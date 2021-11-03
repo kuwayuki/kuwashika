@@ -1,9 +1,9 @@
 import * as React from "react";
 import { StyleSheet } from "react-native";
-import EditScreenInfo from "../organisms/EditScreenInfo";
-import { Text, View } from "../organisms/Themed";
+import EditScreenInfo from "../organisms/other/EditScreenInfo";
+import { Text, View } from "../organisms/common/Themed";
 
-export default function TabPcrScreen() {
+export default function PcrPage() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab Two</Text>

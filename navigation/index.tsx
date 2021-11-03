@@ -1,24 +1,19 @@
-/**
- * If you are not familiar with React Navigation, refer to the "Fundamentals" guide:
- * https://reactnavigation.org/docs/getting-started
- *
- */
 import { FontAwesome } from "@expo/vector-icons";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import * as Print from "expo-print";
 import {
   DarkTheme,
   DefaultTheme,
   NavigationContainer,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import * as Print from "expo-print";
+import { shareAsync } from "expo-sharing";
 import * as React from "react";
 import { Button, ColorSchemeName, Pressable } from "react-native";
 import ModalScreen from "../components/pages/ModalScreen";
 import NotFoundScreen from "../components/pages/NotFoundScreen";
-import TabPeriodontalScreen from "../components/pages/TabPeriodontalScreen";
-import TabPcrScreen from "../components/pages/TabPcrScreen";
+import PcrPage from "../components/pages/PcrPage";
+import PpdPage from "../components/pages/PpdPage";
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import {
@@ -27,7 +22,6 @@ import {
   RootTabScreenProps,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
-import { shareAsync } from "expo-sharing";
 
 export default function Navigation({
   colorScheme,
@@ -78,8 +72,8 @@ export default function Navigation({
     >
       <RootNavigator />
       <Button title="Print" onPress={print} />
-      <Button title="Print to PDF file" onPress={printToFile} />
-      <Button title="Select printer" onPress={selectPrinter} />
+      {/* <Button title="Print to PDF file" onPress={printToFile} />
+      <Button title="Select printer" onPress={selectPrinter} /> */}
     </NavigationContainer>
   );
 }
@@ -94,7 +88,7 @@ function RootNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Root"
+        name="歯周病検査"
         component={BottomTabNavigator}
         options={{ headerShown: true }}
       />
@@ -110,11 +104,7 @@ function RootNavigator() {
   );
 }
 
-/**
- * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
- * https://reactnavigation.org/docs/bottom-tab-navigator
- */
-const BottomTab = createBottomTabNavigator<RootTabParamList>();
+// const BottomTab = createBottomTabNavigator<RootTabParamList>();
 const TopTab = createMaterialTopTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
@@ -129,10 +119,10 @@ function BottomTabNavigator() {
     >
       <TopTab.Screen
         name="TabPeriodontal"
-        component={TabPeriodontalScreen}
+        component={PpdPage}
         options={({ navigation }: RootTabScreenProps<"TabPeriodontal">) => ({
-          title: "歯周病検査",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "PPD",
+          // tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
           headerRight: () => (
             <Pressable
               onPress={() => navigation.navigate("Modal")}
@@ -151,23 +141,31 @@ function BottomTabNavigator() {
         })}
       />
       <TopTab.Screen
+        name="TabUpset"
+        component={PcrPage}
+        options={{
+          title: "動揺度",
+          // tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        }}
+      />
+      <TopTab.Screen
         name="TabPCR"
-        component={TabPcrScreen}
+        component={PcrPage}
         options={{
           title: "PCR",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          // tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />
     </TopTab.Navigator>
   );
 }
 
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
-  color: string;
-}) {
-  return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
-}
+// /**
+//  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
+//  */
+// function TabBarIcon(props: {
+//   name: React.ComponentProps<typeof FontAwesome>["name"];
+//   color: string;
+// }) {
+//   return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
+// }

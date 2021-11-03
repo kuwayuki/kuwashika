@@ -1,19 +1,29 @@
 import * as React from "react";
 import { StyleSheet } from "react-native";
 import { RootTabScreenProps } from "../../types";
-import CommonArea from "../organisms/CommonArea";
-import PpdArea from "../organisms/PpdArea";
-import TextAreaPpdOrganism from "../organisms/TextAreaPpdOrganism";
-import { View } from "../organisms/Themed";
+import { View } from "../organisms/common/Themed";
+import PpdAllTeeth from "../organisms/ppd/PpdAllTeeth";
 
-export default function TabPeriodontalScreen({
+export type ppdContext = {
+  focusNumber: number;
+  setFocusNumber: (focusNumber: number) => void;
+  textInputsFocus: any[];
+};
+export const PpdContext = React.createContext({} as ppdContext);
+
+export default function PpdPage({
   navigation,
 }: RootTabScreenProps<"TabPeriodontal">) {
   const [text, onChangeText] = React.useState("Useless Text");
+  const [focusNumber, setFocusNumber] = React.useState(0);
+  let textInputsFocus: any = null;
   return (
-    <>
+    <PpdContext.Provider
+      value={{ focusNumber, setFocusNumber, textInputsFocus }}
+    >
       <View style={styles.container}>
-        <PpdArea />
+        <PpdAllTeeth />
+        {/* <PpdAllTeeth /> */}
         {/* <View
           style={styles.separator}
           lightColor="#eee"
@@ -21,7 +31,7 @@ export default function TabPeriodontalScreen({
         /> */}
         {/* <EditScreenInfo path="/screens/TabOneScreen.tsx" /> */}
       </View>
-    </>
+    </PpdContext.Provider>
   );
 }
 

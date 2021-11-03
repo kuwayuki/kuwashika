@@ -2,8 +2,8 @@ import { StatusBar } from "expo-status-bar";
 import * as React from "react";
 import { Platform, StyleSheet } from "react-native";
 
-import EditScreenInfo from "../organisms/EditScreenInfo";
-import { Text, View } from "../organisms/Themed";
+import EditScreenInfo from "../organisms/other/EditScreenInfo";
+import { Text, View } from "../organisms/common/Themed";
 
 export default function ModalScreen() {
   return (
