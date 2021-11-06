@@ -2,7 +2,7 @@ import * as React from "react";
 import { StyleSheet, TextInput } from "react-native";
 import { TextInputPropsEx } from "../organisms/common/CommonOneBlockTeeth";
 
-export const MATH = 16;
+export const MATH = 35;
 export default function TextInputAtom(props: TextInputPropsEx) {
   const [state, setState] = React.useState({ backgroundColor: "#ededed" });
   const lastNameRef = React.useRef<React.LegacyRef<any>>();

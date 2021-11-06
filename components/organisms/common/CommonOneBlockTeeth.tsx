@@ -3,7 +3,6 @@ import { TextInputProps, View } from "react-native";
 import TextReadMolecular from "../../moleculars/TextReadMolecular";
 
 export type teethPropsEx = {
-  textInput?: any[];
   refInput?: any;
   teethIndex?: number; // 歯の番号
   teethPartsIndex?: number; // 歯の分裂番号

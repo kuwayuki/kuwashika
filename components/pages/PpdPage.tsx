@@ -1,13 +1,18 @@
 import * as React from "react";
-import { StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import { RootTabScreenProps } from "../../types";
 import { View } from "../organisms/common/Themed";
 import PpdAllTeeth from "../organisms/ppd/PpdAllTeeth";
+import CommonInfoInput from "../organisms/common/CommonInfoInput";
+import CommonBottomButton from "../organisms/common/CommonBottomButton";
 
 export type ppdContext = {
   focusNumber: number;
   setFocusNumber: (focusNumber: number) => void;
-  textInputsFocus: any[];
+  textInputs: any[];
+  setTextInputs: (textInputsFocus: any[]) => void;
+  setFocus: (index: number) => void;
+  setFocusRef: (index: number, ref: any) => void;
 };
 export const PpdContext = React.createContext({} as ppdContext);
 
@@ -16,20 +21,49 @@ export default function PpdPage({
 }: RootTabScreenProps<"TabPeriodontal">) {
   const [text, onChangeText] = React.useState("Useless Text");
   const [focusNumber, setFocusNumber] = React.useState(0);
-  let textInputsFocus: any = null;
+  const [textInputs, setTextInputs] = React.useState<any[]>([]);
+  // const inputRefs = Array(4).fill(React.createRef());
+
+  const setFocus = (index: number) => {
+    const temp = [...textInputs];
+    temp[index + 1].focus();
+    setTextInputs(temp);
+  };
+  const setFocusRef = (index: number, ref: any) => {
+    setTextInputs((textInput) => {
+      const temp = [...textInputs];
+      temp[index] = ref;
+      return [...temp];
+    });
+  };
+
   return (
     <PpdContext.Provider
-      value={{ focusNumber, setFocusNumber, textInputsFocus }}
+      value={{
+        focusNumber,
+        setFocusNumber,
+        textInputs,
+        setTextInputs,
+        setFocus,
+        setFocusRef,
+      }}
     >
       <View style={styles.container}>
-        <PpdAllTeeth />
-        {/* <PpdAllTeeth /> */}
-        {/* <View
+        {/* <View style={styles.zindex}> */}
+        <CommonInfoInput />
+        {/* <CommonBottomButton /> */}
+        {/* </View> */}
+        <ScrollView style={styles.scrollView}>
+          <PpdAllTeeth />
+          {/* <PpdAllTeeth /> */}
+          {/* <View
           style={styles.separator}
           lightColor="#eee"
           darkColor="rgba(255,255,255,0.1)"
         /> */}
-        {/* <EditScreenInfo path="/screens/TabOneScreen.tsx" /> */}
+          {/* <EditScreenInfo path="/screens/TabOneScreen.tsx" /> */}
+        </ScrollView>
+        {/* <CommonInfoInput /> */}
       </View>
     </PpdContext.Provider>
   );
@@ -37,9 +71,21 @@ export default function PpdPage({
 
 const styles = StyleSheet.create({
   container: {
+    height: 0,
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  zindex: {
+    // height: 0,
+    zIndex: 1000,
+  },
+  scrollView: {
+    // height: "100%",
+    minHeight: "70%",
+    marginHorizontal: 10,
+    backgroundColor: "#FFFFEE",
+    // marginVertical: 30,
   },
   title: {
     fontSize: 20,

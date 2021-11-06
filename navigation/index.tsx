@@ -6,10 +6,9 @@ import {
   NavigationContainer,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import * as Print from "expo-print";
-import { shareAsync } from "expo-sharing";
 import * as React from "react";
-import { Button, ColorSchemeName, Pressable } from "react-native";
+import { ColorSchemeName, Pressable } from "react-native";
+import CommonBottomButton from "../components/organisms/common/CommonBottomButton";
 import ModalScreen from "../components/pages/ModalScreen";
 import NotFoundScreen from "../components/pages/NotFoundScreen";
 import PcrPage from "../components/pages/PcrPage";
@@ -28,50 +27,13 @@ export default function Navigation({
 }: {
   colorScheme: ColorSchemeName;
 }) {
-  const [selectedPrinter, setSelectedPrinter] = React.useState<Print.Printer>();
-  const print = async () => {
-    // On iOS/android prints the given html. On web prints the HTML from the current page.
-    await Print.printAsync({
-      html,
-      printerUrl: selectedPrinter?.url, // iOS only
-    });
-  };
-  const html = `
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-  </head>
-  <body style="text-align: center;">
-    <h1 style="font-size: 50px; font-family: Helvetica Neue; font-weight: normal;">
-      Hello Expo!
-    </h1>
-    <img
-      src="https://d30j33t1r58ioz.cloudfront.net/static/guides/sdk.png"
-      style="width: 90vw;" />
-  </body>
-</html>
-`;
-
-  const selectPrinter = async () => {
-    const printer = await Print.selectPrinterAsync(); // iOS only
-    setSelectedPrinter(printer);
-  };
-  const printToFile = async () => {
-    // On iOS/android prints the given html. On web prints the HTML from the current page.
-    const { uri } = await Print.printToFileAsync({
-      html,
-    });
-    console.log("File has been saved to:", uri);
-    await shareAsync(uri, { UTI: ".pdf", mimeType: "application/pdf" });
-  };
-
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
     >
       <RootNavigator />
-      <Button title="Print" onPress={print} />
+      <CommonBottomButton />
       {/* <Button title="Print to PDF file" onPress={printToFile} />
       <Button title="Select printer" onPress={selectPrinter} /> */}
     </NavigationContainer>
@@ -89,8 +51,8 @@ function RootNavigator() {
     <Stack.Navigator>
       <Stack.Screen
         name="歯周病検査"
-        component={BottomTabNavigator}
-        options={{ headerShown: true }}
+        component={TopTabNavigator}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="NotFound"
@@ -107,7 +69,7 @@ function RootNavigator() {
 // const BottomTab = createBottomTabNavigator<RootTabParamList>();
 const TopTab = createMaterialTopTabNavigator<RootTabParamList>();
 
-function BottomTabNavigator() {
+function TopTabNavigator() {
   const colorScheme = useColorScheme();
 
   return (

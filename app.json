@@ -4,6 +4,7 @@
     "slug": "ExpoExample",
     "version": "1.0.0",
     "orientation": "landscape",
+    // "orientation": "portrait", 縦向き
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
