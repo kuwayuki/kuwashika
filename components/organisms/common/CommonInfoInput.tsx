@@ -1,22 +1,14 @@
 import * as React from "react";
 import { StatusBar, StyleSheet, Switch, View } from "react-native";
 import { Icon } from "react-native-elements";
+import { AppContext } from "../../../App";
 import DatePickerAtom from "../../atoms/DatePickerAtom";
 import DropDownPickerAtom from "../../atoms/DropDownPickerAtom";
 import TitleAndAction from "../../moleculars/TitleAndAction";
+import SwitchAtom from "../../atoms/SwitchAtom";
 
 export default function CommonInfoInput() {
-  const [isEnabled, setIsEnabled] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState(1);
-  const [items, setItems] = React.useState([
-    { label: "1", value: 1 },
-    { label: "2", value: 2 },
-  ]);
-  const [exam, setExam] = React.useState([
-    { label: "2021/11/06 初診", value: 1 },
-  ]);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const appContext = React.useContext(AppContext);
 
   return (
     <View
@@ -31,7 +23,6 @@ export default function CommonInfoInput() {
     >
       <View
         style={{
-          // justifyContent: "space-between",
           height: "auto",
           display: "flex",
           width: "auto",
@@ -40,50 +31,39 @@ export default function CommonInfoInput() {
           // justifyContent: "space-between",
         }}
       >
-        <TitleAndAction title={"診療日"}>
+        <TitleAndAction title={"検査日"}>
           <DatePickerAtom />
         </TitleAndAction>
         <TitleAndAction title={"患者番号"}>
           <DropDownPickerAtom
-            open={open}
-            setOpen={setOpen}
-            items={items}
-            value={value}
-            setValue={setValue}
-            width={70}
+            items={appContext.patients}
+            value={appContext.patientNumber}
+            setValue={appContext.setPatientNumber}
+            width={80}
           />
         </TitleAndAction>
         <TitleAndAction title={"検査データ"}>
           <DropDownPickerAtom
-            open={open}
-            setOpen={setOpen}
-            items={exam}
-            value={value}
-            setValue={setValue}
+            items={appContext.inspectionData}
+            value={appContext.inspectionDataNumber}
+            setValue={appContext.setInspectionDataNumber}
             width={160}
-            // style={{ maxWidth: 160 }}
           />
         </TitleAndAction>
-        <TitleAndAction title={"基本"}>
-          <Switch
-            trackColor={{ false: "#767577", true: "#81b0ff" }}
-            thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitch}
-            value={isEnabled}
+        <TitleAndAction title={appContext.isPrecision ? "精密" : "基本"}>
+          <SwitchAtom
+            onValueChange={() =>
+              appContext.setPrecision(!appContext.isPrecision)
+            }
+            value={appContext.isPrecision}
           />
         </TitleAndAction>
       </View>
       <View style={{ flexGrow: 1 }}></View>
       <View
         style={{
-          // height: "auto",
-          // display: "flex",
-          // width: "100%",
           flexDirection: "row",
-          // padding: 5,
           justifyContent: "flex-end",
-          // justifyContent: "space-between",
           zIndex: 1000,
         }}
       >

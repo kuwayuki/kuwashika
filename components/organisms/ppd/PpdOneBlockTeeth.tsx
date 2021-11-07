@@ -1,5 +1,6 @@
 import * as React from "react";
 import { View } from "react-native";
+import { AppContext } from "../../../App";
 import PpdOneSideTeeth, { teethProps } from "./PpdOneSideTeeth";
 
 /**
@@ -7,6 +8,8 @@ import PpdOneSideTeeth, { teethProps } from "./PpdOneSideTeeth";
  * @returns
  */
 export default function PpdOneBlockTeeth(props: teethProps) {
+  const appContext = React.useContext(AppContext);
+
   return (
     <View
       style={{
@@ -15,7 +18,9 @@ export default function PpdOneBlockTeeth(props: teethProps) {
       }}
     >
       <PpdOneSideTeeth {...props} teethRows={props.teethRows * 2 + 0} />
-      <PpdOneSideTeeth {...props} teethRows={props.teethRows * 2 + 1} />
+      {appContext.isPrecision && (
+        <PpdOneSideTeeth {...props} teethRows={props.teethRows * 2 + 1} />
+      )}
     </View>
   );
 }

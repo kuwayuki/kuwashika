@@ -8,7 +8,6 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import { ColorSchemeName, Pressable } from "react-native";
-import CommonBottomButton from "../components/organisms/common/CommonBottomButton";
 import ModalScreen from "../components/pages/ModalScreen";
 import NotFoundScreen from "../components/pages/NotFoundScreen";
 import PcrPage from "../components/pages/PcrPage";
@@ -78,6 +77,7 @@ function TopTabNavigator() {
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
       }}
+      style={{ display: "flex", justifyContent: "flex-start" }}
     >
       <TopTab.Screen
         name="TabPeriodontal"
@@ -121,13 +121,3 @@ function TopTabNavigator() {
     </TopTab.Navigator>
   );
 }
-
-// /**
-//  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-//  */
-// function TabBarIcon(props: {
-//   name: React.ComponentProps<typeof FontAwesome>["name"];
-//   color: string;
-// }) {
-//   return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
-// }

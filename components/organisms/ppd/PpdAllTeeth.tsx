@@ -6,7 +6,6 @@ import { PpdContext } from "../../pages/PpdPage";
 import PpdOneBlockTeeth from "./PpdOneBlockTeeth";
 
 export default function PpdAllTeeth() {
-  const [textInputs, setTextInputs] = React.useState<any[]>([]);
   const ppdContext = React.useContext(PpdContext);
 
   const onTouchAction = (teethNum: number) => {
@@ -36,11 +35,7 @@ export default function PpdAllTeeth() {
             flexDirection: "column",
           }}
         >
-          <PpdOneBlockTeeth
-            teethRows={0}
-            teethIndex={teeth.teethIndex}
-            textInputs={textInputs}
-          />
+          <PpdOneBlockTeeth teethRows={0} teethIndex={teeth.teethIndex} />
           <TextReadMolecular
             value={teeth.teethNum.toString()}
             onTouchEnd={() => onTouchAction(teeth.teethIndex)}
@@ -58,7 +53,6 @@ export default function PpdAllTeeth() {
           <PpdOneBlockTeeth
             teethRows={1}
             teethIndex={teeth.teethIndex + TEETH_ALL.length}
-            textInputs={textInputs}
           />
         </View>
       ))}

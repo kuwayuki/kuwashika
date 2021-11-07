@@ -4,7 +4,6 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 
 export default function DatePickerAtom(props: TextProps) {
   const [date, setDate] = React.useState(new Date());
-  // const [mode, setMode] = React.useState("date");
   const [show, setShow] = React.useState(false);
 
   const onChange = (event: any, selectedDate: any) => {

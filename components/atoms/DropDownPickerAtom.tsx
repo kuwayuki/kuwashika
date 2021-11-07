@@ -4,10 +4,14 @@ import DropDownPicker, {
   DropDownPickerProps,
 } from "react-native-dropdown-picker";
 
-type DropDownPickerAtom = DropDownPickerProps & {
+export type DropdownType = { label: string; value: number };
+
+type DropDownPickerAtomProps = Omit<DropDownPickerProps, "open" | "setOpen"> & {
   width?: number;
 };
-export default function DropDownPickerAtom(props: DropDownPickerAtom) {
+export default function DropDownPickerAtom(props: DropDownPickerAtomProps) {
+  const [open, setOpen] = React.useState(false);
+
   return (
     <View
       style={{
@@ -50,6 +54,8 @@ export default function DropDownPickerAtom(props: DropDownPickerAtom) {
         // itemSeparatorStyle={styles.picker}
         // badgeSeparatorStyle={styles.picker}
         listMode="SCROLLVIEW"
+        open={open}
+        setOpen={setOpen}
         {...props}
       />
     </View>
