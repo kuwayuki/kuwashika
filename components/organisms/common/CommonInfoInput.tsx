@@ -1,6 +1,5 @@
 import * as React from "react";
 import { StatusBar, StyleSheet, Switch, View } from "react-native";
-import DropDownPicker from "react-native-dropdown-picker";
 import { Icon } from "react-native-elements";
 import DatePickerAtom from "../../atoms/DatePickerAtom";
 import DropDownPickerAtom from "../../atoms/DropDownPickerAtom";
@@ -65,7 +64,7 @@ export default function CommonInfoInput() {
             // style={{ maxWidth: 160 }}
           />
         </TitleAndAction>
-        <TitleAndAction title={"1点方"}>
+        <TitleAndAction title={"基本"}>
           <Switch
             trackColor={{ false: "#767577", true: "#81b0ff" }}
             thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}

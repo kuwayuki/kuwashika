@@ -33,7 +33,7 @@ export default function Navigation({
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
     >
       <RootNavigator />
-      <CommonBottomButton />
+      {/* <CommonBottomButton /> */}
       {/* <Button title="Print to PDF file" onPress={printToFile} />
       <Button title="Select printer" onPress={selectPrinter} /> */}
     </NavigationContainer>

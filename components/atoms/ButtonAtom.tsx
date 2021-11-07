@@ -6,6 +6,11 @@ import {
   TouchableOpacityProps,
 } from "react-native";
 
+export enum PRESS {
+  NORMAL,
+  PRESSED,
+}
+
 export default function ButtonAtom(props: TouchableOpacityProps) {
   return (
     <TouchableOpacity

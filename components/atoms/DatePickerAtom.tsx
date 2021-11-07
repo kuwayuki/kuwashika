@@ -15,12 +15,12 @@ export default function DatePickerAtom(props: TextProps) {
 
   return (
     <DateTimePicker
+      locale={"ja"}
       style={styles.base}
-      testID="dateTimePicker"
+      removeClippedSubviews={true}
       value={date}
       mode={"date"}
-      is24Hour={true}
-      display="default"
+      display="compact"
       onChange={onChange}
     />
   );
@@ -28,7 +28,7 @@ export default function DatePickerAtom(props: TextProps) {
 
 const styles = StyleSheet.create({
   base: {
-    width: 120,
+    width: 110,
     marginVertical: 8,
   },
 });

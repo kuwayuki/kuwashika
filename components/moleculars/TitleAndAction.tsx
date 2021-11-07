@@ -14,7 +14,7 @@ export default function TitleAndAction(props: TitleAndActionProps) {
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
-          paddingRight: 16,
+          paddingRight: 8,
           // maxWidth: 150,
           // justifyContent: "flex-start",
           // paddingLeft: 40,
@@ -22,7 +22,7 @@ export default function TitleAndAction(props: TitleAndActionProps) {
         props.style,
       ]}
     >
-      <TextAtom style={{ paddingRight: 8, textAlignVertical: "center" }}>
+      <TextAtom style={{ paddingRight: 4, textAlignVertical: "center" }}>
         {props.title}
       </TextAtom>
       {props.children}

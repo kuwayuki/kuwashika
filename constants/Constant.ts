@@ -2,6 +2,20 @@ type teethType = {
   teethIndex: number; // 歯の番号
   teethNum: number; // 歯の表示数値番号
 };
+export type TEETH_TYPE = {
+  status: TEETH_STATUS;
+  value: number;
+  display: string;
+  color: string;
+};
+
+export enum TEETH_STATUS {
+  NORMAL,
+  MT,
+  BLLEDING,
+  DRAINAGE,
+}
+
 export const TEETH_ALL: teethType[] = [
   { teethIndex: 0, teethNum: 8 },
   { teethIndex: 1, teethNum: 7 },

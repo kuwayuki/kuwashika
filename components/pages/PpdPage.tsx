@@ -1,42 +1,78 @@
 import * as React from "react";
 import { ScrollView, StyleSheet } from "react-native";
+import { TEETH_ALL, TEETH_TYPE } from "../../constants/Constant";
 import { RootTabScreenProps } from "../../types";
+import CommonBottomButton from "../organisms/common/CommonBottomButton";
+import CommonInfoInput from "../organisms/common/CommonInfoInput";
 import { View } from "../organisms/common/Themed";
 import PpdAllTeeth from "../organisms/ppd/PpdAllTeeth";
-import CommonInfoInput from "../organisms/common/CommonInfoInput";
-import CommonBottomButton from "../organisms/common/CommonBottomButton";
+import { PPD_PARTS } from "../organisms/ppd/PpdOneSideTeeth";
 
 export type ppdContext = {
   focusNumber: number;
   setFocusNumber: (focusNumber: number) => void;
   textInputs: any[];
   setTextInputs: (textInputsFocus: any[]) => void;
-  setFocus: (index: number) => void;
-  setFocusRef: (index: number, ref: any) => void;
+  teethValues: TEETH_TYPE[];
+  setTeethValues: (teethValues: TEETH_TYPE[]) => void;
+  setTeethValue: (index: number, teethValue: TEETH_TYPE) => void;
+  mtTeethNums: number[];
+  setMtTeethNums: (mtTeethNums: number[]) => void;
+  pressedValue: number;
+  setPressedValue: (pressedValue: number) => void;
 };
 export const PpdContext = React.createContext({} as ppdContext);
 
 export default function PpdPage({
   navigation,
 }: RootTabScreenProps<"TabPeriodontal">) {
-  const [text, onChangeText] = React.useState("Useless Text");
   const [focusNumber, setFocusNumber] = React.useState(0);
   const [textInputs, setTextInputs] = React.useState<any[]>([]);
-  // const inputRefs = Array(4).fill(React.createRef());
+  const [mtTeethNums, setMtTeethNums] = React.useState<number[]>([]);
+  const [teethValues, setTeethValues] = React.useState<TEETH_TYPE[]>([]);
+  const [pressedValue, setPressedValue] = React.useState(-1);
+  const scrollViewRef = React.useRef<ScrollView>(null);
 
-  const setFocus = (index: number) => {
-    const temp = [...textInputs];
-    temp[index + 1].focus();
-    setTextInputs(temp);
-  };
-  const setFocusRef = (index: number, ref: any) => {
-    setTextInputs((textInput) => {
-      const temp = [...textInputs];
-      temp[index] = ref;
-      return [...temp];
-    });
+  const setTeethValue = (index: number, teethValue: TEETH_TYPE) => {
+    const temp = [...teethValues];
+    if (teethValue.value < 10) {
+      temp[index] = {
+        ...teethValue,
+        value: teethValue.value,
+        display: teethValue.value.toString(),
+      } as TEETH_TYPE;
+    } else if (teethValue.value === 10) {
+      const plus =
+        temp[index] && temp[index].value
+          ? temp[index].value + 1
+          : teethValue.value;
+      temp[index] = {
+        ...teethValue,
+        value: plus,
+        display: plus.toString(),
+      } as TEETH_TYPE;
+    } else {
+      temp[index] = {
+        ...teethValue,
+        value: teethValue.value,
+        display: "",
+      } as TEETH_TYPE;
+    }
+    setTeethValues([...temp]);
   };
 
+  const moveScroll = (index?: number) => {
+    if (scrollViewRef.current) {
+      const num = index ?? focusNumber;
+      const psotionX = num % (TEETH_ALL.length * PPD_PARTS.length);
+      const psotionY = num / (TEETH_ALL.length * PPD_PARTS.length);
+      scrollViewRef.current.scrollTo({
+        x: psotionX * 20,
+        y: psotionY * 10,
+        animated: false,
+      });
+    }
+  };
   return (
     <PpdContext.Provider
       value={{
@@ -44,32 +80,42 @@ export default function PpdPage({
         setFocusNumber,
         textInputs,
         setTextInputs,
-        setFocus,
-        setFocusRef,
+        teethValues,
+        setTeethValues,
+        setTeethValue,
+        mtTeethNums,
+        setMtTeethNums,
+        pressedValue,
+        setPressedValue,
       }}
     >
       <View style={styles.container}>
-        {/* <View style={styles.zindex}> */}
         <CommonInfoInput />
-        {/* <CommonBottomButton /> */}
-        {/* </View> */}
-        <ScrollView style={styles.scrollView}>
+        <ScrollView
+          style={styles.scrollView}
+          horizontal={false}
+          decelerationRate={"normal"}
+          ref={scrollViewRef}
+          maximumZoomScale={4}
+          minimumZoomScale={0.5}
+        >
           <PpdAllTeeth />
-          {/* <PpdAllTeeth /> */}
-          {/* <View
-          style={styles.separator}
-          lightColor="#eee"
-          darkColor="rgba(255,255,255,0.1)"
-        /> */}
-          {/* <EditScreenInfo path="/screens/TabOneScreen.tsx" /> */}
         </ScrollView>
-        {/* <CommonInfoInput /> */}
       </View>
+      <CommonBottomButton
+        focusNumber={focusNumber}
+        setFocusNumber={setFocusNumber}
+        setTeethValue={setTeethValue}
+        moveScroll={moveScroll}
+        pressedValue={pressedValue}
+        setPressedValue={setPressedValue}
+      />
     </PpdContext.Provider>
   );
 }
 
 const styles = StyleSheet.create({
+  keyboard: {},
   container: {
     height: 0,
     flex: 1,
