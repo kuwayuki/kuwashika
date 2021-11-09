@@ -1,7 +1,9 @@
+import * as FileSystem from "expo-file-system";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { DropdownType } from "./components/atoms/DropDownPickerAtom";
+import { InitJsonData, JsonDataType } from "./constants/Util";
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
@@ -35,16 +37,47 @@ export default function App() {
   const colorScheme = useColorScheme();
 
   React.useEffect(() => {
-    setPatients([
-      { label: "新規", value: 0 },
-      { label: "1", value: 1 },
-      { label: "2", value: 2 },
-    ]);
+    const write = async () => {
+      // const fileUri: string = `${FileSystem.documentDirectory}${"myFile.txt"}`;
+      await FileSystem.writeAsStringAsync(
+        FileSystem.documentDirectory + "database.json",
+        JSON.stringify(InitJsonData())
+      );
+      // await writeFile();
+    };
+    write();
 
-    setInspectionData([
-      { label: "新規追加", value: 0 },
-      { label: "2021/11/06 初診", value: 1 },
-    ]);
+    const Read = async () => {
+      const data = await FileSystem.readAsStringAsync(
+        FileSystem.documentDirectory + "database.json"
+      );
+      const object = JSON.parse(data) as JsonDataType;
+
+      // 患者番号
+      const patients = [{ label: "新規", value: 0 }];
+      object.person.forEach((person) =>
+        patients.push({
+          label: person.patientNumber.toString(),
+          value: person.patientNumber,
+        })
+      );
+      setPatients(patients);
+
+      // 検査データ
+      const dataPerson = object.person[0];
+      const inspectionData = [{ label: "新規追加", value: 0 }];
+      dataPerson.data?.forEach((data) =>
+        inspectionData.push({
+          label: data.dataName.toString(),
+          value: data.dataNumber,
+        })
+      );
+      setInspectionData(inspectionData);
+
+      // 検査日
+      setInspectionDate(dataPerson.data[0].date);
+    };
+    Read();
   }, []);
 
   if (!isLoadingComplete) {

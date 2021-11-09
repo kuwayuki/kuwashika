@@ -50,10 +50,7 @@ export default function PpdAllTeeth() {
             teethIndex={teeth.teethIndex + TEETH_ALL.length}
             mtTeethNums={ppdContext.mtTeethNums}
           />
-          <PpdOneBlockTeeth
-            teethRows={1}
-            teethIndex={teeth.teethIndex + TEETH_ALL.length}
-          />
+          <PpdOneBlockTeeth teethRows={1} teethIndex={teeth.teethIndex} />
         </View>
       ))}
     </View>
