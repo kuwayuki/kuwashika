@@ -1,22 +1,22 @@
 import * as React from "react";
 import { StyleSheet } from "react-native";
+import { TextInputPropsEx } from "../../constants/Constant";
 import TextInputAtom from "../atoms/TextInputAtom";
-import { TextInputPropsEx } from "../organisms/common/CommonOneBlockTeeth";
 
 export default function TextInputMolecular(props: TextInputPropsEx) {
   const onFocus = () => {
     props.onTouchStart;
-    if (props.setFocusNumber) props.setFocusNumber(props.teethPartsIndex);
+    if (props.setFocusNumber) props.setFocusNumber(props.teethValue.index);
   };
   const isFocus =
-    props.teethPartsIndex !== undefined &&
+    props.teethValue !== undefined &&
     props.focusNumber !== undefined &&
-    props.teethPartsIndex === props.focusNumber;
+    props.teethValue.index === props.focusNumber;
   const isInputed = props.value && props.value !== "";
   const isMT =
     props.mtTeethNums &&
-    props.teethIndex &&
-    props.mtTeethNums.includes(props.teethIndex);
+    props.teethValue &&
+    props.mtTeethNums.includes(props.teethValue.index);
 
   return (
     <TextInputAtom

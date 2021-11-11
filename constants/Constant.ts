@@ -1,12 +1,34 @@
+import { TextInputProps } from "react-native";
+
 type teethType = {
   teethIndex: number; // 歯の番号
   teethNum: number; // 歯の表示数値番号
 };
+
+export type teethPropsEx = {
+  teethValue?: TEETH_TYPE; // 歯の状態
+  mtTeethNums?: number[]; // 歯の欠損番号
+  focusNumber?: number; // フォーカス歯の番号
+  setFocusNumber?: (focusNumber?: number) => void;
+};
+
+export type teethGroupProps = TextInputProps & {
+  teethGroupIndex: number; // 歯のグループ番号
+};
+
+export type TextInputPropsEx = TextInputProps &
+  teethPropsEx & {
+    // isFocus?: boolean;
+    // isUp?: boolean;
+    // children?: React.ReactNode;
+  };
+
 export type TEETH_TYPE = {
-  status: TEETH_STATUS;
-  value: number;
-  display: string;
-  color: string;
+  index: number; // 歯の番号：1~32 or 1~192
+  status: TEETH_STATUS; // 歯の状態：1~32 or 1~192
+  value?: number; // 歯の入力数値
+  // display: string;
+  // color: string;
 };
 
 export enum TEETH_STATUS {

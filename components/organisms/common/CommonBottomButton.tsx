@@ -10,12 +10,16 @@ import ButtonAtom from "../../atoms/ButtonAtom";
 import ButtonPressedMolecular from "../../moleculars/ButtonPressedMolecular";
 import { PPD_PARTS } from "../ppd/PpdOneSideTeeth";
 
-type buttonType = TEETH_TYPE & {
+type buttonType = {
+  status: TEETH_STATUS;
+  value: number;
   color: string;
+  display: string;
 };
 type CommonButtonPropsType = {
   focusNumber: number;
   setFocusNumber: (focusNumber: number) => void;
+  teethValues: TEETH_TYPE[];
   setTeethValue: (index: number, teethValue: TEETH_TYPE) => void;
   moveScroll: (index?: number) => void;
   pressedValue: number;
@@ -101,10 +105,19 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
     props.setPressedValue(-1);
   };
 
-  const buttonAction = (button: TEETH_TYPE) => {
+  /**
+   * 画面下部ボタン押下時の処理
+   * @param button
+   */
+  const buttonAction = (button: buttonType) => {
     if (button.value < 100) {
-      props.setTeethValue(props.focusNumber, button);
+      // 歯の入力項目に数値を代入
+      props.setTeethValue(props.focusNumber, {
+        ...props.teethValues[props.focusNumber],
+        value: button.value,
+      } as TEETH_TYPE);
       if (button.value < 10) {
+        // 10未満の場合は次の歯に移動
         moveFocus(props.focusNumber);
       }
     } else {
@@ -150,6 +163,7 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
     >
       {BUTTON_NAMES.map((button) =>
         button.value < 100 ? (
+          // 通常ボタン
           <ButtonAtom
             style={
               button.color !== undefined
@@ -161,6 +175,7 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
             {button.display ?? button.value}
           </ButtonAtom>
         ) : (
+          // 押しっぱなしボタン
           <ButtonPressedMolecular
             style={[
               button.color !== undefined

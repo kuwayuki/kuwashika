@@ -1,10 +1,10 @@
 import * as React from "react";
 import { StyleSheet } from "react-native";
+import { teethGroupProps } from "../../constants/Constant";
 import { MATH } from "../atoms/TextInputAtom";
-import { TextInputPropsEx } from "../organisms/common/CommonOneBlockTeeth";
 import TextInputMolecular from "./TextInputMolecular";
 
-export default function TextReadMolecular(props: TextInputPropsEx) {
+export default function TextReadMolecular(props: teethGroupProps) {
   return (
     <TextInputMolecular {...props} editable={false} style={styles.input} />
   );

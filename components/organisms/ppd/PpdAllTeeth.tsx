@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Alert, View } from "react-native";
+import { View } from "react-native";
 import { TEETH_ALL } from "../../../constants/Constant";
 import TextReadMolecular from "../../moleculars/TextReadMolecular";
 import { PpdContext } from "../../pages/PpdPage";
@@ -36,21 +36,22 @@ export default function PpdAllTeeth() {
             flexDirection: "column",
           }}
         >
+          {/* 上段 */}
           <PpdOneBlockTeeth teethRows={0} teethIndex={teeth.teethIndex} />
           <TextReadMolecular
             value={teeth.teethNum.toString()}
             onTouchEnd={() => onTouchAction(teeth.teethIndex)}
-            teethIndex={teeth.teethIndex}
-            mtTeethNums={ppdContext.mtTeethNums}
+            teethGroupIndex={teeth.teethIndex}
           />
           <TextReadMolecular
             value={teeth.teethNum.toString()}
             onTouchEnd={() =>
               onTouchAction(teeth.teethIndex + TEETH_ALL.length)
             }
-            teethIndex={teeth.teethIndex + TEETH_ALL.length}
-            mtTeethNums={ppdContext.mtTeethNums}
+            teethGroupIndex={teeth.teethIndex}
+            // mtTeethNums={ppdContext.mtTeethNums}
           />
+          {/* 下段 */}
           <PpdOneBlockTeeth teethRows={1} teethIndex={teeth.teethIndex} />
         </View>
       ))}
