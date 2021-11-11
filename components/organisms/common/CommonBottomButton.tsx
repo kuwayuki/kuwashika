@@ -23,7 +23,7 @@ type CommonButtonPropsType = {
 };
 
 export const BUTTON_NAMES = [
-  { value: 0, status: TEETH_STATUS.NORMAL } as buttonType,
+  // { value: 0, status: TEETH_STATUS.NORMAL } as buttonType,
   { value: 1, status: TEETH_STATUS.NORMAL } as buttonType,
   { value: 2, status: TEETH_STATUS.NORMAL } as buttonType,
   { value: 3, status: TEETH_STATUS.NORMAL } as buttonType,
@@ -34,6 +34,7 @@ export const BUTTON_NAMES = [
   { value: 8, status: TEETH_STATUS.NORMAL } as buttonType,
   { value: 9, status: TEETH_STATUS.NORMAL } as buttonType,
   { value: 10, display: "+", status: TEETH_STATUS.NORMAL } as buttonType,
+  { value: 11, display: "-", status: TEETH_STATUS.NORMAL } as buttonType,
   // { value: 11, display: "→", status: TEETH_STATUS.NORMAL } as buttonType,
   {
     value: 100,

@@ -26,6 +26,7 @@ export default function PpdAllTeeth() {
       style={{
         display: "flex",
         flexDirection: "row",
+        margin: 3,
       }}
     >
       {TEETH_ALL.map((teeth) => (

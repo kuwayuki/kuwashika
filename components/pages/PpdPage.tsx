@@ -12,10 +12,10 @@ import { PPD_PARTS } from "../organisms/ppd/PpdOneSideTeeth";
 export type ppdContext = {
   focusNumber: number;
   setFocusNumber: (focusNumber: number) => void;
-  teethValues: TEETH_TYPE[];
+  teethValues: TEETH_TYPE[]; // 192の歯
   setTeethValues: (teethValues: TEETH_TYPE[]) => void;
   setTeethValue: (index: number, teethValue: TEETH_TYPE) => void;
-  teethValuesSimple: TEETH_TYPE[];
+  teethValuesSimple: TEETH_TYPE[]; // 32の歯
   setTeethValuesSimple: (teethValues: TEETH_TYPE[]) => void;
   setTeethValueSimple: (index: number, teethValue: TEETH_TYPE) => void;
   mtTeethNums: number[];
@@ -51,6 +51,16 @@ export default function PpdPage({
       const plus =
         temp[index] && temp[index].value
           ? temp[index].value + 1
+          : teethValue.value;
+      temp[index] = {
+        ...teethValue,
+        value: plus,
+        display: plus.toString(),
+      } as TEETH_TYPE;
+    } else if (teethValue.value === 11) {
+      const plus =
+        temp[index] && temp[index].value
+          ? temp[index].value - 1
           : teethValue.value;
       temp[index] = {
         ...teethValue,

@@ -65,7 +65,13 @@ export default function App() {
 
       // 検査データ
       const dataPerson = object.person[0];
-      const inspectionData = [{ label: "新規追加", value: 0 }];
+      const inspectionData = [
+        { label: "新規追加", value: 0 },
+        // { label: "Sc後", value: 1 },
+        // { label: "SRP後", value: 2 },
+        // { label: "SRP/P重防", value: 3 },
+        // { label: "任意入力", value: 10 },
+      ];
       dataPerson.data?.forEach((data) =>
         inspectionData.push({
           label: data.dataName.toString(),
