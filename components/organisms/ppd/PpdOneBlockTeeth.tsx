@@ -14,7 +14,10 @@ export default function PpdOneBlockTeeth(props: teethProps) {
       }}
     >
       {/* 上段 or 下段の1列目 */}
-      <PpdOneSideTeeth {...props} teethRows={props.teethRows * 2 + 0} />
+      <PpdOneSideTeeth
+        {...props}
+        teethRows={props.teethRows * (appContext.isPrecision ? 2 : 1)}
+      />
       {appContext.isPrecision && (
         /* 「精密のみ」：上段 or 下段の２列目 */
         <PpdOneSideTeeth {...props} teethRows={props.teethRows * 2 + 1} />

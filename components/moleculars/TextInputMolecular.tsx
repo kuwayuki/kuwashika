@@ -6,17 +6,13 @@ import TextInputAtom from "../atoms/TextInputAtom";
 export default function TextInputMolecular(props: TextInputPropsEx) {
   const onFocus = () => {
     props.onTouchStart;
-    if (props.setFocusNumber) props.setFocusNumber(props.teethValue.index);
+    if (props.setFocusNumber) props.setFocusNumber(props.teethValue?.index);
   };
   const isFocus =
     props.teethValue !== undefined &&
-    props.focusNumber !== undefined &&
     props.teethValue.index === props.focusNumber;
   const isInputed = props.value && props.value !== "";
-  const isMT =
-    props.mtTeethNums &&
-    props.teethValue &&
-    props.mtTeethNums.includes(props.teethValue.index);
+  const isMT = props.mtTeethNums?.includes(props.teethGroupIndex);
 
   return (
     <TextInputAtom

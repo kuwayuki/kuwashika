@@ -1,10 +1,17 @@
 import { TextInputProps } from "react-native";
 
+/**
+ * 歯の真ん中の数字部分
+ */
 type teethType = {
-  teethIndex: number; // 歯の番号
+  teethGroupIndex: number; // 歯の番号
   teethNum: number; // 歯の表示数値番号
+  teethRow: number;
 };
 
+/**
+ * 各種歯の状態
+ */
 export type teethPropsEx = {
   teethValue?: TEETH_TYPE; // 歯の状態
   mtTeethNums?: number[]; // 歯の欠損番号
@@ -12,21 +19,21 @@ export type teethPropsEx = {
   setFocusNumber?: (focusNumber?: number) => void;
 };
 
+/**
+ * 各種歯ぐき
+ */
 export type teethGroupProps = TextInputProps & {
-  teethGroupIndex: number; // 歯のグループ番号
+  teethGroupIndex?: number; // 歯のグループ番号
 };
 
-export type TextInputPropsEx = TextInputProps &
-  teethPropsEx & {
-    // isFocus?: boolean;
-    // isUp?: boolean;
-    // children?: React.ReactNode;
-  };
+export type TextInputPropsEx = teethGroupProps & teethPropsEx;
 
 export type TEETH_TYPE = {
   index: number; // 歯の番号：1~32 or 1~192
   status: TEETH_STATUS; // 歯の状態：1~32 or 1~192
   value?: number; // 歯の入力数値
+  teethRow: number; // 歯の列番号
+  teethGroupIndex: number; // 歯のグループ番号
   // display: string;
   // color: string;
 };
@@ -39,20 +46,42 @@ export enum TEETH_STATUS {
 }
 
 export const TEETH_ALL: teethType[] = [
-  { teethIndex: 0, teethNum: 8 },
-  { teethIndex: 1, teethNum: 7 },
-  { teethIndex: 2, teethNum: 6 },
-  { teethIndex: 3, teethNum: 5 },
-  { teethIndex: 4, teethNum: 4 },
-  { teethIndex: 5, teethNum: 3 },
-  { teethIndex: 6, teethNum: 2 },
-  { teethIndex: 7, teethNum: 1 },
-  { teethIndex: 8, teethNum: 1 },
-  { teethIndex: 9, teethNum: 2 },
-  { teethIndex: 10, teethNum: 3 },
-  { teethIndex: 11, teethNum: 4 },
-  { teethIndex: 12, teethNum: 5 },
-  { teethIndex: 13, teethNum: 6 },
-  { teethIndex: 14, teethNum: 7 },
-  { teethIndex: 15, teethNum: 8 },
+  { teethGroupIndex: 0, teethNum: 8, teethRow: 0 },
+  { teethGroupIndex: 1, teethNum: 7, teethRow: 0 },
+  { teethGroupIndex: 2, teethNum: 6, teethRow: 0 },
+  { teethGroupIndex: 3, teethNum: 5, teethRow: 0 },
+  { teethGroupIndex: 4, teethNum: 4, teethRow: 0 },
+  { teethGroupIndex: 5, teethNum: 3, teethRow: 0 },
+  { teethGroupIndex: 6, teethNum: 2, teethRow: 0 },
+  { teethGroupIndex: 7, teethNum: 1, teethRow: 0 },
+  { teethGroupIndex: 8, teethNum: 1, teethRow: 0 },
+  { teethGroupIndex: 9, teethNum: 2, teethRow: 0 },
+  { teethGroupIndex: 10, teethNum: 3, teethRow: 0 },
+  { teethGroupIndex: 11, teethNum: 4, teethRow: 0 },
+  { teethGroupIndex: 12, teethNum: 5, teethRow: 0 },
+  { teethGroupIndex: 13, teethNum: 6, teethRow: 0 },
+  { teethGroupIndex: 14, teethNum: 7, teethRow: 0 },
+  { teethGroupIndex: 15, teethNum: 8, teethRow: 0 },
+  { teethGroupIndex: 16, teethNum: 8, teethRow: 1 },
+  { teethGroupIndex: 17, teethNum: 7, teethRow: 1 },
+  { teethGroupIndex: 18, teethNum: 6, teethRow: 1 },
+  { teethGroupIndex: 19, teethNum: 5, teethRow: 1 },
+  { teethGroupIndex: 20, teethNum: 4, teethRow: 1 },
+  { teethGroupIndex: 21, teethNum: 3, teethRow: 1 },
+  { teethGroupIndex: 22, teethNum: 2, teethRow: 1 },
+  { teethGroupIndex: 23, teethNum: 1, teethRow: 1 },
+  { teethGroupIndex: 24, teethNum: 1, teethRow: 1 },
+  { teethGroupIndex: 25, teethNum: 2, teethRow: 1 },
+  { teethGroupIndex: 26, teethNum: 3, teethRow: 1 },
+  { teethGroupIndex: 27, teethNum: 4, teethRow: 1 },
+  { teethGroupIndex: 28, teethNum: 5, teethRow: 1 },
+  { teethGroupIndex: 29, teethNum: 6, teethRow: 1 },
+  { teethGroupIndex: 30, teethNum: 7, teethRow: 1 },
+  { teethGroupIndex: 31, teethNum: 8, teethRow: 1 },
 ];
+export const TEETH_UP: teethType[] = [...TEETH_ALL].filter(
+  (teeth) => teeth.teethRow === 0
+);
+export const TEETH_DOWN: teethType[] = [...TEETH_ALL].filter(
+  (teeth) => teeth.teethRow === 1
+);

@@ -30,18 +30,39 @@ export default function PpdPage({
   >([]);
   const [pressedValue, setPressedValue] = React.useState(-1);
 
+  /**
+   * 初期値を入力
+   * TODO: データから読込
+   */
   React.useEffect(() => {
     const temp: TEETH_TYPE[] = [];
     for (let i = 0; i < 192; i++) {
       temp.push({
         index: i,
         status: TEETH_STATUS.NORMAL,
+        teethRow: i / 48,
+        teethGroupIndex: i / 6,
       } as TEETH_TYPE);
     }
     setTeethValues(temp);
-    setTeethValuesSimple(temp);
+
+    const temp2: TEETH_TYPE[] = [];
+    for (let i = 0; i < 32; i++) {
+      temp2.push({
+        index: i,
+        status: TEETH_STATUS.NORMAL,
+        teethRow: i / 16,
+        teethGroupIndex: i,
+      } as TEETH_TYPE);
+    }
+    setTeethValuesSimple(temp2);
   }, []);
 
+  /**
+   * 歯に数値を入力した操作
+   * @param index
+   * @param teethValue
+   */
   const setTeethValue = (index: number, teethValue: TEETH_TYPE) => {
     const temp = [...teethValues];
     if (teethValue.value < 10) {

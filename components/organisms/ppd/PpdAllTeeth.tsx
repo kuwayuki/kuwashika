@@ -1,6 +1,6 @@
 import * as React from "react";
 import { View } from "react-native";
-import { TEETH_ALL } from "../../../constants/Constant";
+import { TEETH_ALL, TEETH_DOWN, TEETH_UP } from "../../../constants/Constant";
 import TextReadMolecular from "../../moleculars/TextReadMolecular";
 import { PpdContext } from "../../pages/PpdPage";
 import PpdOneBlockTeeth from "./PpdOneBlockTeeth";
@@ -24,37 +24,62 @@ export default function PpdAllTeeth() {
   return (
     <View
       style={{
-        display: "flex",
-        flexDirection: "row",
         margin: 3,
       }}
     >
-      {TEETH_ALL.map((teeth) => (
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          {/* 上段 */}
-          <PpdOneBlockTeeth teethRows={0} teethIndex={teeth.teethIndex} />
-          <TextReadMolecular
-            value={teeth.teethNum.toString()}
-            onTouchEnd={() => onTouchAction(teeth.teethIndex)}
-            teethGroupIndex={teeth.teethIndex}
-          />
-          <TextReadMolecular
-            value={teeth.teethNum.toString()}
-            onTouchEnd={() =>
-              onTouchAction(teeth.teethIndex + TEETH_ALL.length)
-            }
-            teethGroupIndex={teeth.teethIndex}
-            // mtTeethNums={ppdContext.mtTeethNums}
-          />
-          {/* 下段 */}
-          <PpdOneBlockTeeth teethRows={1} teethIndex={teeth.teethIndex} />
-        </View>
-      ))}
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+        }}
+      >
+        {/* 上段 */}
+        {TEETH_UP.map((teeth) => (
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <PpdOneBlockTeeth
+              teethRows={teeth.teethRow}
+              teethGroupIndex={teeth.teethGroupIndex}
+            />
+            <TextReadMolecular
+              value={teeth.teethNum.toString()}
+              onTouchEnd={() => onTouchAction(teeth.teethGroupIndex)}
+              teethGroupIndex={teeth.teethGroupIndex}
+            />
+          </View>
+        ))}
+      </View>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+        }}
+      >
+        {/* 下段 */}
+        {TEETH_DOWN.map((teeth) => (
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <TextReadMolecular
+              value={teeth.teethNum.toString()}
+              onTouchEnd={() => onTouchAction(teeth.teethGroupIndex)}
+              teethGroupIndex={teeth.teethGroupIndex}
+            />
+            <PpdOneBlockTeeth
+              teethRows={teeth.teethRow}
+              teethGroupIndex={teeth.teethGroupIndex}
+            />
+            {/* 下段 */}
+          </View>
+        ))}
+      </View>
     </View>
   );
 }

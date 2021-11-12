@@ -8,7 +8,7 @@ import { PpdContext } from "../../pages/PpdPage";
 
 export type teethProps = {
   teethRows: number; // 基本：1～２列：精密１～４列
-  teethIndex: number; // 0 ～ 16番目のグループ
+  teethGroupIndex: number; // 0 ～ 16番目のグループ
 };
 
 export const PPD_PARTS = [0, 1, 2];
@@ -22,8 +22,9 @@ export default function PpdOneSideTeeth(props: teethProps) {
   const appContext = React.useContext(AppContext);
 
   // (16 x 段番号 + 歯のグループ番号)
+  const times = appContext.isPrecision ? 3 : 1;
   const indexInit =
-    TEETH_ALL.length * props.teethRows * 3 + props.teethIndex * 3;
+    16 * props.teethRows * times + (props.teethGroupIndex % 16) * times;
 
   return (
     <View
@@ -56,7 +57,7 @@ export default function PpdOneSideTeeth(props: teethProps) {
           }
           focusNumber={ppdContext.focusNumber}
           setFocusNumber={ppdContext.setFocusNumber}
-          teethValue={ppdContext.teethValues[indexInit]}
+          teethValue={ppdContext.teethValuesSimple[indexInit]}
           mtTeethNums={ppdContext.mtTeethNums}
           blurOnSubmit={false}
         />
