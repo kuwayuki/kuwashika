@@ -1,7 +1,6 @@
 import * as React from "react";
 import { View } from "react-native";
 import { AppContext } from "../../../App";
-import { TEETH_ALL, TEETH_TYPE } from "../../../constants/Constant";
 import TextInputLargeMolecular from "../../moleculars/TextInputLargeMolecular";
 import TextInputSmallMolecular from "../../moleculars/TextInputSmallMolecular";
 import { PpdContext } from "../../pages/PpdPage";

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { View } from "react-native";
-import { TEETH_ALL, TEETH_DOWN, TEETH_UP } from "../../../constants/Constant";
+import { TEETH_DOWN, TEETH_UP } from "../../../constants/Constant";
 import TextReadMolecular from "../../moleculars/TextReadMolecular";
 import { PpdContext } from "../../pages/PpdPage";
 import PpdOneBlockTeeth from "./PpdOneBlockTeeth";
@@ -49,6 +49,7 @@ export default function PpdAllTeeth() {
               value={teeth.teethNum.toString()}
               onTouchEnd={() => onTouchAction(teeth.teethGroupIndex)}
               teethGroupIndex={teeth.teethGroupIndex}
+              mtTeethNums={ppdContext.mtTeethNums}
             />
           </View>
         ))}
@@ -71,6 +72,7 @@ export default function PpdAllTeeth() {
               value={teeth.teethNum.toString()}
               onTouchEnd={() => onTouchAction(teeth.teethGroupIndex)}
               teethGroupIndex={teeth.teethGroupIndex}
+              mtTeethNums={ppdContext.mtTeethNums}
             />
             <PpdOneBlockTeeth
               teethRows={teeth.teethRow}

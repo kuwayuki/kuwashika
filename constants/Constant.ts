@@ -24,6 +24,7 @@ export type teethPropsEx = {
  */
 export type teethGroupProps = TextInputProps & {
   teethGroupIndex?: number; // 歯のグループ番号
+  mtTeethNums?: number[]; // 歯の欠損番号
 };
 
 export type TextInputPropsEx = teethGroupProps & teethPropsEx;
