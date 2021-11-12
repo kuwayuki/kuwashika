@@ -1,6 +1,7 @@
 import * as React from "react";
-import { View } from "react-native";
+import { TextInputProps, View } from "react-native";
 import { AppContext } from "../../../App";
+import { TEETH_TYPE } from "../../../constants/Constant";
 import TextInputLargeMolecular from "../../moleculars/TextInputLargeMolecular";
 import TextInputSmallMolecular from "../../moleculars/TextInputSmallMolecular";
 import { PpdContext } from "../../pages/PpdPage";
@@ -19,6 +20,20 @@ export const PPD_PARTS = [0, 1, 2];
 export default function PpdOneSideTeeth(props: teethProps) {
   const ppdContext = React.useContext(PpdContext);
   const appContext = React.useContext(AppContext);
+
+  const onTouchBlDrAction = (teethNum: number) => {
+    if (ppdContext.pressedValue !== 101 && ppdContext.pressedValue !== 102)
+      return;
+
+    // 出血及び排膿
+    ppdContext.setTeethValue(teethNum, {
+      ...ppdContext.teethValues[teethNum],
+      status:
+        ppdContext.pressedValue === 101
+          ? { ...ppdContext.teethValues[teethNum].status, isBleeding: true }
+          : { ...ppdContext.teethValues[teethNum].status, isDrainage: true },
+    } as TEETH_TYPE);
+  };
 
   // (16 x 段番号 + 歯のグループ番号)
   const times = appContext.isPrecision ? 3 : 1;
@@ -45,6 +60,7 @@ export default function PpdOneSideTeeth(props: teethProps) {
             teethValue={ppdContext.teethValues[indexInit + count]}
             mtTeethNums={ppdContext.mtTeethNums}
             blurOnSubmit={false}
+            onTouchEnd={() => onTouchBlDrAction(indexInit + count)}
           />
         ))
       ) : (
@@ -59,6 +75,7 @@ export default function PpdOneSideTeeth(props: teethProps) {
           teethValue={ppdContext.teethValuesSimple[indexInit]}
           mtTeethNums={ppdContext.mtTeethNums}
           blurOnSubmit={false}
+          onTouchEnd={() => onTouchBlDrAction(indexInit)}
         />
       )}
     </View>

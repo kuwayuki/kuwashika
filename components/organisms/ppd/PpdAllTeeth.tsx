@@ -1,6 +1,6 @@
 import * as React from "react";
 import { View } from "react-native";
-import { TEETH_DOWN, TEETH_UP } from "../../../constants/Constant";
+import { TEETH_DOWN, TEETH_TYPE, TEETH_UP } from "../../../constants/Constant";
 import TextReadMolecular from "../../moleculars/TextReadMolecular";
 import { PpdContext } from "../../pages/PpdPage";
 import PpdOneBlockTeeth from "./PpdOneBlockTeeth";
@@ -8,7 +8,7 @@ import PpdOneBlockTeeth from "./PpdOneBlockTeeth";
 export default function PpdAllTeeth() {
   const ppdContext = React.useContext(PpdContext);
 
-  const onTouchAction = (teethNum: number) => {
+  const onTouchMtAction = (teethNum: number) => {
     if (ppdContext.pressedValue !== 100) return;
 
     // MT用歯のグループクリック時
@@ -47,7 +47,7 @@ export default function PpdAllTeeth() {
             />
             <TextReadMolecular
               value={teeth.teethNum.toString()}
-              onTouchEnd={() => onTouchAction(teeth.teethGroupIndex)}
+              onTouchEnd={() => onTouchMtAction(teeth.teethGroupIndex)}
               teethGroupIndex={teeth.teethGroupIndex}
               mtTeethNums={ppdContext.mtTeethNums}
             />
@@ -70,7 +70,7 @@ export default function PpdAllTeeth() {
           >
             <TextReadMolecular
               value={teeth.teethNum.toString()}
-              onTouchEnd={() => onTouchAction(teeth.teethGroupIndex)}
+              onTouchEnd={() => onTouchMtAction(teeth.teethGroupIndex)}
               teethGroupIndex={teeth.teethGroupIndex}
               mtTeethNums={ppdContext.mtTeethNums}
             />

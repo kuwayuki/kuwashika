@@ -39,9 +39,8 @@ export default function PpdPage({
     for (let i = 0; i < 192; i++) {
       temp.push({
         index: i,
-        status: TEETH_STATUS.NORMAL,
-        teethRow: i / 48,
-        teethGroupIndex: i / 6,
+        teethRow: Math.floor(i / 48),
+        teethGroupIndex: Math.floor(i / 6),
       } as TEETH_TYPE);
     }
     setTeethValues(temp);
@@ -50,8 +49,7 @@ export default function PpdPage({
     for (let i = 0; i < 32; i++) {
       temp2.push({
         index: i,
-        status: TEETH_STATUS.NORMAL,
-        teethRow: i / 16,
+        teethRow: Math.floor(i / 16),
         teethGroupIndex: i,
       } as TEETH_TYPE);
     }

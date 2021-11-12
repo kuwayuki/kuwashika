@@ -1,3 +1,4 @@
+import { NumericLiteral } from "@babel/types";
 import * as Print from "expo-print";
 import * as React from "react";
 import { StyleSheet, View } from "react-native";
@@ -63,43 +64,40 @@ export const BUTTON_NAMES = [
 export default function CommonBottomButton(props: CommonButtonPropsType) {
   const [selectedPrinter, setSelectedPrinter] = React.useState<Print.Printer>();
 
-  const WARP = TEETH_ALL.length * PPD_PARTS.length;
-  const LAST_ROWS = [WARP - 1, WARP * 2 - 1, WARP * 3 - 1, WARP * 4 - 1]; // 47, 95, 143, 191
-  const WARP_ROWS = [WARP - 1, WARP, WARP * 3, WARP * 3 - 1]; // 47, 48, 144, 143
+  // １列の最大値
+  const rows = props.teethValues.filter((value) => value.teethRow === 0);
+  const MAX_ROW_ITEM_COUNT = rows.length;
+  type warpType = { src: number; dst: number };
+
+  // コの字タイプ
+  const WARP_ROWS = [
+    {
+      src: MAX_ROW_ITEM_COUNT - 1,
+      dst: MAX_ROW_ITEM_COUNT * 2 - 1,
+    } as warpType,
+    { src: MAX_ROW_ITEM_COUNT, dst: MAX_ROW_ITEM_COUNT * 4 - 1 } as warpType,
+    { src: MAX_ROW_ITEM_COUNT * 3, dst: MAX_ROW_ITEM_COUNT * 2 } as warpType,
+    {
+      src: MAX_ROW_ITEM_COUNT * 3 - 1,
+      dst: 0,
+    } as warpType,
+  ]; // 47, 48, 144, 143
+
   const moveFocus = (index: number) => {
-    // 第一指定：上「コ」⇒下「逆コ」
-    // 上：[0 ～ ★47] ⇒ [95 ～ ★48] ⇒ 下：[191 ～ ★144] ⇒ [96 ～ ★143]
-    let nextIndex = 0;
-    if (WARP_ROWS.includes(index)) {
-      // WARP_ROWSの場合は所定の場所にワープ
-      const indexNum = WARP_ROWS.indexOf(index);
-      switch (indexNum) {
-        case 0:
-          // 95へ移動
-          nextIndex = LAST_ROWS[1];
-          break;
-        case 1:
-          // 191へ移動
-          nextIndex = LAST_ROWS[3];
-          break;
-        case 2:
-          // 96へ移動
-          nextIndex = LAST_ROWS[1] + 1;
-          break;
-        case 3:
-          // 0へ移動
-          nextIndex = 0;
-          break;
-      }
-    } else if (index <= LAST_ROWS[0]) {
+    let nextIndex;
+    const warptemp = [...WARP_ROWS];
+    // 現在の列を取得
+    const teeth = props.teethValues[index];
+    // ワープの数値が現在よりも高い場合はプラス、低ければマイナス
+    if (warptemp[teeth.teethRow].src > index) {
       nextIndex = index + 1;
-    } else if (index <= LAST_ROWS[1]) {
+    } else if (warptemp[teeth.teethRow].src < index) {
       nextIndex = index - 1;
-    } else if (index <= LAST_ROWS[2]) {
-      nextIndex = index + 1;
-    } else if (index <= LAST_ROWS[3]) {
-      nextIndex = index - 1;
+    } else {
+      // 同じならワープ(指定列の先頭 or 最後)
+      nextIndex = warptemp[teeth.teethRow].dst;
     }
+
     props.setFocusNumber(nextIndex);
     props.moveScroll(nextIndex);
     props.setPressedValue(-1);
@@ -114,6 +112,7 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
       // 歯の入力項目に数値を代入
       props.setTeethValue(props.focusNumber, {
         ...props.teethValues[props.focusNumber],
+        status: undefined,
         value: button.value,
       } as TEETH_TYPE);
       if (button.value < 10) {

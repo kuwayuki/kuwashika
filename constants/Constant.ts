@@ -31,12 +31,18 @@ export type TextInputPropsEx = teethGroupProps & teethPropsEx;
 
 export type TEETH_TYPE = {
   index: number; // 歯の番号：1~32 or 1~192
-  status: TEETH_STATUS; // 歯の状態：1~32 or 1~192
   value?: number; // 歯の入力数値
   teethRow: number; // 歯の列番号
   teethGroupIndex: number; // 歯のグループ番号
+  status?: TEETH_STATUS_TYPE; // 歯の状態：1~32 or 1~192
   // display: string;
   // color: string;
+};
+
+export type TEETH_STATUS_TYPE = {
+  isBleeding: boolean;
+  isDrainage: boolean;
+  isMT: boolean;
 };
 
 export enum TEETH_STATUS {

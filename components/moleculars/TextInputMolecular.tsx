@@ -12,6 +12,8 @@ export default function TextInputMolecular(props: TextInputPropsEx) {
     props.teethValue !== undefined &&
     props.teethValue.index === props.focusNumber;
   const isInputed = props.value && props.value !== "";
+  const isBleeding = props.teethValue?.status?.isBleeding;
+  const isDrainage = props.teethValue?.status?.isDrainage;
   const isMT = props.mtTeethNums?.includes(props.teethGroupIndex);
 
   return (
@@ -25,6 +27,10 @@ export default function TextInputMolecular(props: TextInputPropsEx) {
           ? { backgroundColor: "#696969", borderWidth: 0 }
           : isFocus
           ? { backgroundColor: "skyblue", fontWeight: "bold", borderWidth: 2 }
+          : isDrainage
+          ? { backgroundColor: "#FFCC00" }
+          : isBleeding
+          ? { color: "#FF3366" }
           : isInputed
           ? { backgroundColor: "#F8F8FF" }
           : { backgroundColor: "#ededed" },
