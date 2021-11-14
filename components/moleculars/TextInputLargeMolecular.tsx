@@ -1,7 +1,7 @@
 import * as React from "react";
 import { StyleSheet } from "react-native";
 import { TextInputPropsEx } from "../../constants/Constant";
-import { MATH } from "../atoms/TextInputAtom";
+import { MATH } from "./TextInputTeethMolecular";
 import TextInputMolecular from "./TextInputMolecular";
 
 export default function TextInputLargeMolecular(props: TextInputPropsEx) {

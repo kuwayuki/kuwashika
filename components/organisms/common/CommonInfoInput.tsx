@@ -9,7 +9,6 @@ import SwitchAtom from "../../atoms/SwitchAtom";
 
 export default function CommonInfoInput() {
   const appContext = React.useContext(AppContext);
-
   return (
     <View
       style={{
@@ -32,7 +31,10 @@ export default function CommonInfoInput() {
         }}
       >
         <TitleAndAction title={"検査日"}>
-          <DatePickerAtom />
+          <DatePickerAtom
+            date={appContext.inspectionDate}
+            setDate={appContext.setInspectionDate}
+          />
         </TitleAndAction>
         <TitleAndAction title={"患者番号"}>
           <DropDownPickerAtom

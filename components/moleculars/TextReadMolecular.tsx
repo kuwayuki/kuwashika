@@ -1,7 +1,7 @@
 import * as React from "react";
 import { StyleSheet } from "react-native";
 import { teethGroupProps } from "../../constants/Constant";
-import { MATH } from "../atoms/TextInputAtom";
+import { MATH } from "./TextInputTeethMolecular";
 import TextInputMolecular from "./TextInputMolecular";
 
 export default function TextReadMolecular(props: teethGroupProps) {

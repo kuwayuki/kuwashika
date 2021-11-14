@@ -1,7 +1,7 @@
 import * as React from "react";
 import { StyleProp, StyleSheet, TextStyle } from "react-native";
 import { TextInputPropsEx } from "../../constants/Constant";
-import TextInputAtom from "../atoms/TextInputAtom";
+import TextInputTeethMolecular from "./TextInputTeethMolecular";
 
 export default function TextInputMolecular(props: TextInputPropsEx) {
   const onFocus = () => {
@@ -44,7 +44,7 @@ export default function TextInputMolecular(props: TextInputPropsEx) {
   };
 
   return (
-    <TextInputAtom
+    <TextInputTeethMolecular
       {...props}
       editable={false}
       onTouchStart={() => onFocus()}

@@ -1,4 +1,5 @@
 import * as React from "react";
+import { AppContext } from "../../App";
 import { TEETH_STATUS, TEETH_TYPE } from "../../constants/Constant";
 import { RootTabScreenProps } from "../../types";
 import PpdTemplate from "../templates/PpdTemplate";
@@ -22,6 +23,8 @@ export const PpdContext = React.createContext({} as ppdContext);
 export default function PpdPage({
   navigation,
 }: RootTabScreenProps<"TabPeriodontal">) {
+  const appContext = React.useContext(AppContext);
+
   const [focusNumber, setFocusNumber] = React.useState(0);
   const [mtTeethNums, setMtTeethNums] = React.useState<number[]>([]);
   const [teethValues, setTeethValues] = React.useState<TEETH_TYPE[]>([]);
@@ -35,26 +38,30 @@ export default function PpdPage({
    * TODO: データから読込
    */
   React.useEffect(() => {
-    const temp: TEETH_TYPE[] = [];
+    const temp: TEETH_TYPE[] = [...appContext.currentPerson.data.PPD.precision];
     for (let i = 0; i < 192; i++) {
-      temp.push({
+      temp[i] = {
+        ...temp[i],
         index: i,
         teethRow: Math.floor(i / 48),
         teethGroupIndex: Math.floor((i % 48) / 3 + (i < 192 / 2 ? 0 : 16)),
-      } as TEETH_TYPE);
+      } as TEETH_TYPE;
     }
     setTeethValues(temp);
 
-    const temp2: TEETH_TYPE[] = [];
+    const temp2: TEETH_TYPE[] = [...appContext.currentPerson.data.PPD.basic];
     for (let i = 0; i < 32; i++) {
-      temp2.push({
+      temp2[i] = {
+        ...temp2[i],
         index: i,
         teethRow: Math.floor(i / 16),
         teethGroupIndex: i,
-      } as TEETH_TYPE);
+      } as TEETH_TYPE;
     }
     setTeethValuesSimple(temp2);
-  }, []);
+
+    setMtTeethNums([...appContext.currentPerson.data.mtTeethNums]);
+  }, [appContext.currentPerson]);
 
   /**
    * 歯に数値を入力した操作
