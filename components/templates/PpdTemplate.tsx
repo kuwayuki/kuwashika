@@ -58,6 +58,7 @@ export default function PpdTemplate() {
         moveScroll={moveScroll}
         pressedValue={ppdContext.pressedValue}
         setPressedValue={ppdContext.setPressedValue}
+        mtTeethNums={ppdContext.mtTeethNums}
       />
     </>
   );
@@ -69,6 +70,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    paddingRight: 25,
   },
   scrollView: {
     minHeight: "70%",

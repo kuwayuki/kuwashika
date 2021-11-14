@@ -40,7 +40,7 @@ export default function PpdPage({
       temp.push({
         index: i,
         teethRow: Math.floor(i / 48),
-        teethGroupIndex: Math.floor(i / 6),
+        teethGroupIndex: Math.floor((i % 48) / 3 + (i < 192 / 2 ? 0 : 16)),
       } as TEETH_TYPE);
     }
     setTeethValues(temp);

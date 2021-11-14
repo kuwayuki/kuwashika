@@ -1,15 +1,9 @@
-import { NumericLiteral } from "@babel/types";
 import * as Print from "expo-print";
 import * as React from "react";
 import { StyleSheet, View } from "react-native";
-import {
-  TEETH_ALL,
-  TEETH_STATUS,
-  TEETH_TYPE,
-} from "../../../constants/Constant";
+import { TEETH_STATUS, TEETH_TYPE } from "../../../constants/Constant";
 import ButtonAtom from "../../atoms/ButtonAtom";
 import ButtonPressedMolecular from "../../moleculars/ButtonPressedMolecular";
-import { PPD_PARTS } from "../ppd/PpdOneSideTeeth";
 
 type buttonType = {
   status: TEETH_STATUS;
@@ -25,6 +19,7 @@ type CommonButtonPropsType = {
   moveScroll: (index?: number) => void;
   pressedValue: number;
   setPressedValue: (pressedValue: number) => void;
+  mtTeethNums: number[];
 };
 
 export const BUTTON_NAMES = [
@@ -97,10 +92,15 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
       // 同じならワープ(指定列の先頭 or 最後)
       nextIndex = warptemp[teeth.teethRow].dst;
     }
-
-    props.setFocusNumber(nextIndex);
-    props.moveScroll(nextIndex);
-    props.setPressedValue(-1);
+    const nextTeeth = props.teethValues[nextIndex];
+    if (props.mtTeethNums.includes(nextTeeth.teethGroupIndex)) {
+      // MTの場合は次のフォーカスに移動
+      moveFocus(nextIndex);
+    } else {
+      props.setFocusNumber(nextIndex);
+      props.moveScroll(nextIndex);
+      props.setPressedValue(-1);
+    }
   };
 
   /**

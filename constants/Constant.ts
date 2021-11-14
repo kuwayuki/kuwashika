@@ -25,6 +25,7 @@ export type teethPropsEx = {
 export type teethGroupProps = TextInputProps & {
   teethGroupIndex?: number; // 歯のグループ番号
   mtTeethNums?: number[]; // 歯の欠損番号
+  isHideNum?: boolean;
 };
 
 export type TextInputPropsEx = teethGroupProps & teethPropsEx;
@@ -42,7 +43,7 @@ export type TEETH_TYPE = {
 export type TEETH_STATUS_TYPE = {
   isBleeding: boolean;
   isDrainage: boolean;
-  isMT: boolean;
+  // isMT: boolean;
 };
 
 export enum TEETH_STATUS {
