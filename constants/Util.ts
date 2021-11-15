@@ -6,14 +6,14 @@ export enum PPD_ORDER {
 
 export type DataType = {
   setting: SettingType;
-  person: PersonType[];
+  persons: PersonType[];
 };
 
 export type SettingType = { ppdOrderType: PPD_ORDER };
 
 export type PersonType = {
   patientNumber: number;
-  patientName: string;
+  patientName?: string;
   data: PersonDataType[];
 };
 
@@ -45,7 +45,7 @@ export const INIT_DATA: DataType = {
     ppdOrderType: PPD_ORDER.co_reco,
   },
   // 患者ごとのデータ
-  person: [
+  persons: [
     {
       patientNumber: 1,
       patientName: "患者名A",

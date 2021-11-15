@@ -13,6 +13,7 @@ import {
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
+import { PersonType } from "./constants/Util";
 
 // 全ページの共通項目
 export type appContext = {
@@ -32,6 +33,7 @@ export type appContext = {
   setInspectionData: (inspectionData: DropdownType[]) => void;
   isPrecision: boolean;
   setPrecision: (isPrecision: boolean) => void;
+  setRegistDatabase: (currentPerson: PersonCurrentType) => void;
 };
 export const AppContext = React.createContext({} as appContext);
 
@@ -52,24 +54,22 @@ export default function App() {
 
   // 初期データ読込処理
   React.useEffect(() => {
-    const write = async () => {
-      await FileSystem.writeAsStringAsync(
-        FileSystem.documentDirectory + "database.json",
-        JSON.stringify(InitJsonData())
-      );
-    };
-    write();
-
+    setRegistDatabase(undefined);
     reloadData(true);
   }, []);
+
+  // // 初期データ読込処理
+  // React.useEffect(() => {
+  //   reloadData();
+  // }, [allDataJson]);
 
   // 患者番号変更処理
   React.useEffect(() => {
     if (!isInitRead) return;
 
     // 検査データと内部データを全て変更
-    if (patientNumber !== 0 && allDataJson.person) {
-      const person = allDataJson.person.find(
+    if (patientNumber !== 0 && allDataJson.persons) {
+      const person = allDataJson.persons.find(
         (person) => person.patientNumber === patientNumber
       );
       reloadPersonData(person.data);
@@ -87,10 +87,10 @@ export default function App() {
     // 検査データと内部データを全て変更
     if (
       inspectionDataNumber !== 0 &&
-      allDataJson.person &&
-      allDataJson.person.length
+      allDataJson.persons &&
+      allDataJson.persons.length
     ) {
-      const person = allDataJson.person.find(
+      const person = allDataJson.persons.find(
         (person) => person.patientNumber === patientNumber
       );
       if (!person || !person.data) return;
@@ -125,7 +125,7 @@ export default function App() {
 
     // 患者番号をセット
     const patients = [{ label: "新規", value: 0 }];
-    refleshData.person.forEach((person) =>
+    refleshData.persons.forEach((person) =>
       patients.push({
         label: person.patientNumber.toString(),
         value: person.patientNumber,
@@ -134,7 +134,8 @@ export default function App() {
     setPatients(patients);
 
     // 患者番号変更処理
-    if (refleshData.person.length) reloadPersonData(refleshData.person[0].data);
+    if (refleshData.persons.length)
+      reloadPersonData(refleshData.persons[0].data);
 
     if (isFileReload) setPatientNumber(1);
   };
@@ -186,6 +187,74 @@ export default function App() {
     } as PersonCurrentType);
   };
 
+  /**
+   * Jsonデータをデータベースに保存
+   * @param currentPerson
+   */
+  const setRegistDatabase = async (currentPerson?: PersonCurrentType) => {
+    if (!currentPerson) {
+      // 患者番号が存在しない場合は患者ごと追加
+      await FileSystem.writeAsStringAsync(
+        FileSystem.documentDirectory + "database.json",
+        JSON.stringify(InitJsonData())
+      );
+      return;
+    }
+
+    const tempAllData = { ...allDataJson };
+    let writeData: DataType;
+    const patientEdit = tempAllData.persons.find(
+      (person) => person.patientNumber === currentPerson.patientNumber
+    );
+    const persons = [...tempAllData.persons];
+
+    // 患者番号が存在しない場合は患者ごと追加
+    if (!patientEdit) {
+      persons.push({
+        patientNumber: currentPerson.patientNumber,
+        data: [currentPerson.data],
+      } as PersonType);
+      writeData = { ...tempAllData, persons: persons };
+    } else {
+      // 既存患者データの編集
+      const newPersons: PersonType[] = [];
+      let newPatientData = [];
+      const patientDataEdit = [...patientEdit.data].find(
+        (data) => data.dataNumber === currentPerson.data.dataNumber
+      );
+      if (!patientDataEdit) {
+        // 患者データが存在しない場合は追加
+        newPatientData = [
+          ...patientEdit.data,
+          { ...currentPerson.data } as PersonDataType,
+        ];
+      } else {
+        // 患者データが存在する場合は変更
+        [...patientEdit.data].forEach((data) =>
+          data !== patientDataEdit
+            ? newPatientData.push(data)
+            : newPatientData.push(patientDataEdit)
+        );
+      }
+      persons.forEach((person) =>
+        person !== patientEdit
+          ? newPersons.push({ ...person })
+          : newPersons.push({
+              ...patientEdit,
+              data: newPatientData,
+            } as PersonType)
+      );
+      writeData = { ...tempAllData, persons: newPersons };
+    }
+
+    // 患者番号が存在しない場合は患者ごと追加
+    await FileSystem.writeAsStringAsync(
+      FileSystem.documentDirectory + "database.json",
+      JSON.stringify(writeData)
+    );
+    // setAllDataJson(writeData);
+  };
+
   if (!isLoadingComplete) {
     return null;
   } else {
@@ -208,6 +277,7 @@ export default function App() {
           setInspectionData,
           isPrecision,
           setPrecision,
+          setRegistDatabase,
         }}
       >
         {modalNumber === 1 && <CommonPatient />}

@@ -74,14 +74,15 @@ export default function CommonInfoInput() {
           name="print"
           type="font-awesome"
           color="#3399FF"
-          onPress={() => console.log("hello")}
+          onPress={() => appContext.setRegistDatabase(undefined)}
+          // onPress={() => console.log("hello")}
         />
         <Icon
           raised
           name="cog"
           type="font-awesome"
           color="#999999"
-          onPress={() => console.log("hello")}
+          onPress={() => appContext.setRegistDatabase(appContext.currentPerson)}
         />
       </View>
     </View>
