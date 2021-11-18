@@ -248,11 +248,11 @@ export default function App() {
     }
 
     // 患者番号が存在しない場合は患者ごと追加
-    await FileSystem.writeAsStringAsync(
-      FileSystem.documentDirectory + "database.json",
-      JSON.stringify(writeData)
-    );
-    // setAllDataJson(writeData);
+    // await FileSystem.writeAsStringAsync(
+    //   FileSystem.documentDirectory + "database.json",
+    //   JSON.stringify(writeData)
+    // );
+    setAllDataJson(writeData);
   };
 
   if (!isLoadingComplete) {

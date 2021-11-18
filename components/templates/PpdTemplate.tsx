@@ -2,6 +2,7 @@ import * as React from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { AppContext } from "../../App";
 import { TEETH_ALL } from "../../constants/Constant";
+import { MATH } from "../moleculars/TextInputTeethMolecular";
 import CommonBottomButton from "../organisms/common/CommonBottomButton";
 import CommonInfoInput from "../organisms/common/CommonInfoInput";
 import { View } from "../organisms/common/Themed";
@@ -18,12 +19,11 @@ export default function PpdTemplate() {
   const moveScroll = (index?: number) => {
     if (scrollViewRef.current) {
       const num = index ?? ppdContext.focusNumber;
-      const psotionX = num % (TEETH_ALL.length * PPD_PARTS.length);
-      const psotionY = num / (TEETH_ALL.length * PPD_PARTS.length);
+      const psotionX = Math.floor(num % (16 * PPD_PARTS.length));
+      const psotionY = Math.floor(num / (16 * PPD_PARTS.length));
       scrollViewRef.current.scrollTo({
-        x: psotionX * 20,
-        y: psotionY * 10,
-        animated: false,
+        x: Math.floor(psotionX * MATH - (36 - psotionX) * (MATH / 4)), // 真ん中に近づくにつれて、移動距離を変える
+        y: Math.floor(psotionY * MATH - (2 - psotionY) * MATH),
       });
     }
   };
@@ -55,7 +55,7 @@ export default function PpdTemplate() {
             ? ppdContext.setTeethValue
             : ppdContext.setTeethValueSimple
         }
-        moveScroll={moveScroll}
+        moveScroll={() => moveScroll(ppdContext.focusNumber)}
         pressedValue={ppdContext.pressedValue}
         setPressedValue={ppdContext.setPressedValue}
         mtTeethNums={ppdContext.mtTeethNums}
