@@ -260,6 +260,7 @@ export default function App() {
     //   JSON.stringify(writeData)
     // );
     setAllDataJson(writeData);
+    alert(writeData);
   };
 
   if (!isLoadingComplete) {
