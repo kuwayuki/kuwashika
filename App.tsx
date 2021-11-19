@@ -192,8 +192,8 @@ export default function App() {
    * @param currentPerson
    */
   const setRegistDatabase = async (currentPerson?: PersonCurrentType) => {
+    // 初期データが存在しない場合は、初期データを生成
     if (!currentPerson) {
-      // 患者番号が存在しない場合は患者ごと追加
       await FileSystem.writeAsStringAsync(
         FileSystem.documentDirectory + "database.json",
         JSON.stringify(InitJsonData())
@@ -201,20 +201,25 @@ export default function App() {
       return;
     }
 
+    // 全データをコピー取得して、加工
     const tempAllData = { ...allDataJson };
     let writeData: DataType;
+
+    // 編集中患者情報を取得
     const patientEdit = tempAllData.persons.find(
       (person) => person.patientNumber === currentPerson.patientNumber
     );
-    const persons = [...tempAllData.persons];
+    // 全患者情報を取得
+    const personsAll = [...tempAllData.persons];
 
     // 患者番号が存在しない場合は患者ごと追加
     if (!patientEdit) {
-      persons.push({
+      personsAll.push({
         patientNumber: currentPerson.patientNumber,
         data: [currentPerson.data],
       } as PersonType);
-      writeData = { ...tempAllData, persons: persons };
+      // 患者情報を追加
+      writeData = { ...tempAllData, persons: personsAll };
     } else {
       // 既存患者データの編集
       const newPersons: PersonType[] = [];
@@ -230,19 +235,21 @@ export default function App() {
         ];
       } else {
         // 患者データが存在する場合は変更
-        [...patientEdit.data].forEach((data) =>
-          data !== patientDataEdit
-            ? newPatientData.push(data)
-            : newPatientData.push(patientDataEdit)
+        [...patientEdit.data].forEach(
+          (data) =>
+            data !== patientDataEdit
+              ? newPatientData.push(data) // そのままデータを突っ込む
+              : newPatientData.push(patientDataEdit) // 編集後のデータを突っ込む
         );
       }
-      persons.forEach((person) =>
-        person !== patientEdit
-          ? newPersons.push({ ...person })
-          : newPersons.push({
-              ...patientEdit,
-              data: newPatientData,
-            } as PersonType)
+      personsAll.forEach(
+        (person) =>
+          person.patientNumber !== patientEdit.patientNumber
+            ? newPersons.push(person) // 変更患者以外はそのまま
+            : newPersons.push({
+                ...patientEdit,
+                data: newPatientData,
+              } as PersonType) // 変更患者は変更後データを設定
       );
       writeData = { ...tempAllData, persons: newPersons };
     }
