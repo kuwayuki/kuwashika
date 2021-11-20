@@ -1,6 +1,7 @@
 import * as React from "react";
 import { AppContext } from "../../App";
-import { TEETH_STATUS, TEETH_TYPE } from "../../constants/Constant";
+import { TEETH_TYPE } from "../../constants/Constant";
+import { PersonCurrentType } from "../../constants/Util";
 import { RootTabScreenProps } from "../../types";
 import PpdTemplate from "../templates/PpdTemplate";
 
@@ -61,7 +62,14 @@ export default function PpdPage({
     setTeethValuesSimple(temp2);
 
     setMtTeethNums([...appContext.currentPerson.data.mtTeethNums]);
-  }, [appContext.currentPerson]);
+  }, [appContext.currentPerson.patientNumber]);
+
+  /**
+   * データが変更される度に編集データを更新
+   */
+  React.useEffect(() => {
+    appContext.setCurrentPerson({...appContext.currentPerson, data: {...appContext.currentPerson.data, PPD: {precision: teethValues, basic: teethValuesSimple}}} as PersonCurrentType);
+  }, [teethValues, teethValuesSimple]);
 
   /**
    * 歯に数値を入力した操作

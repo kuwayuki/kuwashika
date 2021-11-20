@@ -6,9 +6,18 @@ import DatePickerAtom from "../../atoms/DatePickerAtom";
 import DropDownPickerAtom from "../../atoms/DropDownPickerAtom";
 import TitleAndAction from "../../moleculars/TitleAndAction";
 import SwitchAtom from "../../atoms/SwitchAtom";
+import { PersonCurrentType } from "../../../constants/Util";
 
 export default function CommonInfoInput() {
   const appContext = React.useContext(AppContext);
+
+  /**
+   * データが変更される度に編集データを更新
+   */
+   React.useEffect(() => {
+    appContext.setCurrentPerson({...appContext.currentPerson, data: {...appContext.currentPerson.data, date: appContext.inspectionDate, isPrecision: appContext.isPrecision}} as PersonCurrentType);
+  }, [appContext.inspectionDate, appContext.isPrecision]);
+
   return (
     <View
       style={{

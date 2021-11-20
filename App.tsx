@@ -58,11 +58,6 @@ export default function App() {
     reloadData(true);
   }, []);
 
-  // // 初期データ読込処理
-  // React.useEffect(() => {
-  //   reloadData();
-  // }, [allDataJson]);
-
   // 患者番号変更処理
   React.useEffect(() => {
     if (!isInitRead) return;
@@ -239,7 +234,7 @@ export default function App() {
           (data) =>
             data !== patientDataEdit
               ? newPatientData.push(data) // そのままデータを突っ込む
-              : newPatientData.push(patientDataEdit) // 編集後のデータを突っ込む
+              : newPatientData.push(currentPerson.data) // 編集後のデータを突っ込む
         );
       }
       personsAll.forEach(
@@ -260,7 +255,6 @@ export default function App() {
     //   JSON.stringify(writeData)
     // );
     setAllDataJson(writeData);
-    alert(writeData);
   };
 
   if (!isLoadingComplete) {
