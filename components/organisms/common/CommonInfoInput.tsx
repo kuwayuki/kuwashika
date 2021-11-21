@@ -88,7 +88,6 @@ export default function CommonInfoInput() {
         style={{
           flexDirection: "row",
           justifyContent: "flex-end",
-          zIndex: 1000,
         }}
       >
         <CommonPrintIcon />

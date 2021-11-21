@@ -14,6 +14,7 @@ import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
 import { PersonType } from "./constants/Util";
+import CommonInspection from "./components/organisms/common/CommonInspection";
 
 // 全ページの共通項目
 export type appContext = {
@@ -252,11 +253,11 @@ export default function App() {
       writeData = { ...tempAllData, persons: newPersons };
     }
 
-    // ファイル書き込み
-    await FileSystem.writeAsStringAsync(
-      FileSystem.documentDirectory + "database.json",
-      JSON.stringify(writeData)
-    );
+    // // ファイル書き込み
+    // await FileSystem.writeAsStringAsync(
+    //   FileSystem.documentDirectory + "database.json",
+    //   JSON.stringify(writeData)
+    // );
     setAllDataJson(writeData);
   };
 
@@ -288,6 +289,7 @@ export default function App() {
         }}
       >
         {modalNumber === 1 && <CommonPatient />}
+        {modalNumber === 2 && <CommonInspection />}
         <SafeAreaProvider>
           <Navigation colorScheme={colorScheme} />
           <StatusBar />

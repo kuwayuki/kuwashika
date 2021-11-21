@@ -1,4 +1,5 @@
 import { TextInputProps } from "react-native";
+import { DropdownType } from "../components/atoms/DropDownPickerAtom";
 
 /**
  * 歯の真ん中の数字部分
@@ -93,3 +94,10 @@ export const TEETH_UP: teethType[] = [...TEETH_ALL].filter(
 export const TEETH_DOWN: teethType[] = [...TEETH_ALL].filter(
   (teeth) => teeth.teethRow === 1
 );
+
+export const INSPACTION_ITEMS: DropdownType[] = [
+  { label: "Sc後", value: 1 },
+  { label: "SRP後", value: 2 },
+  { label: "SRP/P重防", value: 3 },
+  { label: "任意入力", value: 10 },
+];
