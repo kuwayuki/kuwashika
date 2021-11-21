@@ -14,8 +14,6 @@ export type ppdContext = {
   teethValuesSimple: TEETH_TYPE[]; // 32の歯
   setTeethValuesSimple: (teethValues: TEETH_TYPE[]) => void;
   setTeethValueSimple: (index: number, teethValue: TEETH_TYPE) => void;
-  mtTeethNums: number[];
-  setMtTeethNums: (mtTeethNums: number[]) => void;
   pressedValue: number;
   setPressedValue: (pressedValue: number) => void;
 };
@@ -27,7 +25,6 @@ export default function PpdPage({
   const appContext = React.useContext(AppContext);
 
   const [focusNumber, setFocusNumber] = React.useState(0);
-  const [mtTeethNums, setMtTeethNums] = React.useState<number[]>([]);
   const [teethValues, setTeethValues] = React.useState<TEETH_TYPE[]>([]);
   const [teethValuesSimple, setTeethValuesSimple] = React.useState<
     TEETH_TYPE[]
@@ -36,7 +33,6 @@ export default function PpdPage({
 
   /**
    * 初期値を入力
-   * TODO: データから読込
    */
   React.useEffect(() => {
     const temp: TEETH_TYPE[] = [...appContext.currentPerson.data.PPD.precision];
@@ -61,14 +57,20 @@ export default function PpdPage({
     }
     setTeethValuesSimple(temp2);
 
-    setMtTeethNums([...appContext.currentPerson.data.mtTeethNums]);
+    appContext.setMtTeethNums([...appContext.currentPerson.data.mtTeethNums]);
   }, [appContext.currentPerson.patientNumber]);
 
   /**
    * データが変更される度に編集データを更新
    */
   React.useEffect(() => {
-    appContext.setCurrentPerson({...appContext.currentPerson, data: {...appContext.currentPerson.data, PPD: {precision: teethValues, basic: teethValuesSimple}}} as PersonCurrentType);
+    appContext.setCurrentPerson({
+      ...appContext.currentPerson,
+      data: {
+        ...appContext.currentPerson.data,
+        PPD: { precision: teethValues, basic: teethValuesSimple },
+      },
+    } as PersonCurrentType);
   }, [teethValues, teethValuesSimple]);
 
   /**
@@ -150,8 +152,6 @@ export default function PpdPage({
         teethValues,
         setTeethValues,
         setTeethValue,
-        mtTeethNums,
-        setMtTeethNums,
         pressedValue,
         setPressedValue,
         teethValuesSimple,

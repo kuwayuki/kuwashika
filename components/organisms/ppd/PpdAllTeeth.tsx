@@ -1,24 +1,26 @@
 import * as React from "react";
 import { View } from "react-native";
-import { TEETH_DOWN, TEETH_UP, TEETH_TYPE } from "../../../constants/Constant";
+import { AppContext } from "../../../App";
+import { TEETH_DOWN, TEETH_UP } from "../../../constants/Constant";
 import TextReadMolecular from "../../moleculars/TextReadMolecular";
 import { PpdContext } from "../../pages/PpdPage";
 import PpdOneBlockTeeth from "./PpdOneBlockTeeth";
 
 export default function PpdAllTeeth() {
+  const appContext = React.useContext(AppContext);
   const ppdContext = React.useContext(PpdContext);
 
   const onTouchMtAction = (teethNum: number) => {
     if (ppdContext.pressedValue !== 100) return;
 
     // MT用歯のグループクリック時
-    let temp = [...ppdContext.mtTeethNums];
-    if (ppdContext.mtTeethNums.includes(teethNum)) {
+    let temp = [...appContext.mtTeethNums];
+    if (appContext.mtTeethNums.includes(teethNum)) {
       temp = temp.filter((mtTeethNum) => mtTeethNum !== teethNum);
     } else {
       temp.push(teethNum);
     }
-    ppdContext.setMtTeethNums(temp);
+    appContext.setMtTeethNums(temp);
   };
 
   return (
@@ -50,7 +52,7 @@ export default function PpdAllTeeth() {
               value={teeth.teethNum.toString()}
               onTouchEnd={() => onTouchMtAction(teeth.teethGroupIndex)}
               teethGroupIndex={teeth.teethGroupIndex}
-              mtTeethNums={ppdContext.mtTeethNums}
+              mtTeethNums={appContext.mtTeethNums}
               isHideNum={true}
             />
           </View>
@@ -74,7 +76,7 @@ export default function PpdAllTeeth() {
               value={teeth.teethNum.toString()}
               onTouchEnd={() => onTouchMtAction(teeth.teethGroupIndex)}
               teethGroupIndex={teeth.teethGroupIndex}
-              mtTeethNums={ppdContext.mtTeethNums}
+              mtTeethNums={appContext.mtTeethNums}
               isHideNum={true}
             />
             <PpdOneBlockTeeth

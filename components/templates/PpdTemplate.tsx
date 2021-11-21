@@ -1,7 +1,6 @@
 import * as React from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { AppContext } from "../../App";
-import { TEETH_ALL } from "../../constants/Constant";
 import { MATH } from "../moleculars/TextInputTeethMolecular";
 import CommonBottomButton from "../organisms/common/CommonBottomButton";
 import CommonInfoInput from "../organisms/common/CommonInfoInput";
@@ -58,7 +57,7 @@ export default function PpdTemplate() {
         moveScroll={() => moveScroll(ppdContext.focusNumber)}
         pressedValue={ppdContext.pressedValue}
         setPressedValue={ppdContext.setPressedValue}
-        mtTeethNums={ppdContext.mtTeethNums}
+        mtTeethNums={appContext.mtTeethNums}
       />
     </>
   );

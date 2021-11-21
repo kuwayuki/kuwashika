@@ -40,6 +40,24 @@ export type PersonCurrentType = {
   data: PersonDataType;
 };
 
+export const INIT_PERSON: PersonDataType = {
+  isPrecision: false,
+  dataNumber: 1,
+  dataName: "初診",
+  date: new Date(),
+  mtTeethNums: [],
+  PPD: {
+    precision: [],
+    basic: [],
+  },
+  UPSET: {
+    basic: [],
+  },
+  PCR: {
+    basic: [],
+  },
+} as PersonDataType;
+
 export const INIT_DATA: DataType = {
   setting: {
     ppdOrderType: PPD_ORDER.co_reco,

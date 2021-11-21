@@ -14,9 +14,21 @@ export default function CommonInfoInput() {
   /**
    * データが変更される度に編集データを更新
    */
-   React.useEffect(() => {
-    appContext.setCurrentPerson({...appContext.currentPerson, data: {...appContext.currentPerson.data, date: appContext.inspectionDate, isPrecision: appContext.isPrecision}} as PersonCurrentType);
-  }, [appContext.inspectionDate, appContext.isPrecision]);
+  React.useEffect(() => {
+    appContext.setCurrentPerson({
+      ...appContext.currentPerson,
+      data: {
+        ...appContext.currentPerson.data,
+        date: appContext.inspectionDate,
+        isPrecision: appContext.isPrecision,
+        mtTeethNums: appContext.mtTeethNums,
+      },
+    } as PersonCurrentType);
+  }, [
+    appContext.inspectionDate,
+    appContext.isPrecision,
+    appContext.mtTeethNums,
+  ]);
 
   return (
     <View

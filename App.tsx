@@ -34,6 +34,8 @@ export type appContext = {
   isPrecision: boolean;
   setPrecision: (isPrecision: boolean) => void;
   setRegistDatabase: (currentPerson: PersonCurrentType) => void;
+  mtTeethNums: number[];
+  setMtTeethNums: (mtTeethNums: number[]) => void;
 };
 export const AppContext = React.createContext({} as appContext);
 
@@ -48,13 +50,14 @@ export default function App() {
   const [inspectionData, setInspectionData] = React.useState([]);
   const [isPrecision, setPrecision] = React.useState(false);
   const [isInitRead, setInitRead] = React.useState(false);
+  const [mtTeethNums, setMtTeethNums] = React.useState<number[]>([]);
 
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
 
   // 初期データ読込処理
   React.useEffect(() => {
-    setRegistDatabase(undefined);
+    // setRegistDatabase(undefined);
     reloadData(true);
   }, []);
 
@@ -280,6 +283,8 @@ export default function App() {
           isPrecision,
           setPrecision,
           setRegistDatabase,
+          mtTeethNums,
+          setMtTeethNums,
         }}
       >
         {modalNumber === 1 && <CommonPatient />}

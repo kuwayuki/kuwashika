@@ -1,5 +1,5 @@
 import * as React from "react";
-import { TextInputProps, View } from "react-native";
+import { View } from "react-native";
 import { AppContext } from "../../../App";
 import { TEETH_TYPE } from "../../../constants/Constant";
 import TextInputLargeMolecular from "../../moleculars/TextInputLargeMolecular";
@@ -58,7 +58,7 @@ export default function PpdOneSideTeeth(props: teethProps) {
             focusNumber={ppdContext.focusNumber}
             setFocusNumber={ppdContext.setFocusNumber}
             teethValue={ppdContext.teethValues[indexInit + count]}
-            mtTeethNums={ppdContext.mtTeethNums}
+            mtTeethNums={appContext.mtTeethNums}
             blurOnSubmit={false}
             onTouchEnd={() => onTouchBlDrAction(indexInit + count)}
           />
@@ -73,7 +73,7 @@ export default function PpdOneSideTeeth(props: teethProps) {
           focusNumber={ppdContext.focusNumber}
           setFocusNumber={ppdContext.setFocusNumber}
           teethValue={ppdContext.teethValuesSimple[indexInit]}
-          mtTeethNums={ppdContext.mtTeethNums}
+          mtTeethNums={appContext.mtTeethNums}
           blurOnSubmit={false}
           onTouchEnd={() => onTouchBlDrAction(indexInit)}
         />
