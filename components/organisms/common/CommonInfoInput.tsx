@@ -1,12 +1,13 @@
 import * as React from "react";
-import { StatusBar, StyleSheet, Switch, View } from "react-native";
+import { StatusBar, StyleSheet, View } from "react-native";
 import { Icon } from "react-native-elements";
 import { AppContext } from "../../../App";
+import { PersonCurrentType } from "../../../constants/Util";
 import DatePickerAtom from "../../atoms/DatePickerAtom";
 import DropDownPickerAtom from "../../atoms/DropDownPickerAtom";
-import TitleAndAction from "../../moleculars/TitleAndAction";
 import SwitchAtom from "../../atoms/SwitchAtom";
-import { PersonCurrentType } from "../../../constants/Util";
+import TitleAndAction from "../../moleculars/TitleAndAction";
+import CommonPrintIcon from "./CommonPrintIcon";
 
 export default function CommonInfoInput() {
   const appContext = React.useContext(AppContext);
@@ -90,14 +91,7 @@ export default function CommonInfoInput() {
           zIndex: 1000,
         }}
       >
-        <Icon
-          raised
-          name="print"
-          type="font-awesome"
-          color="#3399FF"
-          onPress={() => appContext.setRegistDatabase(undefined)}
-          // onPress={() => console.log("hello")}
-        />
+        <CommonPrintIcon />
         <Icon
           raised
           name="cog"

@@ -14,17 +14,19 @@ export default function CommonPatient() {
   const [patientName, setPatientName] = React.useState<string>(undefined);
 
   const savePatient = () => {
+    // 患者番号の追加
     const temp: DropdownType[] = [...appContext.patients];
     temp.push({ label: patientNumber.toString(), value: patientNumber });
     appContext.setPatients(temp);
-
     appContext.setPatientNumber(patientNumber);
 
+    // 全体データの更新
     appContext.setRegistDatabase({
       patientNumber: patientNumber,
       data: INIT_PERSON,
     } as PersonCurrentType);
 
+    // モーダルを閉じる
     appContext.setModalNumber(0);
   };
   const cancel = () => {

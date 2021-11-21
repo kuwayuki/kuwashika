@@ -1,4 +1,3 @@
-import * as Print from "expo-print";
 import * as React from "react";
 import { StyleSheet, View } from "react-native";
 import { TEETH_STATUS, TEETH_TYPE } from "../../../constants/Constant";
@@ -57,8 +56,6 @@ export const BUTTON_NAMES = [
   // { value: 100, display: "印刷", color: "#3399FF" } as buttonType,
 ];
 export default function CommonBottomButton(props: CommonButtonPropsType) {
-  const [selectedPrinter, setSelectedPrinter] = React.useState<Print.Printer>();
-
   // １列の最大値
   const rows = props.teethValues.filter((value) => value.teethRow === 0);
   const MAX_ROW_ITEM_COUNT = rows.length;
@@ -125,30 +122,6 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
       );
     }
   };
-
-  const print = async () => {
-    // On iOS/android prints the given html. On web prints the HTML from the current page.
-    await Print.printAsync({
-      html,
-      printerUrl: selectedPrinter?.url, // iOS only
-    });
-  };
-
-  const html = `
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-  </head>
-  <body style="text-align: center;">
-    <h1 style="font-size: 50px; font-family: Helvetica Neue; font-weight: normal;">
-      Hello Expo!
-    </h1>
-    <img
-      src="https://d30j33t1r58ioz.cloudfront.net/static/guides/sdk.png"
-      style="width: 90vw;" />
-  </body>
-</html>
-`;
 
   return (
     <View
