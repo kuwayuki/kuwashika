@@ -252,11 +252,11 @@ export default function App() {
       writeData = { ...tempAllData, persons: newPersons };
     }
 
-    // 患者番号が存在しない場合は患者ごと追加
-    // await FileSystem.writeAsStringAsync(
-    //   FileSystem.documentDirectory + "database.json",
-    //   JSON.stringify(writeData)
-    // );
+    // ファイル書き込み
+    await FileSystem.writeAsStringAsync(
+      FileSystem.documentDirectory + "database.json",
+      JSON.stringify(writeData)
+    );
     setAllDataJson(writeData);
   };
 

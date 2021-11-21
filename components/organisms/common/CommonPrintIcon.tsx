@@ -19,18 +19,21 @@ export default function CommonPrintIcon() {
     });
   };
 
-  const createTr = (td?: any, isNo = false) => {
-    return `<tr style="border: 1px solid #595959; border-collapse: collapse; ${
+  const createTr = (td?: any, thName?: string, isNo = false) => {
+    return `<tr align="center" style="border: 1px solid #595959; ${
       isNo && "background: #ca9715"
-    }">${td ?? ""}</tr>`;
+    }">${createTh(thName)}${td ?? ""}</tr>`;
+  };
+
+  const createTh = (thName?: string) => {
+    if (thName === undefined) return "</>";
+    return `<th>${thName}</th>`;
   };
 
   const createTd = (value?: any, isPrecision = false) => {
-    return `<td colspan="${
+    return `<td align="center" colspan="${
       isPrecision ? 3 : 1
-    } style="border: 1px solid #595959; border-collapse: collapse; text-align:center">${
-      value ?? ""
-    }</td>`;
+    } style="border: 1px solid #595959; font-size: 3pt">${value ?? ""}</td>`;
   };
 
   const createHtml = (): string => {
@@ -60,27 +63,19 @@ export default function CommonPrintIcon() {
     return `
     <html>
     <table
+    border="1"
     style="
-      border: 1px solid #595959;
       border-collapse: collapse;
       table-layout: fixed;
       width: 100%;
+      font-size: 8px;
     "
   >
-    <tr
-      style="
-        border: 1px solid #595959;
-        border-collapse: collapse;
-        background: #ca9715;
-      "
-    >
-      <th colspan="16">aaaaa</th>
-    </tr>
-    ${createTr(ppd[0])}
-    ${isPrecision ? createTr(ppd[1]) : "</>"}
-    ${No.map((n) => createTr(n, true))}
-    ${createTr(ppd[isPrecision ? 2 : 1])}
-    ${isPrecision ? createTr(ppd[3]) : "</>"}
+    ${createTr(ppd[0], "PPD: B")}
+    ${isPrecision ? createTr(ppd[1], "PPD: P") : "</>"}
+    ${No.map((n) => createTr(n, "", true))}
+    ${createTr(ppd[isPrecision ? 2 : 1], isPrecision ? "PPD: L" : "PPD")}
+    ${isPrecision ? createTr(ppd[3], "PPD: B") : "</>"}
   </table>
   <hr width: 100% size="1" color="#cc6666" style="border-style: dashed" />
   </html>
