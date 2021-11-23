@@ -10,10 +10,13 @@ export type ppdContext = {
   setFocusNumber: (focusNumber: number) => void;
   teethValues: TEETH_TYPE[]; // 192の歯
   setTeethValues: (teethValues: TEETH_TYPE[]) => void;
-  setTeethValue: (index: number, teethValue: TEETH_TYPE) => void;
   teethValuesSimple: TEETH_TYPE[]; // 32の歯
   setTeethValuesSimple: (teethValues: TEETH_TYPE[]) => void;
-  setTeethValueSimple: (index: number, teethValue: TEETH_TYPE) => void;
+  setTeethValue: (
+    index: number,
+    teethValue: TEETH_TYPE,
+    isPrecision?: boolean
+  ) => void;
   pressedValue: number;
   setPressedValue: (pressedValue: number) => void;
 };
@@ -81,13 +84,16 @@ export default function PpdPage({
    * @param index
    * @param teethValue
    */
-  const setTeethValue = (index: number, teethValue: TEETH_TYPE) => {
-    const temp = [...teethValues];
+  const setTeethValue = (
+    index: number,
+    teethValue: TEETH_TYPE,
+    isPrecision = false
+  ) => {
+    const temp = isPrecision ? [...teethValues] : [...teethValuesSimple];
     if (teethValue.value < 10) {
       temp[index] = {
         ...teethValue,
         value: teethValue.value,
-        // display: teethValue.value.toString(),
       } as TEETH_TYPE;
     } else if (teethValue.value === 10) {
       const plus =
@@ -97,7 +103,6 @@ export default function PpdPage({
       temp[index] = {
         ...teethValue,
         value: plus,
-        // display: plus.toString(),
       } as TEETH_TYPE;
     } else if (teethValue.value === 11) {
       const plus =
@@ -107,44 +112,14 @@ export default function PpdPage({
       temp[index] = {
         ...teethValue,
         value: plus,
-        // display: plus.toString(),
       } as TEETH_TYPE;
     } else {
       temp[index] = {
         ...teethValue,
         value: teethValue.value,
-        // display: "",
       } as TEETH_TYPE;
     }
-    setTeethValues([...temp]);
-  };
-
-  const setTeethValueSimple = (index: number, teethValue: TEETH_TYPE) => {
-    const temp = [...teethValuesSimple];
-    if (teethValue.value < 10) {
-      temp[index] = {
-        ...teethValue,
-        value: teethValue.value,
-        // display: teethValue.value.toString(),
-      } as TEETH_TYPE;
-    } else if (teethValue.value === 10) {
-      const plus =
-        temp[index] && temp[index].value
-          ? temp[index].value + 1
-          : teethValue.value;
-      temp[index] = {
-        ...teethValue,
-        value: plus,
-        // display: plus.toString(),
-      } as TEETH_TYPE;
-    } else {
-      temp[index] = {
-        ...teethValue,
-        value: teethValue.value,
-        // display: "",
-      } as TEETH_TYPE;
-    }
-    setTeethValuesSimple([...temp]);
+    isPrecision ? setTeethValues([...temp]) : setTeethValuesSimple([...temp]);
   };
 
   return (
@@ -159,7 +134,6 @@ export default function PpdPage({
         setPressedValue,
         teethValuesSimple,
         setTeethValuesSimple,
-        setTeethValueSimple,
       }}
     >
       <PpdTemplate />

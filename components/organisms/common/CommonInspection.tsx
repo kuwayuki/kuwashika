@@ -43,7 +43,7 @@ export default function CommonInspection() {
       kind: inspectionDataKindNumber,
     });
     appContext.setInspectionData(temp);
-    appContext.setInspectionDataNumber(inspectionDataKindNumber);
+    appContext.setInspectionDataNumber(nextDataNumber);
 
     const patientData = {
       ...appContext.currentPerson,

@@ -1,5 +1,6 @@
 import * as React from "react";
 import { StyleSheet, View } from "react-native";
+import { AppContext } from "../../../App";
 import { TEETH_STATUS, TEETH_TYPE } from "../../../constants/Constant";
 import ButtonAtom from "../../atoms/ButtonAtom";
 import ButtonPressedMolecular from "../../moleculars/ButtonPressedMolecular";
@@ -14,7 +15,11 @@ type CommonButtonPropsType = {
   focusNumber: number;
   setFocusNumber: (focusNumber: number) => void;
   teethValues: TEETH_TYPE[];
-  setTeethValue: (index: number, teethValue: TEETH_TYPE) => void;
+  setTeethValue: (
+    index: number,
+    teethValue: TEETH_TYPE,
+    isPrecision?: boolean
+  ) => void;
   moveScroll: (index?: number) => void;
   pressedValue: number;
   setPressedValue: (pressedValue: number) => void;
@@ -56,6 +61,8 @@ export const BUTTON_NAMES = [
   // { value: 100, display: "印刷", color: "#3399FF" } as buttonType,
 ];
 export default function CommonBottomButton(props: CommonButtonPropsType) {
+  const appContext = React.useContext(AppContext);
+
   // １列の最大値
   const rows = props.teethValues.filter((value) => value.teethRow === 0);
   const MAX_ROW_ITEM_COUNT = rows.length;
@@ -108,11 +115,15 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
   const buttonAction = (button: buttonType) => {
     if (button.value < 100) {
       // 歯の入力項目に数値を代入
-      props.setTeethValue(props.focusNumber, {
-        ...props.teethValues[props.focusNumber],
-        status: undefined,
-        value: button.value,
-      } as TEETH_TYPE);
+      props.setTeethValue(
+        props.focusNumber,
+        {
+          ...props.teethValues[props.focusNumber],
+          status: undefined,
+          value: button.value,
+        } as TEETH_TYPE,
+        appContext.isPrecision
+      );
       if (button.value < 10) {
         // 10未満の場合は次の歯に移動
         moveFocus(props.focusNumber);
