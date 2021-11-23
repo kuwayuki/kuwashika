@@ -3,6 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { DropdownType } from "./components/atoms/DropDownPickerAtom";
+import CommonInspection from "./components/organisms/common/CommonInspection";
 import CommonPatient from "./components/organisms/common/CommonPatient";
 import {
   DataType,
@@ -12,12 +13,11 @@ import {
   INIT_PERSON,
   PersonCurrentType,
   PersonDataType,
+  PersonType,
 } from "./constants/Util";
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
-import { PersonType } from "./constants/Util";
-import CommonInspection from "./components/organisms/common/CommonInspection";
 
 // 全ページの共通項目
 export type appContext = {

@@ -44,6 +44,7 @@ export default function PpdAllTeeth() {
   const teethRow = (teeth: teethType, isUp: boolean) => {
     return (
       <View
+        key={Math.random().toString()}
         style={{
           display: "flex",
           flexDirection: "row",

@@ -57,6 +57,9 @@ export default function CommonTeeth(props: teethProps) {
   const teeth = (count?: number) => {
     const obj = {
       ...props,
+      key:
+        props.teethValues[indexInit + count]?.index?.toString() ??
+        Math.random().toString(),
       value: props.teethValues[indexInit + count]?.value?.toString() ?? "",
       focusNumber: props.focusNumber,
       setFocusNumber: props.setFocusNumber,
