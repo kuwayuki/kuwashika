@@ -14,7 +14,6 @@ export type teethProps = {
   ) => void;
   teethRows: number; // 基本：1～２列：精密１～４列
   teethGroupIndex: number; // 0 ～ 16番目のグループ
-  pressedValue: number;
   focusNumber: number;
   setFocusNumber: (focusNumber: number) => void;
   isPrecision?: boolean;
@@ -30,7 +29,8 @@ export default function CommonTeeth(props: teethProps) {
   const appContext = React.useContext(AppContext);
 
   const onTouchBlDrAction = (teethNum: number) => {
-    if (props.pressedValue !== 101 && props.pressedValue !== 102) return;
+    if (appContext.pressedValue !== 101 && appContext.pressedValue !== 102)
+      return;
 
     // 出血及び排膿
     props.setTeethValue(
@@ -38,7 +38,7 @@ export default function CommonTeeth(props: teethProps) {
       {
         ...props.teethValues[teethNum],
         status:
-          props.pressedValue === 101
+          appContext.pressedValue === 101
             ? { ...props.teethValues[teethNum].status, isBleeding: true }
             : { ...props.teethValues[teethNum].status, isDrainage: true },
       } as TEETH_TYPE,

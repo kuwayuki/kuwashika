@@ -25,9 +25,6 @@ export default function CommonInspection() {
   }, []);
 
   const savePatient = () => {
-    const addData = INSPACTION_ITEMS.find(
-      (item) => item.value === inspectionDataKindNumber
-    );
     const currentPerson = appContext.allDataJson.persons.find(
       (person) =>
         person.patientNumber === appContext.currentPerson.patientNumber
@@ -37,8 +34,15 @@ export default function CommonInspection() {
 
     // 検査データの追加
     const temp: DropdownType[] = [...appContext.inspectionData];
+    // 任意入力以外はそのまま設定
+    const addData = INSPACTION_ITEMS.find(
+      (item) => item.value === inspectionDataKindNumber
+    );
     temp.push({
-      label: addData.label,
+      label:
+        inspectionDataKindNumber === INSPACTION_ITEMS[3].value
+          ? inspectionName
+          : addData.label,
       value: nextDataNumber,
       kind: inspectionDataKindNumber,
     });

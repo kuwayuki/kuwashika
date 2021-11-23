@@ -11,7 +11,7 @@ export default function PpdAllTeeth() {
   const ppdContext = React.useContext(PpdContext);
 
   const onTouchMtAction = (teethNum: number) => {
-    if (ppdContext.pressedValue !== 100) return;
+    if (appContext.pressedValue !== 100) return;
 
     // MT用歯のグループクリック時
     let temp = [...appContext.mtTeethNums];
@@ -35,7 +35,6 @@ export default function PpdAllTeeth() {
         teethRows={teeth.teethRow}
         teethGroupIndex={teeth.teethGroupIndex}
         isPrecision={appContext.isPrecision}
-        pressedValue={ppdContext.pressedValue}
         focusNumber={ppdContext.focusNumber}
         setFocusNumber={ppdContext.setFocusNumber}
       />

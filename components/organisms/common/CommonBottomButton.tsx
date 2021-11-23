@@ -21,8 +21,6 @@ type CommonButtonPropsType = {
     isPrecision?: boolean
   ) => void;
   moveScroll: (index?: number) => void;
-  pressedValue: number;
-  setPressedValue: (pressedValue: number) => void;
   mtTeethNums: number[];
 };
 
@@ -104,7 +102,7 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
     } else {
       props.setFocusNumber(nextIndex);
       props.moveScroll(nextIndex);
-      props.setPressedValue(-1);
+      appContext.setPressedValue(-1);
     }
   };
 
@@ -129,8 +127,8 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
         moveFocus(props.focusNumber);
       }
     } else {
-      props.setPressedValue(
-        props.pressedValue === button.value ? -1 : button.value
+      appContext.setPressedValue(
+        appContext.pressedValue === button.value ? -1 : button.value
       );
     }
   };
@@ -165,7 +163,7 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
               button.color !== undefined
                 ? { backgroundColor: button.color }
                 : undefined,
-              props.pressedValue === button.value
+              appContext.pressedValue === button.value
                 ? {
                     backgroundColor: button.color,
                     borderWidth: 2,

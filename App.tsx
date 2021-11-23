@@ -41,6 +41,8 @@ export type appContext = {
   setRegistDatabase: (currentPerson: PersonCurrentType) => void;
   mtTeethNums: number[];
   setMtTeethNums: (mtTeethNums: number[]) => void;
+  pressedValue: number;
+  setPressedValue: (pressedValue: number) => void;
 };
 export const AppContext = React.createContext({} as appContext);
 
@@ -56,15 +58,22 @@ export default function App() {
   const [isPrecision, setPrecision] = React.useState(false);
   const [isInitRead, setInitRead] = React.useState(false);
   const [mtTeethNums, setMtTeethNums] = React.useState<number[]>([]);
+  const [pressedValue, setPressedValue] = React.useState(-1);
 
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
 
   // 初期データ読込処理
   React.useEffect(() => {
-    setRegistDatabase(undefined); // データリセット
+    // setRegistDatabase(undefined); // データリセット
     reloadData(true);
   }, []);
+
+  // データ自動保存
+  React.useEffect(() => {
+    if (!isInitRead) return;
+    setRegistDatabase(currentPerson);
+  }, [currentPerson]);
 
   // 患者番号変更処理
   React.useEffect(() => {
@@ -290,6 +299,8 @@ export default function App() {
           setRegistDatabase,
           mtTeethNums,
           setMtTeethNums,
+          pressedValue,
+          setPressedValue,
         }}
       >
         {modalNumber === 1 && <CommonPatient />}

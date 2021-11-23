@@ -17,8 +17,6 @@ export type ppdContext = {
     teethValue: TEETH_TYPE,
     isPrecision?: boolean
   ) => void;
-  pressedValue: number;
-  setPressedValue: (pressedValue: number) => void;
 };
 export const PpdContext = React.createContext({} as ppdContext);
 
@@ -32,7 +30,6 @@ export default function PpdPage({
   const [teethValuesSimple, setTeethValuesSimple] = React.useState<
     TEETH_TYPE[]
   >([]);
-  const [pressedValue, setPressedValue] = React.useState(-1);
 
   /**
    * 患者データから表示再読み込み
@@ -130,8 +127,6 @@ export default function PpdPage({
         teethValues,
         setTeethValues,
         setTeethValue,
-        pressedValue,
-        setPressedValue,
         teethValuesSimple,
         setTeethValuesSimple,
       }}

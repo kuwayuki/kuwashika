@@ -51,8 +51,6 @@ export default function PpdTemplate() {
         }
         setTeethValue={ppdContext.setTeethValue}
         moveScroll={() => moveScroll(ppdContext.focusNumber)}
-        pressedValue={ppdContext.pressedValue}
-        setPressedValue={ppdContext.setPressedValue}
         mtTeethNums={appContext.mtTeethNums}
       />
     </>
