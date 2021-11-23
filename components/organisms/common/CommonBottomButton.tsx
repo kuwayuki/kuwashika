@@ -161,7 +161,6 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
         button.value < 100 ? (
           // 通常ボタン
           <ButtonAtom
-            key={button.value}
             style={
               button.color !== undefined
                 ? { backgroundColor: button.color }
@@ -174,7 +173,6 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
         ) : (
           // 押しっぱなしボタン
           <ButtonPressedMolecular
-            key={button.value}
             style={[
               button.color !== undefined
                 ? { backgroundColor: button.color }

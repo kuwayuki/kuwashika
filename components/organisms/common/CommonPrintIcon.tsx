@@ -1,9 +1,9 @@
 import * as Print from "expo-print";
 import * as React from "react";
-import { StatusBar, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { Icon } from "react-native-elements";
 import { AppContext } from "../../../App";
-import { TEETH_ALL } from "../../../constants/Constant";
+import { teethType, TEETH_ALL, TEETH_TYPE } from "../../../constants/Constant";
 
 export default function CommonPrintIcon() {
   const [selectedPrinter, setSelectedPrinter] = React.useState<Print.Printer>();
@@ -19,42 +19,62 @@ export default function CommonPrintIcon() {
     });
   };
 
-  const createTr = (td?: any, thName?: string, isNo = false) => {
+  const createTr = (td: any, thName?: string, isNo = false) => {
     return `<tr align="center" style="border: 1px solid #595959; ${
-      isNo && "background: #ca9715"
-    }">${createTh(thName)}${td ?? ""}</tr>`;
+      isNo && "background: #FFFFFF"
+    }">${createTh(thName)}${td}</tr>`;
   };
 
   const createTh = (thName?: string) => {
-    if (thName === undefined) return "</>";
+    if (thName === undefined) return "";
     return `<th>${thName}</th>`;
   };
 
-  const createTd = (value?: any, isPrecision = false) => {
+  const createTd = (teeth: TEETH_TYPE | string, isPrecision = false) => {
+    let styles = "border: 1px solid #595959; font-size: 8pt;";
+    const value = typeof teeth !== "string" ? teeth.value ?? "" : teeth;
+    if (typeof teeth !== "string") {
+      const isMT = appContext.mtTeethNums?.includes(teeth.teethGroupIndex);
+
+      if (isMT) {
+        styles = "color:#696969; background-color:#696969; border:0px";
+      } else {
+        const isDrainage = teeth.status?.isDrainage;
+        const isBleeding = teeth.status?.isBleeding;
+
+        if (isDrainage) styles += " background-color:#FFCC00;";
+        if (isBleeding) styles += " color:#FF3366;";
+      }
+    } else {
+      styles += " background-color:#EEFEFE;";
+    }
+
     return `<td align="center" colspan="${
       isPrecision ? 3 : 1
-    } style="border: 1px solid #595959; font-size: 3pt">${value ?? ""}</td>`;
+    }" style="${styles}" >${value ?? ""}</td>`;
   };
 
   const createHtml = (): string => {
-    const data = appContext.currentPerson.data;
-    const isPrecision = data.isPrecision;
+    const currentPersonData = appContext.currentPerson.data;
+    const isPrecision = currentPersonData.isPrecision;
     // 全体的なテーブルを作成
 
     // ヘッダー(真ん中のナンバー)を作成
     let No: string[] = ["", ""];
-    TEETH_ALL.forEach((teeth) => {
-      const td = createTd(teeth.teethNum, isPrecision);
-      No[teeth.teethRow] = No[teeth.teethRow] + td;
+    TEETH_ALL.forEach((teeth: teethType) => {
+      const td = createTd(teeth.teethNum.toString(), isPrecision);
+      No[teeth.teethRow] += td;
     });
 
     // PPDを作成
-    let ppd: string[] = ["", "", "", ""];
-    const ppdData = isPrecision ? data.PPD.precision : data.PPD.basic;
-    ppdData.forEach((num) => {
-      if (num.teethRow === undefined) return;
-      const td = createTd(num.value);
-      ppd[num.teethRow] = ppd[num.teethRow] + td;
+    let ppdTd: string[] = ["", "", "", ""];
+    const ppdData = isPrecision
+      ? currentPersonData.PPD.precision
+      : currentPersonData.PPD.basic;
+    ppdData.forEach((teeth: TEETH_TYPE) => {
+      if (teeth.teethRow === undefined) return;
+      const td = createTd(teeth);
+      ppdTd[teeth.teethRow] += td;
     });
 
     // 動揺度を作成
@@ -71,30 +91,16 @@ export default function CommonPrintIcon() {
       font-size: 8px;
     "
   >
-    ${createTr(ppd[0], "PPD: B")}
-    ${isPrecision ? createTr(ppd[1], "PPD: P") : "</>"}
-    ${No.map((n) => createTr(n, "", true))}
-    ${createTr(ppd[isPrecision ? 2 : 1], isPrecision ? "PPD: L" : "PPD")}
-    ${isPrecision ? createTr(ppd[3], "PPD: B") : "</>"}
+    ${createTr(ppdTd[0], "PPD: B")}
+    ${isPrecision ? createTr(ppdTd[1], "PPD: P") : "</>"}
+    ${createTr(No[0], "", true)}
+    ${createTr(No[1], "", true)}
+    ${createTr(ppdTd[isPrecision ? 2 : 1], isPrecision ? "PPD: L" : "PPD")}
+    ${isPrecision ? createTr(ppdTd[3], "PPD: B") : "</>"}
   </table>
   <hr width: 100% size="1" color="#cc6666" style="border-style: dashed" />
   </html>
   `;
-    // return `
-    // <html>
-    //   <head>
-    //     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-    //   </head>
-    //   <body style="text-align: center;">
-    //     <h1 style="font-size: 50px; font-family: Helvetica Neue; font-weight: normal;">
-    //       Hello Expo!
-    //     </h1>
-    //     <img
-    //       src="https://d30j33t1r58ioz.cloudfront.net/static/guides/sdk.png"
-    //       style="width: 90vw;" />
-    //   </body>
-    // </html>
-    // `;
   };
 
   return (
@@ -107,10 +113,4 @@ export default function CommonPrintIcon() {
     />
   );
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: StatusBar.currentHeight,
-    marginHorizontal: 16,
-  },
-});
+const styles = StyleSheet.create({});
