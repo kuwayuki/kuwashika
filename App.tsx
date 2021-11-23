@@ -9,6 +9,7 @@ import {
   DateFormat,
   formatDate,
   InitJsonData,
+  INIT_PERSON,
   PersonCurrentType,
   PersonDataType,
 } from "./constants/Util";
@@ -84,7 +85,7 @@ export default function App() {
       const person = allDataJson.persons.find(
         (person) => person.patientNumber === patientNumber
       );
-      reloadPersonData(person.data);
+      reloadPersonData(person?.data ?? [INIT_PERSON]);
       return;
     }
 
@@ -164,7 +165,7 @@ export default function App() {
       inspectionData.push({
         label:
           formatDate(data.date, DateFormat.MM_DD) +
-          "：" +
+          ":" +
           data.inspectionDataName,
         value: data.inspectionDataNumber,
       })

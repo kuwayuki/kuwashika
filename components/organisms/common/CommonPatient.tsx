@@ -14,6 +14,15 @@ export default function CommonPatient() {
   const [patientName, setPatientName] = React.useState<string>(undefined);
 
   const savePatient = () => {
+    if (
+      appContext.patients
+        .map((patient) => patient.value)
+        .includes(patientNumber)
+    ) {
+      alert("この患者番号は既に存在します");
+      return;
+    }
+
     // 患者番号の追加
     const temp: DropdownType[] = [...appContext.patients];
     temp.push({ label: patientNumber.toString(), value: patientNumber });

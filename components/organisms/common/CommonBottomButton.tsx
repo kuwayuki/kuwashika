@@ -22,6 +22,7 @@ type CommonButtonPropsType = {
   ) => void;
   moveScroll: (index?: number) => void;
   mtTeethNums: number[];
+  isPrecision?: boolean;
 };
 
 export const BUTTON_NAMES = [
@@ -67,7 +68,7 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
   type warpType = { src: number; dst: number };
 
   // コの字タイプ(列順)
-  const WARP_ROWS = [
+  const WARP_ROWS_PRECISION = [
     {
       src: MAX_ROW_ITEM_COUNT - 1,
       dst: MAX_ROW_ITEM_COUNT * 2 - 1,
@@ -80,9 +81,22 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
     { src: MAX_ROW_ITEM_COUNT * 3, dst: MAX_ROW_ITEM_COUNT * 2 } as warpType,
   ]; // 1列目：47(⇒95), 2列目：48(⇒191), 3列目：143(⇒0), 4列目：144(⇒96)
 
+  const WARP_ROWS_BASIC = [
+    {
+      src: MAX_ROW_ITEM_COUNT - 1,
+      dst: MAX_ROW_ITEM_COUNT * 2 - 1,
+    } as warpType,
+    {
+      src: MAX_ROW_ITEM_COUNT,
+      dst: 0,
+    } as warpType,
+  ]; // 1列目：15(⇒31), 2列目：16(⇒0)
+
   const moveFocus = (index: number) => {
     let nextIndex;
-    const warptemp = [...WARP_ROWS];
+    const warptemp = props.isPrecision
+      ? [...WARP_ROWS_PRECISION]
+      : [...WARP_ROWS_BASIC];
     // 現在の列を取得
     const teeth = props.teethValues[index];
     // ワープの数値が現在よりも高い場合はプラス、低ければマイナス

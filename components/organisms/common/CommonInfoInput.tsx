@@ -96,7 +96,8 @@ export default function CommonInfoInput() {
           name="cog"
           type="font-awesome"
           color="#999999"
-          onPress={() => appContext.setRegistDatabase(appContext.currentPerson)}
+          onPress={() => appContext.setRegistDatabase(undefined)}
+          // onPress={() => appContext.setRegistDatabase(appContext.currentPerson)}
         />
       </View>
     </View>
