@@ -21,8 +21,9 @@ export type PersonType = {
 
 export type PersonDataType = {
   date: Date;
-  dataNumber: number;
-  dataName: string;
+  inspectionDataNumber: number;
+  inspectionDataKindNumber: number;
+  inspectionDataName: string;
   isPrecision: boolean;
   mtTeethNums: number[];
   PPD: {
@@ -44,8 +45,9 @@ export type PersonCurrentType = {
 
 export const INIT_PERSON: PersonDataType = {
   isPrecision: false,
-  dataNumber: 1,
-  dataName: "初診",
+  inspectionDataNumber: 1,
+  inspectionDataKindNumber: 1,
+  inspectionDataName: "初診",
   date: new Date(),
   mtTeethNums: [],
   PPD: {
@@ -72,8 +74,9 @@ export const INIT_DATA: DataType = {
       data: [
         {
           date: new Date(),
-          dataNumber: 1,
-          dataName: "初診",
+          inspectionDataNumber: 1,
+          inspectionDataKindNumber: 1,
+          inspectionDataName: "初診",
           isPrecision: false,
           mtTeethNums: [6, 8],
           PPD: {
@@ -111,8 +114,9 @@ export const INIT_DATA: DataType = {
       data: [
         {
           date: new Date(2018, 9, 26, 1, 1, 22),
-          dataNumber: 1,
-          dataName: "初診",
+          inspectionDataNumber: 1,
+          inspectionDataKindNumber: 1,
+          inspectionDataName: "初診",
           isPrecision: false,
           mtTeethNums: [],
           PPD: {
@@ -129,8 +133,9 @@ export const INIT_DATA: DataType = {
         {
           // date: new Date(),
           date: new Date(2019, 9, 26, 1, 1, 22),
-          dataNumber: 2,
-          dataName: "2回目",
+          inspectionDataNumber: 2,
+          inspectionDataKindNumber: 2,
+          inspectionDataName: "2回目",
           isPrecision: true,
           mtTeethNums: [],
           PPD: {
@@ -152,8 +157,9 @@ export const INIT_DATA: DataType = {
       data: [
         {
           date: new Date(2020, 9, 26, 1, 1, 22),
-          dataNumber: 1,
-          dataName: "初診",
+          inspectionDataNumber: 1,
+          inspectionDataKindNumber: 1,
+          inspectionDataName: "初診",
           isPrecision: false,
           mtTeethNums: [],
           PPD: {

@@ -13,38 +13,46 @@ import TitleAndAction from "../../moleculars/TitleAndAction";
 
 export default function CommonInspection() {
   const appContext = React.useContext(AppContext);
-  const [inspectionDataNumber, setInspectionDataNumber] =
+  const [inspectionDataKindNumber, setInspectionDataKindNumber] =
     React.useState<number>(undefined);
   const [inspectionName, setInspectionName] = React.useState<string>(undefined);
 
   React.useEffect(() => {
     const items = INSPACTION_ITEMS.map((item) => item.value);
-    const index = items.indexOf(appContext.currentPerson.data.dataNumber) + 1;
-    setInspectionDataNumber(INSPACTION_ITEMS[index < 3 ? index : 0].value);
+    const index =
+      items.indexOf(appContext.currentPerson.data.inspectionDataKindNumber) + 1;
+    setInspectionDataKindNumber(INSPACTION_ITEMS[index < 3 ? index : 0].value);
   }, []);
 
   const savePatient = () => {
     const addData = INSPACTION_ITEMS.find(
-      (item) => item.value === inspectionDataNumber
+      (item) => item.value === inspectionDataKindNumber
     );
+    const currentPerson = appContext.allDataJson.persons.find(
+      (person) =>
+        person.patientNumber === appContext.currentPerson.patientNumber
+    );
+    const numbers = currentPerson.data.map((data) => data.inspectionDataNumber);
+    const nextDataNumber = Math.max(...numbers) + 1;
+
     // 検査データの追加
     const temp: DropdownType[] = [...appContext.inspectionData];
     temp.push({
       label: addData.label,
-      value: inspectionDataNumber,
+      value: nextDataNumber,
+      kind: inspectionDataKindNumber,
     });
     appContext.setInspectionData(temp);
-    appContext.setInspectionDataNumber(inspectionDataNumber);
-
-    // FIXME: 直近のデータではなくて、最新のデータから取得(とりあえずいいか)
+    appContext.setInspectionDataNumber(inspectionDataKindNumber);
 
     const patientData = {
       ...appContext.currentPerson,
       data: {
         ...appContext.currentPerson.data,
         date: new Date(),
-        dataNumber: inspectionDataNumber,
-        dataName: addData.label,
+        inspectionDataNumber: nextDataNumber,
+        inspectionDataKindNumber: inspectionDataKindNumber,
+        inspectionDataName: addData.label,
       },
     } as PersonCurrentType;
 
@@ -58,7 +66,7 @@ export default function CommonInspection() {
     // Modalを閉じて、前の検査番号に戻す
     appContext.setModalNumber(0);
     appContext.setInspectionDataNumber(
-      appContext.currentPerson.data.dataNumber
+      appContext.currentPerson.data.inspectionDataNumber
     );
   };
 
@@ -71,12 +79,12 @@ export default function CommonInspection() {
         >
           <DropDownPickerAtom
             items={INSPACTION_ITEMS}
-            value={inspectionDataNumber}
-            setValue={setInspectionDataNumber}
+            value={inspectionDataKindNumber}
+            setValue={setInspectionDataKindNumber}
             width={160}
           />
         </TitleAndAction>
-        {inspectionDataNumber === INSPACTION_ITEMS[3].value && (
+        {inspectionDataKindNumber === INSPACTION_ITEMS[3].value && (
           <TitleAndAction
             title={"検査名称"}
             style={{ marginBottom: 16, zIndex: 1001 }}

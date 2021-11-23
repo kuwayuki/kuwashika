@@ -60,7 +60,7 @@ export default function PpdPage({
     appContext.setMtTeethNums([...appContext.currentPerson.data.mtTeethNums]);
   }, [
     appContext.currentPerson.patientNumber,
-    appContext.currentPerson.data.dataNumber,
+    appContext.currentPerson.data.inspectionDataNumber,
   ]);
 
   /**

@@ -4,7 +4,7 @@ import DropDownPicker, {
   DropDownPickerProps,
 } from "react-native-dropdown-picker";
 
-export type DropdownType = { label: string; value: number };
+export type DropdownType = { label: string; value: number; kind?: number };
 
 type DropDownPickerAtomProps = Omit<DropDownPickerProps, "open" | "setOpen"> & {
   width?: number;

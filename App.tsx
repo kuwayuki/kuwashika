@@ -20,6 +20,8 @@ import CommonInspection from "./components/organisms/common/CommonInspection";
 
 // 全ページの共通項目
 export type appContext = {
+  allDataJson: DataType;
+  setAllDataJson: (allDataJson: DataType) => void;
   currentPerson: PersonCurrentType;
   setCurrentPerson: (currentPerson: PersonCurrentType) => void;
   modalNumber: number;
@@ -60,7 +62,7 @@ export default function App() {
 
   // 初期データ読込処理
   React.useEffect(() => {
-    // setRegistDatabase(undefined);
+    setRegistDatabase(undefined); // データリセット
     reloadData(true);
   }, []);
 
@@ -97,7 +99,7 @@ export default function App() {
       if (!person || !person.data) return;
 
       const personDataType = person.data.find(
-        (data) => data.dataNumber === inspectionDataNumber
+        (data) => data.inspectionDataNumber === inspectionDataNumber
       );
       reloadPersonInspectionData(personDataType);
       return;
@@ -154,8 +156,8 @@ export default function App() {
         label:
           formatDate(data.date, DateFormat.MM_DD) +
           "：" +
-          data.dataName.toString(),
-        value: data.dataNumber,
+          data.inspectionDataName,
+        value: data.inspectionDataNumber,
       })
     );
     setInspectionData(inspectionData);
@@ -172,7 +174,7 @@ export default function App() {
   const reloadPersonInspectionData = (personData: PersonDataType) => {
     if (!personData) return;
     // 検査データ
-    setInspectionDataNumber(personData.dataNumber);
+    setInspectionDataNumber(personData.inspectionDataNumber);
     // 検査日
     setInspectionDate(personData.date);
     // 基本 or 精密
@@ -223,7 +225,8 @@ export default function App() {
       const newPersons: PersonType[] = [];
       let newPatientData = [];
       const patientDataEdit = [...patientEdit.data].find(
-        (data) => data.dataNumber === currentPerson.data.dataNumber
+        (data) =>
+          data.inspectionDataNumber === currentPerson.data.inspectionDataNumber
       );
       if (!patientDataEdit) {
         // 患者データが存在しない場合は追加
@@ -252,11 +255,11 @@ export default function App() {
       writeData = { ...tempAllData, persons: newPersons };
     }
 
-    // // ファイル書き込み
-    // await FileSystem.writeAsStringAsync(
-    //   FileSystem.documentDirectory + "database.json",
-    //   JSON.stringify(writeData)
-    // );
+    // ファイル書き込み
+    await FileSystem.writeAsStringAsync(
+      FileSystem.documentDirectory + "database.json",
+      JSON.stringify(writeData)
+    );
     setAllDataJson(writeData);
   };
 
@@ -266,6 +269,8 @@ export default function App() {
     return (
       <AppContext.Provider
         value={{
+          allDataJson,
+          setAllDataJson,
           currentPerson,
           setCurrentPerson,
           modalNumber,
