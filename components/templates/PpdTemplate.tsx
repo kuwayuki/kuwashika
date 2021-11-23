@@ -6,7 +6,7 @@ import CommonBottomButton from "../organisms/common/CommonBottomButton";
 import CommonInfoInput from "../organisms/common/CommonInfoInput";
 import { View } from "../organisms/common/Themed";
 import PpdAllTeeth from "../organisms/ppd/PpdAllTeeth";
-import { PPD_PARTS } from "../organisms/ppd/PpdOneSideTeeth";
+import { PPD_PARTS } from "../organisms/common/CommonTeeth";
 import { PpdContext } from "../pages/PpdPage";
 
 export default function PpdTemplate() {

@@ -22,6 +22,26 @@ export default function PpdAllTeeth() {
     }
     appContext.setMtTeethNums(temp);
   };
+
+  const teethBlock = (teeth: teethType) => {
+    return (
+      <PpdOneBlockTeeth
+        teethValues={
+          appContext.isPrecision
+            ? ppdContext.teethValues
+            : ppdContext.teethValuesSimple
+        }
+        setTeethValue={ppdContext.setTeethValue}
+        teethRows={teeth.teethRow}
+        teethGroupIndex={teeth.teethGroupIndex}
+        isPrecision={appContext.isPrecision}
+        pressedValue={ppdContext.pressedValue}
+        focusNumber={ppdContext.focusNumber}
+        setFocusNumber={ppdContext.setFocusNumber}
+      />
+    );
+  };
+
   const teethRow = (teeth: teethType, isUp: boolean) => {
     return (
       <View
@@ -36,12 +56,7 @@ export default function PpdAllTeeth() {
             flexDirection: "column",
           }}
         >
-          {isUp && (
-            <PpdOneBlockTeeth
-              teethRows={teeth.teethRow}
-              teethGroupIndex={teeth.teethGroupIndex}
-            />
-          )}
+          {isUp && teethBlock(teeth)}
           <TextReadMolecular
             value={teeth.teethNum.toString()}
             onTouchEnd={() => onTouchMtAction(teeth.teethGroupIndex)}
@@ -49,12 +64,7 @@ export default function PpdAllTeeth() {
             mtTeethNums={appContext.mtTeethNums}
             isHideNum={true}
           />
-          {!isUp && (
-            <PpdOneBlockTeeth
-              teethRows={teeth.teethRow}
-              teethGroupIndex={teeth.teethGroupIndex}
-            />
-          )}
+          {!isUp && teethBlock(teeth)}
         </View>
       </View>
     );
