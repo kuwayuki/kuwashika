@@ -2,7 +2,7 @@ import * as React from "react";
 import { StyleSheet, View } from "react-native";
 import { AppContext } from "../../../App";
 import { INSPACTION_ITEMS } from "../../../constants/Constant";
-import { INIT_PERSON } from "../../../constants/Util";
+import { PersonCurrentType } from "../../../constants/Util";
 import DropDownPickerAtom, {
   DropdownType,
 } from "../../atoms/DropDownPickerAtom";
@@ -36,14 +36,17 @@ export default function CommonInspection() {
     appContext.setInspectionData(temp);
     appContext.setInspectionDataNumber(inspectionDataNumber);
 
+    // FIXME: 直近のデータではなくて、最新のデータから取得(とりあえずいいか)
+
     const patientData = {
       ...appContext.currentPerson,
       data: {
-        ...INIT_PERSON,
+        ...appContext.currentPerson.data,
+        date: new Date(),
         dataNumber: inspectionDataNumber,
-        dataName: inspectionDataNumber.toString(),
+        dataName: addData.label,
       },
-    };
+    } as PersonCurrentType;
 
     // 全体データの更新
     appContext.setRegistDatabase(patientData);

@@ -1,4 +1,6 @@
 import { TEETH_TYPE } from "./Constant";
+import dayjs from "dayjs";
+import "dayjs/locale/ja";
 
 export enum PPD_ORDER {
   co_reco,
@@ -128,7 +130,7 @@ export const INIT_DATA: DataType = {
           // date: new Date(),
           date: new Date(2019, 9, 26, 1, 1, 22),
           dataNumber: 2,
-          dataName: "2021/11/11 2回目",
+          dataName: "2回目",
           isPrecision: true,
           mtTeethNums: [],
           PPD: {
@@ -174,6 +176,24 @@ export const InitJsonData = () => {
   return INIT_DATA;
 };
 
-// export const JsonInsert = (data: JsonDataType) => {
-//   return json;
-// };
+export enum DateFormat {
+  YY_MM_DD_dd = "YYYY/MM/DD(dd)",
+  MM_DD_dd = "MM/DD(dd)",
+  YY_MM_DD = "YYYY/MM/DD",
+  MM_DD = "MM/DD",
+}
+
+export const formatDate = (date: Date, type: DateFormat): string => {
+  switch (type) {
+    case DateFormat.YY_MM_DD_dd:
+      return dayjs(date).locale("ja").format("YYYY/MM/DD(dd)");
+    case DateFormat.MM_DD_dd:
+      return dayjs(date).locale("ja").format("MM/DD(dd)");
+    case DateFormat.YY_MM_DD:
+      return dayjs(date).locale("ja").format("YYYY/MM/DD");
+    case DateFormat.MM_DD:
+      return dayjs(date).locale("ja").format("MM/DD");
+    default:
+      return "";
+  }
+};

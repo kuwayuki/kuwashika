@@ -6,6 +6,8 @@ import { DropdownType } from "./components/atoms/DropDownPickerAtom";
 import CommonPatient from "./components/organisms/common/CommonPatient";
 import {
   DataType,
+  DateFormat,
+  formatDate,
   InitJsonData,
   PersonCurrentType,
   PersonDataType,
@@ -146,16 +148,13 @@ export default function App() {
    */
   const reloadPersonData = async (personData: PersonDataType[]) => {
     // 検査データ
-    const inspectionData = [
-      { label: "新規追加", value: 0 },
-      // { label: "Sc後", value: 1 },
-      // { label: "SRP後", value: 2 },
-      // { label: "SRP/P重防", value: 3 },
-      // { label: "任意入力", value: 10 },
-    ];
+    const inspectionData = [{ label: "新規追加", value: 0 }];
     personData.forEach((data) =>
       inspectionData.push({
-        label: data.dataName.toString(),
+        label:
+          formatDate(data.date, DateFormat.MM_DD) +
+          "：" +
+          data.dataName.toString(),
         value: data.dataNumber,
       })
     );

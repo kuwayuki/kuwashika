@@ -61,19 +61,19 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
   const MAX_ROW_ITEM_COUNT = rows.length;
   type warpType = { src: number; dst: number };
 
-  // コの字タイプ
+  // コの字タイプ(列順)
   const WARP_ROWS = [
     {
       src: MAX_ROW_ITEM_COUNT - 1,
       dst: MAX_ROW_ITEM_COUNT * 2 - 1,
     } as warpType,
     { src: MAX_ROW_ITEM_COUNT, dst: MAX_ROW_ITEM_COUNT * 4 - 1 } as warpType,
-    { src: MAX_ROW_ITEM_COUNT * 3, dst: MAX_ROW_ITEM_COUNT * 2 } as warpType,
     {
       src: MAX_ROW_ITEM_COUNT * 3 - 1,
       dst: 0,
     } as warpType,
-  ]; // 47, 48, 144, 143
+    { src: MAX_ROW_ITEM_COUNT * 3, dst: MAX_ROW_ITEM_COUNT * 2 } as warpType,
+  ]; // 1列目：47(⇒95), 2列目：48(⇒191), 3列目：143(⇒0), 4列目：144(⇒96)
 
   const moveFocus = (index: number) => {
     let nextIndex;
@@ -89,6 +89,7 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
       // 同じならワープ(指定列の先頭 or 最後)
       nextIndex = warptemp[teeth.teethRow].dst;
     }
+
     const nextTeeth = props.teethValues[nextIndex];
     if (props.mtTeethNums.includes(nextTeeth.teethGroupIndex)) {
       // MTの場合は次のフォーカスに移動

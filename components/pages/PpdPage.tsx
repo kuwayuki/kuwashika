@@ -32,7 +32,7 @@ export default function PpdPage({
   const [pressedValue, setPressedValue] = React.useState(-1);
 
   /**
-   * 初期値を入力
+   * 患者データから表示再読み込み
    */
   React.useEffect(() => {
     const temp: TEETH_TYPE[] = [...appContext.currentPerson.data.PPD.precision];
@@ -58,7 +58,10 @@ export default function PpdPage({
     setTeethValuesSimple(temp2);
 
     appContext.setMtTeethNums([...appContext.currentPerson.data.mtTeethNums]);
-  }, [appContext.currentPerson.patientNumber]);
+  }, [
+    appContext.currentPerson.patientNumber,
+    appContext.currentPerson.data.dataNumber,
+  ]);
 
   /**
    * データが変更される度に編集データを更新
