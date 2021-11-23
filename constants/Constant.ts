@@ -4,7 +4,7 @@ import { DropdownType } from "../components/atoms/DropDownPickerAtom";
 /**
  * 歯の真ん中の数字部分
  */
-type teethType = {
+export type teethType = {
   teethGroupIndex: number; // 歯の番号
   teethNum: number; // 歯の表示数値番号
   teethRow: number;
@@ -37,14 +37,11 @@ export type TEETH_TYPE = {
   teethRow: number; // 歯の列番号
   teethGroupIndex: number; // 歯のグループ番号
   status?: TEETH_STATUS_TYPE; // 歯の状態：1~32 or 1~192
-  // display: string;
-  // color: string;
 };
 
 export type TEETH_STATUS_TYPE = {
   isBleeding: boolean;
   isDrainage: boolean;
-  // isMT: boolean;
 };
 
 export enum TEETH_STATUS {
