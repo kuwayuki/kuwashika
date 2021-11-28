@@ -41,7 +41,9 @@ export default function PpdTemplate() {
       const bornusY =
         nativeEvent.layoutMeasurement.height * nativeEvent.zoomScale;
       // 端っこに行くにつれて差分を徐々に倍率を下げる（真ん中が最大）
-      const positionX = timesX * indexPositionX - 300;
+      const positionX =
+        timesX * indexPositionX -
+        (nativeEvent.zoomScale >= 1 ? 300 : 100 * nativeEvent.zoomScale);
       const positionY =
         (nativeEvent.contentSize.height / partsTimesY) * indexPositionY +
         (indexPositionY < partsTimesY / 2 ? -bornusY : bornusY);

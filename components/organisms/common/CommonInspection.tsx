@@ -90,7 +90,7 @@ export default function CommonInspection() {
         </TitleAndAction>
         {inspectionDataKindNumber === INSPACTION_ITEMS[3].value && (
           <TitleAndAction
-            title={"検査名称"}
+            title={"検査名称　"}
             style={{ marginBottom: 16, zIndex: 1001 }}
           >
             <TextInputAtom

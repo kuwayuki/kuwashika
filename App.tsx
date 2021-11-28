@@ -1,4 +1,5 @@
 import * as FileSystem from "expo-file-system";
+import { FileInfo } from "expo-file-system";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -127,13 +128,16 @@ export default function App() {
   const reloadData = async (isFileReload = false) => {
     let refleshData: DataType;
     if (isFileReload) {
-      try {
+      const result: FileInfo = await FileSystem.getInfoAsync(
+        FileSystem.documentDirectory + "database.json"
+      );
+      if (result.exists) {
         const data = await FileSystem.readAsStringAsync(
           FileSystem.documentDirectory + "database.json"
         );
         refleshData = JSON.parse(data) as DataType;
         setInitRead(true);
-      } catch (error) {
+      } else {
         refleshData = { ...INIT_DATA };
         setRegistDatabase();
       }
