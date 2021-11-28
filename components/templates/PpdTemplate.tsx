@@ -6,6 +6,7 @@ import {
 } from "react-native";
 import { AppContext } from "../../App";
 import ScrollViewAtom from "../atoms/ScrollViewAtom";
+import { MATH } from "../moleculars/TextInputTeethMolecular";
 import CommonBottomButton from "../organisms/common/CommonBottomButton";
 import CommonInfoInput from "../organisms/common/CommonInfoInput";
 import { View } from "../organisms/common/Themed";
@@ -18,43 +19,50 @@ export default function PpdTemplate() {
   const partsTimesX = appContext.isPrecision ? 3 : 1;
   const partsTimesY = appContext.isPrecision ? 4 : 2;
   const maxColumns = 16 * partsTimesX;
-
-  const scrollViewRef = React.useRef(null);
-  let nativeEvent: NativeScrollEvent = {
-    zoomScale: 1,
+  const MAX_WIDTH = maxColumns * MATH;
+  const [nativeEvent, setNativeEvent] = React.useState<NativeScrollEvent>({
+    zoomScale: 0.99,
     contentSize: { width: 1823, height: 232 },
     layoutMeasurement: { width: 799, height: 185 },
-  } as NativeScrollEvent;
+  } as NativeScrollEvent);
+  const scrollViewRef = React.useRef(null);
 
   const moveScroll = (index?: number) => {
     if (scrollViewRef.current) {
       const num = index ?? ppdContext.focusNumber;
-      const pointPositionX = Math.floor(num % maxColumns);
-      const pointPositionY = Math.floor(num / maxColumns);
-      const bornusX =
-        (nativeEvent.layoutMeasurement.width / 2) * nativeEvent.zoomScale;
+      // 左から何番目？
+      let indexPositionX = Math.floor(num % maxColumns);
+      if (indexPositionX > 0) indexPositionX++;
+      // 上から何番目？
+      const indexPositionY = Math.floor(num / maxColumns);
+
+      // 一マス分のサイズ
+      const timesX = (MAX_WIDTH * nativeEvent.zoomScale) / maxColumns;
       const bornusY =
         nativeEvent.layoutMeasurement.height * nativeEvent.zoomScale;
-      const positionX =
-        (nativeEvent.contentSize.width / maxColumns) * pointPositionX - bornusX;
+      // 端っこに行くにつれて差分を徐々に倍率を下げる（真ん中が最大）
+      const positionX = timesX * indexPositionX - 300;
       const positionY =
-        (nativeEvent.contentSize.height / partsTimesY) * pointPositionY +
-        (pointPositionY < partsTimesY / 2 ? -bornusY : bornusY);
-
+        (nativeEvent.contentSize.height / partsTimesY) * indexPositionY +
+        (indexPositionY < partsTimesY / 2 ? -bornusY : bornusY);
       scrollViewRef.current.scrollTo({ x: positionX, y: positionY });
     }
   };
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    if (!event) return;
-    nativeEvent = event.nativeEvent;
+    if (!event || nativeEvent.zoomScale === event.nativeEvent.zoomScale) return;
+    setNativeEvent(event.nativeEvent);
   };
 
   return (
     <>
       <View style={styles.container}>
         <CommonInfoInput />
-        <ScrollViewAtom ref={scrollViewRef} onScroll={handleScroll}>
+        <ScrollViewAtom
+          ref={scrollViewRef}
+          onScroll={handleScroll}
+          onScrollEndDrag={handleScroll}
+        >
           <PpdAllTeeth />
         </ScrollViewAtom>
       </View>
@@ -67,7 +75,7 @@ export default function PpdTemplate() {
             : ppdContext.teethValuesSimple
         }
         setTeethValue={ppdContext.setTeethValue}
-        moveScroll={() => moveScroll(ppdContext.focusNumber)}
+        moveScroll={moveScroll}
         mtTeethNums={appContext.mtTeethNums}
         isPrecision={appContext.isPrecision}
       />

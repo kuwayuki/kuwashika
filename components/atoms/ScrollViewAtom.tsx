@@ -14,7 +14,7 @@ const ScrollViewAtom = React.forwardRef((props: ScrollViewProps, ref: any) => {
       ref={ref}
       horizontal={false}
       decelerationRate={"normal"}
-      maximumZoomScale={4}
+      maximumZoomScale={2}
       minimumZoomScale={0.5}
     >
       {props.children}

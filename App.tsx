@@ -10,6 +10,7 @@ import {
   DateFormat,
   formatDate,
   InitJsonData,
+  INIT_DATA,
   INIT_PERSON,
   PersonCurrentType,
   PersonDataType,
@@ -126,11 +127,16 @@ export default function App() {
   const reloadData = async (isFileReload = false) => {
     let refleshData: DataType;
     if (isFileReload) {
-      const data = await FileSystem.readAsStringAsync(
-        FileSystem.documentDirectory + "database.json"
-      );
-      refleshData = JSON.parse(data) as DataType;
-      setInitRead(true);
+      try {
+        const data = await FileSystem.readAsStringAsync(
+          FileSystem.documentDirectory + "database.json"
+        );
+        refleshData = JSON.parse(data) as DataType;
+        setInitRead(true);
+      } catch (error) {
+        refleshData = { ...INIT_DATA };
+        setRegistDatabase();
+      }
     } else {
       refleshData = { ...allDataJson };
     }
