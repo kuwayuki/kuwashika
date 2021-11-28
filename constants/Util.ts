@@ -152,7 +152,7 @@ export const INIT_DATA: DataType = {
       ],
     },
     {
-      patientNumber: 3,
+      patientNumber: 9999,
       patientName: "患者名",
       data: [
         {

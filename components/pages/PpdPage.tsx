@@ -35,6 +35,8 @@ export default function PpdPage({
    * 患者データから表示再読み込み
    */
   React.useEffect(() => {
+    if (!appContext.currentPerson) return;
+
     const temp: TEETH_TYPE[] = [...appContext.currentPerson.data.PPD.precision];
     for (let i = 0; i < 192; i++) {
       temp[i] = {
@@ -59,14 +61,16 @@ export default function PpdPage({
 
     appContext.setMtTeethNums([...appContext.currentPerson.data.mtTeethNums]);
   }, [
-    appContext.currentPerson.patientNumber,
-    appContext.currentPerson.data.inspectionDataNumber,
+    appContext.currentPerson?.patientNumber,
+    appContext.currentPerson?.data?.inspectionDataNumber,
   ]);
 
   /**
    * データが変更される度に編集データを更新
    */
   React.useEffect(() => {
+    if (!appContext.currentPerson) return;
+
     appContext.setCurrentPerson({
       ...appContext.currentPerson,
       data: {

@@ -1,6 +1,8 @@
 import { TextInputProps } from "react-native";
 import { DropdownType } from "../components/atoms/DropDownPickerAtom";
 
+export const DATA_FILE = "database.json";
+
 /**
  * 歯の真ん中の数字部分
  */

@@ -19,13 +19,18 @@ export default function PpdTemplate() {
   const partsTimesX = appContext.isPrecision ? 3 : 1;
   const partsTimesY = appContext.isPrecision ? 4 : 2;
   const maxColumns = 16 * partsTimesX;
-  const MAX_WIDTH = maxColumns * MATH;
+  const MAX_WIDTH = 48 * MATH;
   const [nativeEvent, setNativeEvent] = React.useState<NativeScrollEvent>({
     zoomScale: 0.99,
     contentSize: { width: 1823, height: 232 },
     layoutMeasurement: { width: 799, height: 185 },
   } as NativeScrollEvent);
   const scrollViewRef = React.useRef(null);
+
+  // 初期データ読込処理
+  React.useEffect(() => {
+    scrollViewRef.current.scrollTo({ x: 0, y: 0 });
+  }, [appContext.currentPerson.patientNumber]);
 
   const moveScroll = (index?: number) => {
     if (scrollViewRef.current) {
@@ -68,19 +73,21 @@ export default function PpdTemplate() {
           <PpdAllTeeth />
         </ScrollViewAtom>
       </View>
-      <CommonBottomButton
-        focusNumber={ppdContext.focusNumber}
-        setFocusNumber={ppdContext.setFocusNumber}
-        teethValues={
-          appContext.isPrecision
-            ? ppdContext.teethValues
-            : ppdContext.teethValuesSimple
-        }
-        setTeethValue={ppdContext.setTeethValue}
-        moveScroll={moveScroll}
-        mtTeethNums={appContext.mtTeethNums}
-        isPrecision={appContext.isPrecision}
-      />
+      {
+        <CommonBottomButton
+          focusNumber={ppdContext.focusNumber}
+          setFocusNumber={ppdContext.setFocusNumber}
+          teethValues={
+            appContext.isPrecision
+              ? ppdContext.teethValues
+              : ppdContext.teethValuesSimple
+          }
+          setTeethValue={ppdContext.setTeethValue}
+          moveScroll={moveScroll}
+          mtTeethNums={appContext.mtTeethNums}
+          isPrecision={appContext.isPrecision}
+        />
+      }
     </>
   );
 }

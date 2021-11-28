@@ -6,6 +6,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { DropdownType } from "./components/atoms/DropDownPickerAtom";
 import CommonInspection from "./components/organisms/common/CommonInspection";
 import CommonPatient from "./components/organisms/common/CommonPatient";
+import CommonSetting from "./components/organisms/common/CommonSetting";
+import { DATA_FILE } from "./constants/Constant";
 import {
   DataType,
   DateFormat,
@@ -68,7 +70,6 @@ export default function App() {
 
   // 初期データ読込処理
   React.useEffect(() => {
-    // setRegistDatabase(undefined); // データリセット
     reloadData(true);
   }, []);
 
@@ -129,11 +130,11 @@ export default function App() {
     let refleshData: DataType;
     if (isFileReload) {
       const result: FileInfo = await FileSystem.getInfoAsync(
-        FileSystem.documentDirectory + "database.json"
+        FileSystem.documentDirectory + DATA_FILE
       );
       if (result.exists) {
         const data = await FileSystem.readAsStringAsync(
-          FileSystem.documentDirectory + "database.json"
+          FileSystem.documentDirectory + DATA_FILE
         );
         refleshData = JSON.parse(data) as DataType;
         setInitRead(true);
@@ -207,6 +208,16 @@ export default function App() {
     } as PersonCurrentType);
   };
 
+  const initAction = async () => {
+    await FileSystem.deleteAsync(FileSystem.documentDirectory + DATA_FILE);
+    await reloadData(true);
+    await FileSystem.writeAsStringAsync(
+      FileSystem.documentDirectory + DATA_FILE,
+      JSON.stringify(InitJsonData())
+    );
+    // setPatientNumber(9999);
+  };
+
   /**
    * Jsonデータをデータベースに保存
    * @param currentPerson
@@ -214,10 +225,7 @@ export default function App() {
   const setRegistDatabase = async (currentPerson?: PersonCurrentType) => {
     // 初期データが存在しない場合は、初期データを生成
     if (!currentPerson) {
-      await FileSystem.writeAsStringAsync(
-        FileSystem.documentDirectory + "database.json",
-        JSON.stringify(InitJsonData())
-      );
+      await initAction();
       return;
     }
 
@@ -277,7 +285,7 @@ export default function App() {
 
     // ファイル書き込み
     await FileSystem.writeAsStringAsync(
-      FileSystem.documentDirectory + "database.json",
+      FileSystem.documentDirectory + DATA_FILE,
       JSON.stringify(writeData)
     );
     setAllDataJson(writeData);
@@ -316,6 +324,7 @@ export default function App() {
       >
         {modalNumber === 1 && <CommonPatient />}
         {modalNumber === 2 && <CommonInspection />}
+        {modalNumber === 100 && <CommonSetting />}
         <SafeAreaProvider>
           <Navigation colorScheme={colorScheme} />
           <StatusBar />

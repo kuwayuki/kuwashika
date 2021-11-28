@@ -19,7 +19,7 @@ export default function CommonInfoInput() {
     appContext.setCurrentPerson({
       ...appContext.currentPerson,
       data: {
-        ...appContext.currentPerson.data,
+        ...appContext.currentPerson?.data,
         date: appContext.inspectionDate,
         isPrecision: appContext.isPrecision,
         mtTeethNums: appContext.mtTeethNums,
@@ -63,7 +63,7 @@ export default function CommonInfoInput() {
             items={appContext.patients}
             value={appContext.patientNumber}
             setValue={appContext.setPatientNumber}
-            width={80}
+            width={88}
           />
         </TitleAndAction>
         <TitleAndAction title={"検査データ"}>
@@ -96,7 +96,8 @@ export default function CommonInfoInput() {
           name="cog"
           type="font-awesome"
           color="#999999"
-          onPress={() => appContext.setRegistDatabase(undefined)}
+          onPress={() => appContext.setModalNumber(100)}
+          // onPress={() => appContext.setRegistDatabase(undefined)}
           // onPress={() => appContext.setRegistDatabase(appContext.currentPerson)}
         />
       </View>
