@@ -2,7 +2,7 @@ import * as React from "react";
 import { StyleSheet, View } from "react-native";
 import { AppContext } from "../../../App";
 import { INSPACTION_ITEMS } from "../../../constants/Constant";
-import { PersonCurrentType } from "../../../constants/Util";
+import { PersonType } from "../../../constants/Util";
 import DropDownPickerAtom, {
   DropdownType,
 } from "../../atoms/DropDownPickerAtom";
@@ -20,15 +20,14 @@ export default function CommonInspection() {
   React.useEffect(() => {
     const items = INSPACTION_ITEMS.map((item) => item.value);
     const index =
-      items.indexOf(appContext.currentPerson.data.inspectionDataKindNumber) + 1;
+      items.indexOf(
+        appContext.currentPerson.currentData.inspectionDataKindNumber
+      ) + 1;
     setInspectionDataKindNumber(INSPACTION_ITEMS[index < 3 ? index : 0].value);
   }, []);
 
   const savePatient = () => {
-    const currentPerson = appContext.allDataJson.persons.find(
-      (person) =>
-        person.patientNumber === appContext.currentPerson.patientNumber
-    );
+    const currentPerson = appContext.currentPerson;
     const numbers = currentPerson.data.map((data) => data.inspectionDataNumber);
     const nextDataNumber = Math.max(...numbers) + 1;
 
@@ -58,10 +57,10 @@ export default function CommonInspection() {
         inspectionDataKindNumber: inspectionDataKindNumber,
         inspectionDataName: addData.label,
       },
-    } as PersonCurrentType;
+    } as PersonType;
 
     // 全体データの更新
-    appContext.setRegistDatabase(patientData);
+    appContext.registPatientData(patientData);
 
     // モーダルを閉じる
     appContext.setModalNumber(0);
@@ -70,7 +69,7 @@ export default function CommonInspection() {
     // Modalを閉じて、前の検査番号に戻す
     appContext.setModalNumber(0);
     appContext.setInspectionDataNumber(
-      appContext.currentPerson.data.inspectionDataNumber
+      appContext.currentPerson.currentData.inspectionDataNumber
     );
   };
 

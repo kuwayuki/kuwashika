@@ -55,7 +55,7 @@ export default function CommonPrintIcon() {
   };
 
   const createHtml = (): string => {
-    const currentPersonData = appContext.currentPerson.data;
+    const currentPersonData = appContext.currentPerson.currentData;
     const isPrecision = currentPersonData.isPrecision;
     // 全体的なテーブルを作成
 

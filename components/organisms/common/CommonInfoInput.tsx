@@ -2,7 +2,7 @@ import * as React from "react";
 import { StatusBar, StyleSheet, View } from "react-native";
 import { Icon } from "react-native-elements";
 import { AppContext } from "../../../App";
-import { PersonCurrentType } from "../../../constants/Util";
+import { PersonType } from "../../../constants/Util";
 import DatePickerAtom from "../../atoms/DatePickerAtom";
 import DropDownPickerAtom from "../../atoms/DropDownPickerAtom";
 import SwitchAtom from "../../atoms/SwitchAtom";
@@ -16,15 +16,17 @@ export default function CommonInfoInput() {
    * データが変更される度に編集データを更新
    */
   React.useEffect(() => {
+    if (!appContext.currentPerson) return;
+
     appContext.setCurrentPerson({
       ...appContext.currentPerson,
-      data: {
-        ...appContext.currentPerson?.data,
+      currentData: {
+        ...appContext.currentPerson.currentData,
         date: appContext.inspectionDate,
         isPrecision: appContext.isPrecision,
         mtTeethNums: appContext.mtTeethNums,
       },
-    } as PersonCurrentType);
+    } as PersonType);
   }, [
     appContext.inspectionDate,
     appContext.isPrecision,

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { StyleSheet, View } from "react-native";
 import { AppContext } from "../../../App";
-import { INIT_PERSON, PersonCurrentType } from "../../../constants/Util";
+import { INIT_PERSON, PersonType } from "../../../constants/Util";
 import { DropdownType } from "../../atoms/DropDownPickerAtom";
 import ModalAtom from "../../atoms/ModalAtom";
 import PressableAtom from "../../atoms/PressableAtom";
@@ -30,10 +30,10 @@ export default function CommonPatient() {
     appContext.setPatientNumber(patientNumber);
 
     // 全体データの更新
-    appContext.setRegistDatabase({
+    appContext.registPatientData({
       patientNumber: patientNumber,
-      data: INIT_PERSON,
-    } as PersonCurrentType);
+      data: [INIT_PERSON],
+    } as PersonType);
 
     // モーダルを閉じる
     appContext.setModalNumber(0);

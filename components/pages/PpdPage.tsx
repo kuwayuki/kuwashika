@@ -1,7 +1,7 @@
 import * as React from "react";
 import { AppContext } from "../../App";
 import { TEETH_TYPE } from "../../constants/Constant";
-import { PersonCurrentType } from "../../constants/Util";
+import { PersonType } from "../../constants/Util";
 import { RootTabScreenProps } from "../../types";
 import PpdTemplate from "../templates/PpdTemplate";
 
@@ -37,7 +37,9 @@ export default function PpdPage({
   React.useEffect(() => {
     if (!appContext.currentPerson) return;
 
-    const temp: TEETH_TYPE[] = [...appContext.currentPerson.data.PPD.precision];
+    const temp: TEETH_TYPE[] = [
+      ...appContext.currentPerson.currentData.PPD.precision,
+    ];
     for (let i = 0; i < 192; i++) {
       temp[i] = {
         ...temp[i],
@@ -48,7 +50,9 @@ export default function PpdPage({
     }
     setTeethValues(temp);
 
-    const temp2: TEETH_TYPE[] = [...appContext.currentPerson.data.PPD.basic];
+    const temp2: TEETH_TYPE[] = [
+      ...appContext.currentPerson.currentData.PPD.basic,
+    ];
     for (let i = 0; i < 32; i++) {
       temp2[i] = {
         ...temp2[i],
@@ -59,10 +63,12 @@ export default function PpdPage({
     }
     setTeethValuesSimple(temp2);
 
-    appContext.setMtTeethNums([...appContext.currentPerson.data.mtTeethNums]);
+    appContext.setMtTeethNums([
+      ...appContext.currentPerson.currentData.mtTeethNums,
+    ]);
   }, [
     appContext.currentPerson?.patientNumber,
-    appContext.currentPerson?.data?.inspectionDataNumber,
+    appContext.currentPerson?.currentData?.inspectionDataNumber,
   ]);
 
   /**
@@ -73,11 +79,11 @@ export default function PpdPage({
 
     appContext.setCurrentPerson({
       ...appContext.currentPerson,
-      data: {
-        ...appContext.currentPerson.data,
+      currentData: {
+        ...appContext.currentPerson.currentData,
         PPD: { precision: teethValues, basic: teethValuesSimple },
       },
-    } as PersonCurrentType);
+    } as PersonType);
   }, [teethValues, teethValuesSimple]);
 
   /**

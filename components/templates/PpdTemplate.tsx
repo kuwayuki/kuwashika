@@ -30,7 +30,7 @@ export default function PpdTemplate() {
   // 初期データ読込処理
   React.useEffect(() => {
     scrollViewRef.current.scrollTo({ x: 0, y: 0 });
-  }, [appContext.currentPerson.patientNumber]);
+  }, [appContext.currentPerson?.patientNumber]);
 
   const moveScroll = (index?: number) => {
     if (scrollViewRef.current) {
