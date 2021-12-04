@@ -1,7 +1,12 @@
 import * as React from "react";
 import { StyleSheet, View } from "react-native";
 import { AppContext } from "../../../App";
-import { INIT_PERSON, PersonCurrentType } from "../../../constants/Util";
+import {
+  DataType,
+  INIT_PERSON,
+  INIT_SETTING_DATA,
+  SettingType,
+} from "../../../constants/Util";
 import { DropdownType } from "../../atoms/DropDownPickerAtom";
 import ModalAtom from "../../atoms/ModalAtom";
 import PressableAtom from "../../atoms/PressableAtom";
@@ -10,8 +15,17 @@ import TitleAndAction from "../../moleculars/TitleAndAction";
 
 export default function CommonSetting() {
   const appContext = React.useContext(AppContext);
-  const [patientNumber, setPatientNumber] = React.useState<number>(undefined);
+  const [patientNumber, setPatientNumber] = React.useState<number>();
   const [patientName, setPatientName] = React.useState<string>(undefined);
+
+  // 初期データ読込処理
+  React.useEffect(() => {
+    setPatientNumber(appContext.patientNumber);
+    const patient = appContext.settingData.persons.find(
+      (patient) => patient.patientNumber === appContext.patientNumber
+    );
+    setPatientName(patient?.patientName);
+  }, []);
 
   const savePatient = () => {
     if (
@@ -29,11 +43,11 @@ export default function CommonSetting() {
     appContext.setPatients(temp);
     appContext.setPatientNumber(patientNumber);
 
-    // 全体データの更新
-    appContext.setRegistDatabase({
-      patientNumber: patientNumber,
-      data: INIT_PERSON,
-    } as PersonCurrentType);
+    // // 全体データの更新
+    // appContext.registSettingData({
+    //   setting: patientNumber,
+    //   data: INIT_PERSON,
+    // } as DataType);
 
     // モーダルを閉じる
     appContext.setModalNumber(0);
@@ -48,8 +62,15 @@ export default function CommonSetting() {
 
   // データの初期化
   const initData = async () => {
+    // 全体データの更新
     appContext.setModalNumber(0);
-    appContext.setRegistDatabase(undefined);
+    await appContext.deletePerson();
+  };
+
+  // ユーザーの削除
+  const deletePatientData = async () => {
+    appContext.setModalNumber(0);
+    await appContext.deletePerson(appContext.patientNumber);
   };
 
   return (
@@ -86,8 +107,13 @@ export default function CommonSetting() {
         />
         <PressableAtom
           style={[styles.button, styles.buttonClose]}
+          onPress={deletePatientData}
+          value={"ユーザー削除"}
+        />
+        <PressableAtom
+          style={[styles.button, styles.buttonClose]}
           onPress={savePatient}
-          value={"追加"}
+          value={"更新"}
         />
         <PressableAtom
           style={[styles.button, styles.buttonClose]}

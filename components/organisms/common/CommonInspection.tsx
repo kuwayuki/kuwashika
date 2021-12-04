@@ -2,7 +2,7 @@ import * as React from "react";
 import { StyleSheet, View } from "react-native";
 import { AppContext } from "../../../App";
 import { INSPACTION_ITEMS } from "../../../constants/Constant";
-import { PersonType } from "../../../constants/Util";
+import { INIT_PERSON, PersonType } from "../../../constants/Util";
 import DropDownPickerAtom, {
   DropdownType,
 } from "../../atoms/DropDownPickerAtom";
@@ -48,19 +48,13 @@ export default function CommonInspection() {
     appContext.setInspectionData(temp);
     appContext.setInspectionDataNumber(nextDataNumber);
 
-    const patientData = {
-      ...appContext.currentPerson,
-      data: {
-        ...appContext.currentPerson.data,
-        date: new Date(),
-        inspectionDataNumber: nextDataNumber,
-        inspectionDataKindNumber: inspectionDataKindNumber,
-        inspectionDataName: addData.label,
-      },
-    } as PersonType;
-
-    // 全体データの更新
-    appContext.registPatientData(patientData);
+    // 現在データの引き継ぎ
+    appContext.setCurrentPersonData({
+      ...appContext.currentPerson.currentData,
+      inspectionDataNumber: nextDataNumber,
+      inspectionDataKindNumber: inspectionDataKindNumber,
+      inspectionDataName: addData.label,
+    });
 
     // モーダルを閉じる
     appContext.setModalNumber(0);

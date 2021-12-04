@@ -1,7 +1,7 @@
 import * as React from "react";
 import { AppContext } from "../../App";
 import { TEETH_TYPE } from "../../constants/Constant";
-import { PersonType } from "../../constants/Util";
+import { PersonDataType, PersonType } from "../../constants/Util";
 import { RootTabScreenProps } from "../../types";
 import PpdTemplate from "../templates/PpdTemplate";
 
@@ -35,7 +35,7 @@ export default function PpdPage({
    * 患者データから表示再読み込み
    */
   React.useEffect(() => {
-    if (!appContext.currentPerson) return;
+    if (!appContext.currentPerson || !appContext.isReload) return;
 
     const temp: TEETH_TYPE[] = [
       ...appContext.currentPerson.currentData.PPD.precision,
@@ -66,24 +66,20 @@ export default function PpdPage({
     appContext.setMtTeethNums([
       ...appContext.currentPerson.currentData.mtTeethNums,
     ]);
-  }, [
-    appContext.currentPerson?.patientNumber,
-    appContext.currentPerson?.currentData?.inspectionDataNumber,
-  ]);
+    appContext.setReload(false);
+  }, [appContext.isReload]);
 
-  /**
-   * データが変更される度に編集データを更新
-   */
+  /** データが変更される度に編集データを更新 */
   React.useEffect(() => {
     if (!appContext.currentPerson) return;
-
-    appContext.setCurrentPerson({
-      ...appContext.currentPerson,
-      currentData: {
-        ...appContext.currentPerson.currentData,
-        PPD: { precision: teethValues, basic: teethValuesSimple },
+    const data: PersonDataType = {
+      ...appContext.currentPerson.currentData,
+      PPD: {
+        precision: teethValues,
+        basic: teethValuesSimple,
       },
-    } as PersonType);
+    };
+    appContext.setCurrentPersonData(data);
   }, [teethValues, teethValuesSimple]);
 
   /**

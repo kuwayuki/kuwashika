@@ -25,10 +25,15 @@ import Navigation from "./navigation";
 
 // 全ページの共通項目
 export type appContext = {
+  isReload: boolean;
+  setReload: (isRelaod: boolean) => void;
+  isInitRead: boolean;
+  setInitRead: (isInitRead: boolean) => void;
   settingData: DataType;
   setSettingData: (settingData: DataType) => void;
   currentPerson: PersonType;
   setCurrentPerson: (currentPerson: PersonType) => void;
+  setCurrentPersonData: (currentData: PersonDataType) => void;
   modalNumber: number;
   setModalNumber: (modalNumber: number) => void;
   inspectionDate: Date;
@@ -43,12 +48,13 @@ export type appContext = {
   setInspectionData: (inspectionData: DropdownType[]) => void;
   isPrecision: boolean;
   setPrecision: (isPrecision: boolean) => void;
-  registSettingData: (settingData: DataType) => void;
+  registSettingData: (settingData?: DataType) => void;
   registPatientData: (currentPerson: PersonType) => void;
   mtTeethNums: number[];
   setMtTeethNums: (mtTeethNums: number[]) => void;
   pressedValue: number;
   setPressedValue: (pressedValue: number) => void;
+  deletePerson: (patientNumber?: number) => void;
 };
 export const AppContext = React.createContext({} as appContext);
 
@@ -63,11 +69,33 @@ export default function App() {
   const [inspectionData, setInspectionData] = React.useState([]);
   const [isPrecision, setPrecision] = React.useState(false);
   const [isInitRead, setInitRead] = React.useState(false);
+  const [isReload, setReload] = React.useState(false);
   const [mtTeethNums, setMtTeethNums] = React.useState<number[]>([]);
   const [pressedValue, setPressedValue] = React.useState(-1);
 
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
+
+  const setCurrentPersonData = (currentData: PersonDataType) => {
+    const data = [];
+    const isUpdate = [...currentPerson.data].some(
+      (personData) =>
+        personData.inspectionDataNumber === currentData.inspectionDataNumber
+    );
+    [...currentPerson.data].forEach((personData) => {
+      personData.inspectionDataNumber === currentData.inspectionDataNumber
+        ? data.push(currentData)
+        : data.push(personData);
+    });
+
+    // 新規の場合は追加
+    if (!isUpdate) data.push(currentData);
+    setCurrentPerson({
+      ...currentPerson,
+      data: data,
+      currentData: currentData,
+    } as PersonType);
+  };
 
   // 初期データ読込処理
   React.useEffect(() => {
@@ -80,6 +108,12 @@ export default function App() {
     registPatientData(currentPerson);
   }, [currentPerson?.data]);
 
+  // 設定データ自動保存
+  React.useEffect(() => {
+    if (!isInitRead || !settingData) return;
+    registSettingData(settingData);
+  }, [settingData]);
+
   // 患者番号変更処理
   React.useEffect(() => {
     const read = async () => {
@@ -91,6 +125,7 @@ export default function App() {
           (person) => person.patientNumber === patientNumber
         );
         await reloadPersonData(person);
+        setReload(true);
         return;
       }
 
@@ -109,7 +144,14 @@ export default function App() {
       const personData = currentPerson.data.find(
         (data) => data.inspectionDataNumber === inspectionDataNumber
       );
-      reloadPersonInspectionData(personData);
+      reloadPersonInspectionData(
+        personData ??
+          ({
+            ...INIT_PERSON,
+            inspectionDataNumber: inspectionDataNumber,
+          } as PersonDataType)
+      );
+      setReload(true);
       return;
     }
 
@@ -152,7 +194,7 @@ export default function App() {
     );
     setPatients(patients);
 
-    if (isFileReload) setPatientNumber(1);
+    if (isFileReload) setPatientNumber(patients[1].value);
   };
 
   /**
@@ -168,13 +210,13 @@ export default function App() {
     const result: FileInfo = await FileSystem.getInfoAsync(dataName);
     // 存在する場合は読み込み
     if (result.exists) {
-      const data = await FileSystem.readAsStringAsync(dataName);
-      refleshData = JSON.parse(data) as PersonDataType[];
+      const readData = await FileSystem.readAsStringAsync(dataName);
+      refleshData = JSON.parse(readData) as PersonDataType[];
       setInitRead(true);
     } else {
       // 存在しない場合は初期データを書き込み
       refleshData = [INIT_PERSON];
-      await registPatientData({
+      registPatientData({
         patientNumber: personNumber.patientNumber,
         data: refleshData,
       } as PersonType);
@@ -194,7 +236,7 @@ export default function App() {
     setInspectionData(inspectionData);
 
     // 検査データの最後のをセット
-    reloadPersonInspectionData(refleshData[refleshData.length - 1]);
+    reloadPersonInspectionData(refleshData, personNumber);
   };
 
   /**
@@ -202,42 +244,67 @@ export default function App() {
    *
    * @param personData
    */
-  const reloadPersonInspectionData = (personData: PersonDataType) => {
-    // 検査データ
-    setInspectionDataNumber(personData.inspectionDataNumber);
-    // 検査日
-    setInspectionDate(personData.date);
-    // 基本 or 精密
-    setPrecision(personData.isPrecision);
+  const reloadPersonInspectionData = (
+    personData?: PersonDataType | PersonDataType[],
+    personNumber?: PersonNumberType
+  ) => {
+    const isPersonData = Array.isArray(personData);
+    const currentData = isPersonData
+      ? personData[personData.length - 1]
+      : personData;
 
     // 現在の表示ユーザーをセット
     setCurrentPerson({
       ...currentPerson,
-      currentData: personData,
+      patientNumber: personNumber?.patientNumber ?? currentPerson.patientNumber,
+      data: isPersonData ? personData : currentPerson.data,
+      currentData: currentData,
     } as PersonType);
+
+    // 検査データ
+    setInspectionDataNumber(currentData.inspectionDataNumber);
+    // 検査日
+    setInspectionDate(currentData.date);
+    // 基本 or 精密
+    setPrecision(currentData.isPrecision);
+    // MT(欠損)
+    setMtTeethNums(currentData.mtTeethNums);
   };
 
-  const initAction = async () => {
-    await FileSystem.deleteAsync(FileSystem.documentDirectory + SETTING_FILE);
+  // 初期データが存在しない場合は、初期データを生成
+  const deletePerson = async (patientNumber?: number) => {
+    if (patientNumber) {
+      // 指定ユーザーのみ削除
+      await FileSystem.deleteAsync(
+        FileSystem.documentDirectory + patientNumber + DATA_FILE
+      );
+      const patient = [...settingData.persons].filter(
+        (person) => person.patientNumber !== patientNumber
+      );
+      const settingTemp: DataType = { ...settingData, persons: patient };
+      setSettingData(settingTemp);
+    } else {
+      // 全データ削除
+      await Promise.all(
+        [...patients].map((patient: DropdownType) =>
+          FileSystem.deleteAsync(
+            FileSystem.documentDirectory + patient.value + DATA_FILE
+          )
+        )
+      );
+      await FileSystem.deleteAsync(FileSystem.documentDirectory + SETTING_FILE);
+      // setSettingData(InitSettingData());
+    }
     await reloadData(true);
-    await FileSystem.writeAsStringAsync(
-      FileSystem.documentDirectory + SETTING_FILE,
-      JSON.stringify(InitSettingData())
-    );
   };
 
   /**
    * Jsonデータをデータベースに保存
    * @param settingData
    */
-  const registSettingData = async (settingData?: DataType) => {
-    // 初期データが存在しない場合は、初期データを生成
-    if (!settingData) {
-      await initAction();
-      return;
-    }
+  const registSettingData = async (settingData: DataType) => {
     // ファイル書き込み
-    await FileSystem.writeAsStringAsync(
+    FileSystem.writeAsStringAsync(
       FileSystem.documentDirectory + SETTING_FILE,
       JSON.stringify(settingData)
     );
@@ -248,61 +315,10 @@ export default function App() {
    * Jsonデータをデータベースに保存
    * @param currentPerson
    */
-  const registPatientData = async (currentPerson: PersonType) => {
+  const registPatientData = (currentPerson: PersonType) => {
     let writeData: PersonDataType[] = [...currentPerson.data];
-
-    // // 編集中患者情報を取得
-    // const patientEdit = tempAllData.persons.find(
-    //   (person) => person.patientNumber === currentPerson.patientNumber
-    // );
-    // // 全患者情報を取得
-    // const personsAll = [...tempAllData.persons];
-
-    // // 患者番号が存在しない場合は患者ごと追加
-    // if (!patientEdit) {
-    //   personsAll.push({
-    //     patientNumber: currentPerson.patientNumber,
-    //     data: [currentPerson.data],
-    //   } as PersonType);
-    //   // 患者情報を追加
-    //   writeData = { ...tempAllData, persons: personsAll };
-    // } else {
-    //   // 既存患者データの編集
-    //   const newPersons: PersonType[] = [];
-    //   let newPatientData = [];
-    //   const patientDataEdit = [...patientEdit.data].find(
-    //     (data) =>
-    //       data.inspectionDataNumber === currentPerson.data.inspectionDataNumber
-    //   );
-    //   if (!patientDataEdit) {
-    //     // 患者データが存在しない場合は追加
-    //     newPatientData = [
-    //       ...patientEdit.data,
-    //       { ...currentPerson.data } as PersonDataType,
-    //     ];
-    //   } else {
-    //     // 患者データが存在する場合は変更
-    //     [...patientEdit.data].forEach(
-    //       (data) =>
-    //         data !== patientDataEdit
-    //           ? newPatientData.push(data) // そのままデータを突っ込む
-    //           : newPatientData.push(currentPerson.data) // 編集後のデータを突っ込む
-    //     );
-    //   }
-    //   personsAll.forEach(
-    //     (person) =>
-    //       person.patientNumber !== patientEdit.patientNumber
-    //         ? newPersons.push(person) // 変更患者以外はそのまま
-    //         : newPersons.push({
-    //             ...patientEdit,
-    //             data: newPatientData,
-    //           } as PersonType) // 変更患者は変更後データを設定
-    //   );
-    //   writeData = { ...tempAllData, persons: newPersons };
-    // }
-
     // ファイル書き込み
-    await FileSystem.writeAsStringAsync(
+    FileSystem.writeAsStringAsync(
       FileSystem.documentDirectory + currentPerson.patientNumber + DATA_FILE,
       JSON.stringify(writeData)
     );
@@ -314,10 +330,15 @@ export default function App() {
     return (
       <AppContext.Provider
         value={{
+          isReload,
+          setReload,
+          isInitRead,
+          setInitRead,
           settingData,
           setSettingData,
           currentPerson,
           setCurrentPerson,
+          setCurrentPersonData,
           modalNumber,
           setModalNumber,
           inspectionDate,
@@ -338,6 +359,7 @@ export default function App() {
           setMtTeethNums,
           pressedValue,
           setPressedValue,
+          deletePerson,
         }}
       >
         {modalNumber === 1 && <CommonPatient />}

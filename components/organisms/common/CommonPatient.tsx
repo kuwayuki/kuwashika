@@ -35,6 +35,15 @@ export default function CommonPatient() {
       data: [INIT_PERSON],
     } as PersonType);
 
+    // 全体データの更新
+    appContext.registSettingData({
+      ...appContext.settingData,
+      persons: [
+        ...appContext.settingData.persons,
+        { patientNumber: patientNumber, patientName: patientName },
+      ],
+    });
+
     // モーダルを閉じる
     appContext.setModalNumber(0);
   };
