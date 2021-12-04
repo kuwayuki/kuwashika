@@ -35,6 +35,17 @@ export default function PpdPage({
    * 患者データから表示再読み込み
    */
   React.useEffect(() => {
+    setFocusNumber(0);
+  }, [
+    appContext.patientNumber,
+    appContext.inspectionDataNumber,
+    appContext.isPrecision,
+  ]);
+
+  /**
+   * 患者データから表示再読み込み
+   */
+  React.useEffect(() => {
     if (!appContext.currentPerson || !appContext.isReload) return;
 
     const temp: TEETH_TYPE[] = [

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, View } from "react-native";
+import { Modal, StyleSheet, View } from "react-native";
 import { AppContext } from "../../../App";
 import {
   DataType,
@@ -10,8 +10,10 @@ import {
 import { DropdownType } from "../../atoms/DropDownPickerAtom";
 import ModalAtom from "../../atoms/ModalAtom";
 import PressableAtom from "../../atoms/PressableAtom";
+import SwitchAtom from "../../atoms/SwitchAtom";
 import TextInputAtom from "../../atoms/TextInputAtom";
 import TitleAndAction from "../../moleculars/TitleAndAction";
+import { Card } from "react-native-elements";
 
 export default function CommonSetting() {
   const appContext = React.useContext(AppContext);
@@ -73,53 +75,109 @@ export default function CommonSetting() {
     await appContext.deletePerson(appContext.patientNumber);
   };
 
+  // 検査データの削除
+  const deleteInspectionData = async () => {
+    appContext.setModalNumber(0);
+    await appContext.deletePerson(undefined, appContext.inspectionDataNumber);
+  };
+
   return (
     <ModalAtom>
-      <View>
-        <TitleAndAction title={"患者番号"} style={{ marginBottom: 16 }}>
-          <TextInputAtom
-            autoFocus={true}
-            keyboardType={"phone-pad"}
-            value={patientNumber?.toString()}
-            style={{ fontSize: 18 }}
-            onChangeText={(num) => setPatientNumber(Number(num))}
-          />
-        </TitleAndAction>
-        <TitleAndAction title={"患者名称"} style={{ marginBottom: 16 }}>
-          <TextInputAtom
-            value={patientName}
-            onChangeText={setPatientName}
-            style={{ fontSize: 18 }}
-          />
-        </TitleAndAction>
-      </View>
       <View
         style={{
+          height: "100%",
           display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
+          justifyContent: "flex-start",
         }}
       >
-        <PressableAtom
-          style={[styles.button, styles.buttonClose]}
-          onPress={initData}
-          value={"初期化"}
-        />
-        <PressableAtom
-          style={[styles.button, styles.buttonClose]}
-          onPress={deletePatientData}
-          value={"ユーザー削除"}
-        />
-        <PressableAtom
-          style={[styles.button, styles.buttonClose]}
-          onPress={savePatient}
-          value={"更新"}
-        />
-        <PressableAtom
-          style={[styles.button, styles.buttonClose]}
-          onPress={cancel}
-          value={"キャンセル"}
-        />
+        <Card>
+          <View
+            style={{
+              height: "60%",
+              display: "flex",
+              justifyContent: "flex-start",
+              margin: 20,
+            }}
+          >
+            <TitleAndAction title={appContext.isPrecision ? "精密" : "基本"}>
+              <SwitchAtom
+                onValueChange={() =>
+                  appContext.setPrecision(!appContext.isPrecision)
+                }
+                value={appContext.isPrecision}
+              />
+            </TitleAndAction>
+          </View>
+        </Card>
+        {/* <View>
+          <TitleAndAction title={"患者番号"} style={{ marginBottom: 16 }}>
+            <TextInputAtom
+              keyboardType={"phone-pad"}
+              value={patientNumber?.toString()}
+              style={{ fontSize: 18 }}
+              onChangeText={(num) =>
+                setPatientNumber(num ? Number(num) : undefined)
+              }
+            />
+          </TitleAndAction>
+          <TitleAndAction title={"患者名称"} style={{ marginBottom: 16 }}>
+            <TextInputAtom
+              value={patientName}
+              onChangeText={setPatientName}
+              style={{ fontSize: 18 }}
+            />
+          </TitleAndAction>
+        </View> */}
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            // justifyContent: "space-between",
+          }}
+        >
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-start",
+            }}
+          >
+            <PressableAtom
+              style={[styles.button, styles.buttonDelete]}
+              onPress={initData}
+              value={"初期化"}
+            />
+            <PressableAtom
+              style={[styles.button, styles.buttonDelete]}
+              onPress={deletePatientData}
+              value={"ユーザー削除"}
+            />
+            <PressableAtom
+              style={[styles.button, styles.buttonDelete]}
+              onPress={deleteInspectionData}
+              value={"検査データ削除"}
+            />
+          </View>
+          <View style={{ flexGrow: 1 }}></View>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-end",
+            }}
+          >
+            <PressableAtom
+              style={[styles.button, styles.buttonClose]}
+              onPress={savePatient}
+              value={"更新"}
+            />
+            <PressableAtom
+              style={[styles.button, styles.buttonClose]}
+              onPress={cancel}
+              value={"キャンセル"}
+            />
+          </View>
+        </View>
       </View>
     </ModalAtom>
   );
@@ -129,9 +187,13 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: 16,
     margin: 8,
-    padding: 10,
+    marginRight: 16,
+    padding: 16,
   },
   buttonClose: {
     backgroundColor: "#2196F3",
+  },
+  buttonDelete: {
+    backgroundColor: "#FF3366",
   },
 });

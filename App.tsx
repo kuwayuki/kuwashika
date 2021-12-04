@@ -54,7 +54,7 @@ export type appContext = {
   setMtTeethNums: (mtTeethNums: number[]) => void;
   pressedValue: number;
   setPressedValue: (pressedValue: number) => void;
-  deletePerson: (patientNumber?: number) => void;
+  deletePerson: (patientNumber?: number, inspectionDataNumber?: number) => void;
 };
 export const AppContext = React.createContext({} as appContext);
 
@@ -64,9 +64,11 @@ export default function App() {
   const [inspectionDate, setInspectionDate] = React.useState(new Date());
   const [modalNumber, setModalNumber] = React.useState(0);
   const [patientNumber, setPatientNumber] = React.useState(-1);
-  const [patients, setPatients] = React.useState([]);
+  const [patients, setPatients] = React.useState<DropdownType[]>([]);
   const [inspectionDataNumber, setInspectionDataNumber] = React.useState(0);
-  const [inspectionData, setInspectionData] = React.useState([]);
+  const [inspectionData, setInspectionData] = React.useState<DropdownType[]>(
+    []
+  );
   const [isPrecision, setPrecision] = React.useState(false);
   const [isInitRead, setInitRead] = React.useState(false);
   const [isReload, setReload] = React.useState(false);
@@ -272,7 +274,10 @@ export default function App() {
   };
 
   // 初期データが存在しない場合は、初期データを生成
-  const deletePerson = async (patientNumber?: number) => {
+  const deletePerson = async (
+    patientNumber?: number,
+    inspectionDataNumber?: number
+  ) => {
     if (patientNumber) {
       // 指定ユーザーのみ削除
       await FileSystem.deleteAsync(
@@ -283,17 +288,37 @@ export default function App() {
       );
       const settingTemp: DataType = { ...settingData, persons: patient };
       setSettingData(settingTemp);
+    } else if (inspectionDataNumber) {
+      // 検査データ除外のみ
+      const data = [...currentPerson.data].filter(
+        (personData) => personData.inspectionDataNumber !== inspectionDataNumber
+      );
+      const inspectionTemp = [...inspectionData].filter(
+        (inspect) => inspect.value !== inspectionDataNumber
+      );
+      const index = data.length > 1 ? data.length : 0;
+      setInspectionData(inspectionTemp);
+      setInspectionDataNumber(index ?? 1);
+      setCurrentPerson({
+        ...currentPerson,
+        data: data,
+        currentData: index ? data[index - 1] : INIT_PERSON,
+      });
     } else {
-      // 全データ削除
-      await Promise.all(
-        [...patients].map((patient: DropdownType) =>
+      // 全データ削除(新規以外)
+      const patientsOnly: DropdownType[] = [...patients].filter(
+        (pats: DropdownType) => pats.value
+      );
+      patientsOnly.forEach((patient: DropdownType) => {
+        try {
           FileSystem.deleteAsync(
             FileSystem.documentDirectory + patient.value + DATA_FILE
-          )
-        )
-      );
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      });
       await FileSystem.deleteAsync(FileSystem.documentDirectory + SETTING_FILE);
-      // setSettingData(InitSettingData());
     }
     await reloadData(true);
   };

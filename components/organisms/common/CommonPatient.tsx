@@ -60,9 +60,11 @@ export default function CommonPatient() {
           <TextInputAtom
             autoFocus={true}
             keyboardType={"phone-pad"}
-            value={patientNumber?.toString()}
+            value={patientNumber?.toString() ?? ""}
             style={{ fontSize: 18 }}
-            onChangeText={(num) => setPatientNumber(Number(num))}
+            onChangeText={(num) =>
+              setPatientNumber(num ? Number(num) : undefined)
+            }
           />
         </TitleAndAction>
         <TitleAndAction title={"患者名称"} style={{ marginBottom: 16 }}>

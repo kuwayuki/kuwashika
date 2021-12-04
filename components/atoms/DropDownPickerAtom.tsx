@@ -3,6 +3,7 @@ import { StyleSheet, View } from "react-native";
 import DropDownPicker, {
   DropDownPickerProps,
 } from "react-native-dropdown-picker";
+import { AppContext } from "../../App";
 
 export type DropdownType = { label: string; value: number; kind?: number };
 
@@ -11,6 +12,11 @@ type DropDownPickerAtomProps = Omit<DropDownPickerProps, "open" | "setOpen"> & {
 };
 export default function DropDownPickerAtom(props: DropDownPickerAtomProps) {
   const [open, setOpen] = React.useState(false);
+  const appContext = React.useContext(AppContext);
+
+  React.useEffect(() => {
+    setOpen(false);
+  }, [appContext.currentPerson]);
 
   return (
     <View
