@@ -11,14 +11,14 @@ import { MATH } from "../moleculars/TextInputTeethMolecular";
 import CommonBottomButton from "../organisms/common/CommonBottomButton";
 import CommonInfoInput from "../organisms/common/CommonInfoInput";
 import { View } from "../organisms/common/Themed";
-import PpdAllTeeth from "../organisms/ppd/PpdAllTeeth";
-import { PpdContext } from "../pages/PpdPage";
+import UpsetAllTeeth from "../organisms/upset/UpsetAllTeeth";
+import { UpsetContext } from "../pages/UpsetPage";
 
-export default function PpdTemplate() {
+export default function UpsetTemplate() {
   const appContext = React.useContext(AppContext);
-  const ppdContext = React.useContext(PpdContext);
-  const partsTimesX = appContext.isPrecision ? 3 : 1;
-  const partsTimesY = appContext.isPrecision ? 4 : 2;
+  const upsetContext = React.useContext(UpsetContext);
+  const partsTimesX = 1;
+  const partsTimesY = 2;
   const maxColumns = 16 * partsTimesX;
   const MAX_WIDTH = 48 * MATH;
   const [nativeEvent, setNativeEvent] = React.useState<NativeScrollEvent>({
@@ -35,7 +35,7 @@ export default function PpdTemplate() {
 
   const moveScroll = (index?: number) => {
     if (scrollViewRef.current) {
-      const num = index ?? ppdContext.focusNumber;
+      const num = index ?? upsetContext.focusNumber;
       // 左から何番目？
       let indexPositionX = Math.floor(num % maxColumns);
       if (indexPositionX > 0) indexPositionX++;
@@ -65,29 +65,24 @@ export default function PpdTemplate() {
   return (
     <>
       <View style={styles.container}>
-        <CommonInfoInput tabPage={TAB_PAGE.PPD} />
+        <CommonInfoInput tabPage={TAB_PAGE.UPSET} />
         <ScrollViewAtom
           ref={scrollViewRef}
           onScroll={handleScroll}
           onScrollEndDrag={handleScroll}
         >
-          <PpdAllTeeth />
+          <UpsetAllTeeth />
         </ScrollViewAtom>
       </View>
       {
         <CommonBottomButton
-          tabPage={TAB_PAGE.PPD}
-          focusNumber={ppdContext.focusNumber}
-          setFocusNumber={ppdContext.setFocusNumber}
-          teethValues={
-            appContext.isPrecision
-              ? ppdContext.teethValues
-              : ppdContext.teethValuesSimple
-          }
-          setTeethValue={ppdContext.setTeethValue}
+          tabPage={TAB_PAGE.UPSET}
+          focusNumber={upsetContext.focusNumber}
+          setFocusNumber={upsetContext.setFocusNumber}
+          teethValues={upsetContext.teethValuesSimple}
+          setTeethValue={upsetContext.setTeethValue}
           moveScroll={moveScroll}
           mtTeethNums={appContext.mtTeethNums}
-          isPrecision={appContext.isPrecision}
         />
       }
     </>

@@ -2,6 +2,7 @@ import * as React from "react";
 import { StatusBar, StyleSheet, View } from "react-native";
 import { Icon } from "react-native-elements";
 import { AppContext } from "../../../App";
+import { TAB_PAGE } from "../../../constants/Constant";
 import { PersonDataType, PersonType } from "../../../constants/Util";
 import DatePickerAtom from "../../atoms/DatePickerAtom";
 import DropDownPickerAtom from "../../atoms/DropDownPickerAtom";
@@ -9,7 +10,11 @@ import SwitchAtom from "../../atoms/SwitchAtom";
 import TitleAndAction from "../../moleculars/TitleAndAction";
 import CommonPrintIcon from "./CommonPrintIcon";
 
-export default function CommonInfoInput() {
+type CommonInfoInputPropsType = {
+  tabPage: TAB_PAGE;
+};
+
+export default function CommonInfoInput(props: CommonInfoInputPropsType) {
   const appContext = React.useContext(AppContext);
 
   /**
@@ -74,7 +79,10 @@ export default function CommonInfoInput() {
             width={160}
           />
         </TitleAndAction>
-        <TitleAndAction title={appContext.isPrecision ? "精密" : "基本"}>
+        <TitleAndAction
+          title={appContext.isPrecision ? "精密" : "基本"}
+          style={props.tabPage && { display: "none" }}
+        >
           <SwitchAtom
             onValueChange={() =>
               appContext.setPrecision(!appContext.isPrecision)

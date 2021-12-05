@@ -1,7 +1,11 @@
 import * as React from "react";
 import { StyleSheet, View } from "react-native";
 import { AppContext } from "../../../App";
-import { TEETH_STATUS, TEETH_TYPE } from "../../../constants/Constant";
+import {
+  TAB_PAGE,
+  TEETH_STATUS,
+  TEETH_TYPE,
+} from "../../../constants/Constant";
 import ButtonAtom from "../../atoms/ButtonAtom";
 import ButtonPressedMolecular from "../../moleculars/ButtonPressedMolecular";
 
@@ -12,6 +16,7 @@ type buttonType = {
   display: string;
 };
 type CommonButtonPropsType = {
+  tabPage: TAB_PAGE;
   focusNumber: number;
   setFocusNumber: (focusNumber: number) => void;
   teethValues: TEETH_TYPE[];
@@ -25,7 +30,7 @@ type CommonButtonPropsType = {
   isPrecision?: boolean;
 };
 
-export const BUTTON_NAMES = [
+export const PPD_BUTTON_NAMES = [
   // { value: 0, status: TEETH_STATUS.NORMAL } as buttonType,
   { value: 1, status: TEETH_STATUS.NORMAL } as buttonType,
   { value: 2, status: TEETH_STATUS.NORMAL } as buttonType,
@@ -57,8 +62,21 @@ export const BUTTON_NAMES = [
     color: "#FFCC00",
     status: TEETH_STATUS.DRAINAGE,
   } as buttonType,
-  // { value: 100, display: "印刷", color: "#3399FF" } as buttonType,
 ];
+
+export const UPSET_BUTTON_NAMES = [
+  { value: 0, status: TEETH_STATUS.NORMAL } as buttonType,
+  { value: 1, status: TEETH_STATUS.NORMAL } as buttonType,
+  { value: 2, status: TEETH_STATUS.NORMAL } as buttonType,
+  { value: 3, status: TEETH_STATUS.NORMAL } as buttonType,
+  {
+    value: 100,
+    display: "MT",
+    color: "#3366CC",
+    status: TEETH_STATUS.MT,
+  } as buttonType,
+];
+
 export default function CommonBottomButton(props: CommonButtonPropsType) {
   const appContext = React.useContext(AppContext);
 
@@ -147,6 +165,13 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
     }
   };
 
+  const buttonName =
+    props.tabPage === TAB_PAGE.PPD
+      ? PPD_BUTTON_NAMES
+      : props.tabPage === TAB_PAGE.UPSET
+      ? UPSET_BUTTON_NAMES
+      : UPSET_BUTTON_NAMES;
+
   return (
     <View
       style={{
@@ -157,7 +182,7 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
         justifyContent: "space-between",
       }}
     >
-      {BUTTON_NAMES.map((button) =>
+      {buttonName.map((button) =>
         button.value < 100 ? (
           // 通常ボタン
           <ButtonAtom

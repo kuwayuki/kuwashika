@@ -12,6 +12,7 @@ import ModalScreen from "../components/pages/ModalScreen";
 import NotFoundScreen from "../components/pages/NotFoundScreen";
 import PcrPage from "../components/pages/PcrPage";
 import PpdPage from "../components/pages/PpdPage";
+import UpsetPage from "../components/pages/UpsetPage";
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import {
@@ -104,7 +105,7 @@ function TopTabNavigator() {
       />
       <TopTab.Screen
         name="TabUpset"
-        component={PcrPage}
+        component={UpsetPage}
         options={{
           title: "動揺度",
           // tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
