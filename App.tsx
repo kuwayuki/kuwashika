@@ -194,7 +194,7 @@ export default function App() {
         value: person.patientNumber,
       })
     );
-    setPatients(patients);
+    setPatients(patients.sort((a, b) => a.value - b.value));
 
     if (isFileReload) setPatientNumber(patients[1].value);
   };
@@ -226,15 +226,20 @@ export default function App() {
 
     // 検査データ
     const inspectionData = [{ label: "新規追加", value: 0 }];
-    refleshData.forEach((data) =>
-      inspectionData.push({
-        label:
-          formatDate(data.date, DateFormat.MM_DD) +
-          ":" +
-          data.inspectionDataName,
-        value: data.inspectionDataNumber,
+    // refleshData.forEach((data) =>
+    refleshData
+      .sort((a, b) => {
+        return a.date > b.date ? 1 : -1;
       })
-    );
+      .forEach((data) =>
+        inspectionData.push({
+          label:
+            formatDate(data.date, DateFormat.MM_DD) +
+            ":" +
+            data.inspectionDataName,
+          value: data.inspectionDataNumber,
+        })
+      );
     setInspectionData(inspectionData);
 
     // 検査データの最後のをセット

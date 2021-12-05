@@ -10,17 +10,22 @@ export type DateProps = {
 export default function DatePickerAtom(props: DateProps) {
   const [show, setShow] = React.useState(false);
 
+  /**
+   * データが変更される度に編集データを更新
+   */
+  React.useEffect(() => {
+    setShow(false);
+  }, [props.date]);
+
   const onChange = (event: any, selectedDate: any) => {
     const currentDate = selectedDate || props.date;
     setShow(Platform.OS === "ios");
     props.setDate(currentDate);
   };
 
-  // parse a date in yyyy-mm-dd format
   function parseDate(input) {
     try {
-      var parts = input.match(/(\d+)/g);
-      return new Date(parts[0], parts[1] - 1, parts[2]); // months are 0-based
+      return new Date(input);
     } catch (error) {
       return input;
     }
