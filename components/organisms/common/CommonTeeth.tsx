@@ -17,6 +17,7 @@ export type teethProps = {
   focusNumber: number;
   setFocusNumber: (focusNumber: number) => void;
   isPrecision?: boolean;
+  isPcr?: boolean;
 };
 
 export const PPD_PARTS = [0, 1, 2];

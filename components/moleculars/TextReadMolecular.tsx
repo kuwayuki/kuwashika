@@ -1,7 +1,7 @@
 import * as React from "react";
 import { StyleSheet } from "react-native";
 import { teethGroupProps } from "../../constants/Constant";
-import { MATH } from "./TextInputTeethMolecular";
+import { TEETH_MATH } from "./TextInputTeethMolecular";
 import TextInputMolecular from "./TextInputMolecular";
 
 export default function TextReadMolecular(props: teethGroupProps) {
@@ -12,7 +12,7 @@ export default function TextReadMolecular(props: teethGroupProps) {
 
 const styles = StyleSheet.create({
   input: {
-    width: MATH * 3,
+    width: TEETH_MATH * 3,
     fontWeight: "bold",
   },
 });

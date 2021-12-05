@@ -7,7 +7,7 @@ import {
 import { AppContext } from "../../App";
 import { TAB_PAGE } from "../../constants/Constant";
 import ScrollViewAtom from "../atoms/ScrollViewAtom";
-import { MATH } from "../moleculars/TextInputTeethMolecular";
+import { TEETH_MATH } from "../moleculars/TextInputTeethMolecular";
 import CommonBottomButton from "../organisms/common/CommonBottomButton";
 import CommonInfoInput from "../organisms/common/CommonInfoInput";
 import { View } from "../organisms/common/Themed";
@@ -20,7 +20,7 @@ export default function UpsetTemplate() {
   const partsTimesX = 1;
   const partsTimesY = 2;
   const maxColumns = 16 * partsTimesX;
-  const MAX_WIDTH = 48 * MATH;
+  const MAX_WIDTH = 48 * TEETH_MATH;
   const [nativeEvent, setNativeEvent] = React.useState<NativeScrollEvent>({
     zoomScale: 0.99,
     contentSize: { width: 1823, height: 232 },
