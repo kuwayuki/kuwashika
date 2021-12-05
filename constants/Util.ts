@@ -45,6 +45,7 @@ export type PersonDataType = {
     basic: TEETH_TYPE[];
   };
   PCR: {
+    precision: TEETH_TYPE[];
     basic: TEETH_TYPE[];
   };
 };
@@ -64,6 +65,7 @@ export const INIT_PERSON: PersonDataType = {
     basic: [],
   },
   PCR: {
+    precision: [],
     basic: [],
   },
 } as PersonDataType;
@@ -114,119 +116,3 @@ export const formatDate = (date: Date, type: DateFormat): string => {
       return "";
   }
 };
-
-// export const INIT_DATA: DataType = {
-//   setting: {
-//     ppdOrderType: PPD_ORDER.co_reco,
-//   },
-//   // 患者ごとのデータ
-//   persons: [
-//     {
-//       patientNumber: 1,
-//       patientName: "患者名A",
-//       data: [
-//         {
-//           date: new Date(),
-//           inspectionDataNumber: 1,
-//           inspectionDataKindNumber: 1,
-//           inspectionDataName: "初診",
-//           isPrecision: false,
-//           mtTeethNums: [6, 8],
-//           PPD: {
-//             precision: [
-//               {
-//                 index: 0,
-//                 teethRow: 0,
-//                 teethGroupIndex: 0,
-//                 value: 6,
-//                 status: { isBleeding: true, isDrainage: true },
-//               } as TEETH_TYPE,
-//             ],
-//             basic: [
-//               {
-//                 index: 0,
-//                 teethRow: 0,
-//                 teethGroupIndex: 0,
-//                 value: 3,
-//                 status: { isBleeding: true, isDrainage: false },
-//               } as TEETH_TYPE,
-//             ],
-//           },
-//           UPSET: {
-//             basic: [],
-//           },
-//           PCR: {
-//             basic: [],
-//           },
-//         },
-//       ],
-//     },
-//     {
-//       patientNumber: 2,
-//       patientName: "患者名B",
-//       data: [
-//         {
-//           date: new Date(2018, 9, 26, 1, 1, 22),
-//           inspectionDataNumber: 1,
-//           inspectionDataKindNumber: 1,
-//           inspectionDataName: "初診",
-//           isPrecision: false,
-//           mtTeethNums: [],
-//           PPD: {
-//             precision: [],
-//             basic: [],
-//           },
-//           UPSET: {
-//             basic: [],
-//           },
-//           PCR: {
-//             basic: [],
-//           },
-//         },
-//         {
-//           // date: new Date(),
-//           date: new Date(2019, 9, 26, 1, 1, 22),
-//           inspectionDataNumber: 2,
-//           inspectionDataKindNumber: 2,
-//           inspectionDataName: "2回目",
-//           isPrecision: true,
-//           mtTeethNums: [],
-//           PPD: {
-//             precision: [],
-//             basic: [],
-//           },
-//           UPSET: {
-//             basic: [],
-//           },
-//           PCR: {
-//             basic: [],
-//           },
-//         },
-//       ],
-//     },
-//     {
-//       patientNumber: 9999,
-//       patientName: "患者名",
-//       data: [
-//         {
-//           date: new Date(2020, 9, 26, 1, 1, 22),
-//           inspectionDataNumber: 1,
-//           inspectionDataKindNumber: 1,
-//           inspectionDataName: "初診",
-//           isPrecision: false,
-//           mtTeethNums: [],
-//           PPD: {
-//             precision: [],
-//             basic: [],
-//           },
-//           UPSET: {
-//             basic: [],
-//           },
-//           PCR: {
-//             basic: [],
-//           },
-//         },
-//       ],
-//     },
-//   ],
-// };
