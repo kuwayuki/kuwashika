@@ -1,11 +1,18 @@
 import * as React from "react";
 import { ScrollView, ScrollViewProps, StyleSheet } from "react-native";
+import { AppContext } from "../../App";
 
 const ScrollViewAtom = React.forwardRef((props: ScrollViewProps, ref: any) => {
+  const appContext = React.useContext(AppContext);
+
   React.useEffect(() => {
     if (!ref) return;
     ref.current.scrollTo({ x: 1, y: 1 });
-  }, []);
+  }, [
+    appContext.patientNumber,
+    appContext.inspectionDataNumber,
+    appContext.isPrecision,
+  ]);
 
   return (
     <ScrollView

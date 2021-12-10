@@ -78,7 +78,24 @@ export default function CommonPrintIcon() {
     });
 
     // 動揺度を作成
+    let upsetTd: string[] = ["", ""];
+    const upsetData = currentPersonData.UPSET.basic;
+    upsetData.forEach((teeth: TEETH_TYPE) => {
+      if (teeth.teethRow === undefined) return;
+      const td = createTd(teeth);
+      upsetTd[teeth.teethRow] += td;
+    });
+
     // PCRを作成
+    let pcrTd: string[] = ["", "", "", ""];
+    const pcrData = isPrecision
+      ? currentPersonData.PCR.precision
+      : currentPersonData.PCR.basic;
+    pcrData.forEach((teeth: TEETH_TYPE) => {
+      if (teeth.teethRow === undefined) return;
+      const td = createTd(teeth);
+      pcrTd[teeth.teethRow] += td;
+    });
 
     return `
     <html>
@@ -91,12 +108,16 @@ export default function CommonPrintIcon() {
       font-size: 8px;
     "
   >
+    ${createTr(pcrTd[0], "PCR")}
+    ${createTr(upsetTd[0], "動揺度")}
     ${createTr(ppdTd[0], "PPD: B")}
     ${isPrecision ? createTr(ppdTd[1], "PPD: P") : "</>"}
     ${createTr(No[0], "", true)}
     ${createTr(No[1], "", true)}
     ${createTr(ppdTd[isPrecision ? 2 : 1], isPrecision ? "PPD: L" : "PPD")}
     ${isPrecision ? createTr(ppdTd[3], "PPD: B") : "</>"}
+    ${createTr(upsetTd[1], "動揺度")}
+    ${createTr(pcrTd[1], "PCR")}
   </table>
   <hr width: 100% size="1" color="#cc6666" style="border-style: dashed" />
   </html>

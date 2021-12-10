@@ -16,7 +16,7 @@ export default function TextInputLargeMolecular(props: TextInputPropsEx) {
 
 const styles = StyleSheet.create({
   input: {
-    width: TEETH_MATH * 3,
+    width: TEETH_MATH * 2,
     height: TEETH_MATH * 2,
   },
 });

@@ -2,6 +2,7 @@ import * as React from "react";
 import { StyleSheet } from "react-native";
 import { TextInputPropsEx } from "../../constants/Constant";
 import TextInputMolecular from "./TextInputMolecular";
+import { TEETH_MATH } from "./TextInputTeethMolecular";
 
 export default function TextInputSmallMolecular(props: TextInputPropsEx) {
   return (
@@ -14,5 +15,8 @@ export default function TextInputSmallMolecular(props: TextInputPropsEx) {
 }
 
 const styles = StyleSheet.create({
-  input: {},
+  input: {
+    width: TEETH_MATH * (2 / 3),
+    height: TEETH_MATH * 1,
+  },
 });

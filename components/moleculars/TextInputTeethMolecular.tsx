@@ -2,7 +2,7 @@ import * as React from "react";
 import { StyleSheet, TextInputProps } from "react-native";
 import TextInputAtom from "../atoms/TextInputAtom";
 
-export const TEETH_MATH = 35;
+export const TEETH_MATH = 40;
 export default function TextInputTeethMolecular(props: TextInputProps) {
   return <TextInputAtom {...props} style={[styles.base, props.style]} />;
 }

@@ -17,11 +17,16 @@ export default function PcrOneBlockTeeth(props: teethProps) {
       <CommonTeeth
         {...props}
         teethRows={props.teethRows * (appContext.isPrecision ? 2 : 1)}
+        isPcr={true}
       />
-      {appContext.isPrecision && (
-        /* 「精密のみ」：上段 or 下段の２列目 */
-        <CommonTeeth {...props} teethRows={props.teethRows * 2 + 1} />
-      )}
     </View>
   );
 }
+// {appContext.isPrecision && (
+//   /* 「精密のみ」：上段 or 下段の２列目 */
+//   <CommonTeeth
+//     {...props}
+//     teethRows={props.teethRows * 2 + 1}
+//     isPcr={true}
+//   />
+// )}

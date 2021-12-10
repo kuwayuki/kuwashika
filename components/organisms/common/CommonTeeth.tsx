@@ -3,6 +3,7 @@ import { View } from "react-native";
 import { AppContext } from "../../../App";
 import { TEETH_TYPE } from "../../../constants/Constant";
 import TextInputLargeMolecular from "../../moleculars/TextInputLargeMolecular";
+import TextInputPcrMolecular from "../../moleculars/TextInputPcrMolecular";
 import TextInputSmallMolecular from "../../moleculars/TextInputSmallMolecular";
 
 export type teethProps = {
@@ -48,6 +49,8 @@ export default function CommonTeeth(props: teethProps) {
   };
 
   const textInputProps = (props: any) => {
+    if (props.isPcr)
+      return <TextInputPcrMolecular {...props} index={props.teethValues % 4} />;
     return props.isPrecision ? (
       <TextInputSmallMolecular {...props} />
     ) : (
@@ -68,6 +71,7 @@ export default function CommonTeeth(props: teethProps) {
       mtTeethNums: appContext.mtTeethNums,
       blurOnSubmit: false,
       onTouchEnd: () => onTouchBlDrAction(indexInit + count),
+      isPcr: props.isPcr,
     };
 
     return textInputProps(obj);
@@ -85,7 +89,11 @@ export default function CommonTeeth(props: teethProps) {
         flexDirection: "row",
       }}
     >
-      {props.isPrecision ? PPD_PARTS.map((count) => teeth(count)) : teeth(0)}
+      {props.isPcr
+        ? teeth(0)
+        : props.isPrecision
+        ? PPD_PARTS.map((count) => teeth(count))
+        : teeth(0)}
     </View>
   );
 }
