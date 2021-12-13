@@ -36,9 +36,12 @@ export default function TextInputMolecularPcr(props: PcrTextInputPropsEx) {
     }
     let indexStyle: StyleProp<TextStyle>;
     // 偶数の場合は縦長、奇数の場合は横長
-    const topIndex = props.index % 4 === 0 ? 0 : -len * (1 + 0.5 * props.index);
+    const topIndex =
+      props.groupIndex % 4 === 0 ? 0 : -len * (1 + 0.5 * props.groupIndex);
     const leftIndex =
-      props.index % 2 === 0 ? (Math.pow(-1, props.index / 2) * len) / 2 : 0;
+      props.groupIndex % 2 === 0
+        ? (Math.pow(-1, props.groupIndex / 2) * len) / 2
+        : 0;
     const color = "transparent";
     // props.index % 4 === 0
     //   ? "red"
