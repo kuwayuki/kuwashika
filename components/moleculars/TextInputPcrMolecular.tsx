@@ -4,13 +4,14 @@ import { TextInputPropsEx } from "../../constants/Constant";
 import TextInputMolecularPcr from "./TextInputMolecularPcr";
 import { TEETH_MATH } from "./TextInputTeethMolecular";
 
-export type PcrTextInputPropsEx = TextInputPropsEx & { groupIndex: number };
+export type PcrTextInputPropsEx = TextInputPropsEx & { pcrIndex?: number }; // pcrIndex: [0, 1, 2, 3], [4, 5, 6, 7]...
+const MATH_4 = [0, 1, 2, 3];
 export default function TextInputPcrMolecular(props: PcrTextInputPropsEx) {
   const len = TEETH_MATH * 2;
   const isFocus =
     props.teethValue !== undefined &&
     props.teethValue.index === props.focusNumber;
-  const teethIndex = props.groupIndex * 4;
+  const teethIndex = props.teethGroupIndex * 4;
 
   return (
     <View
@@ -26,36 +27,16 @@ export default function TextInputPcrMolecular(props: PcrTextInputPropsEx) {
         borderWidth: isFocus ? 2 : 0.5,
       }}
     >
-      <TextInputMolecularPcr
-        {...props}
-        teethValue={props.teethValue ? props.teethValue[teethIndex] : undefined}
-        groupIndex={0}
-        keyboardType={"phone-pad"}
-      />
-      <TextInputMolecularPcr
-        {...props}
-        teethValue={
-          props.teethValue ? props.teethValue[teethIndex + 1] : undefined
-        }
-        groupIndex={1}
-        keyboardType={"phone-pad"}
-      />
-      <TextInputMolecularPcr
-        {...props}
-        teethValue={
-          props.teethValue ? props.teethValue[teethIndex + 2] : undefined
-        }
-        groupIndex={2}
-        keyboardType={"phone-pad"}
-      />
-      <TextInputMolecularPcr
-        {...props}
-        teethValue={
-          props.teethValue ? props.teethValue[teethIndex + 3] : undefined
-        }
-        groupIndex={3}
-        keyboardType={"phone-pad"}
-      />
+      {MATH_4.map((math) => (
+        <TextInputMolecularPcr
+          {...props}
+          teethValue={
+            props.teethValue ? props.teethValue[teethIndex + math] : undefined
+          }
+          pcrIndex={teethIndex + math}
+          keyboardType={"phone-pad"}
+        />
+      ))}
     </View>
   );
 }

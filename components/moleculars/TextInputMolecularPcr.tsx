@@ -13,20 +13,18 @@ export default function TextInputMolecularPcr(props: PcrTextInputPropsEx) {
     props.onTouchStart;
     if (props.setFocusNumber) props.setFocusNumber(props.teethValue?.index);
   };
-  const isFocus =
-    props.teethValue !== undefined &&
-    props.teethValue.index === props.focusNumber;
-  const isInputed = props.value && props.value !== "";
+  const isFocus = props.pcrIndex === props.focusNumber;
+  const isInputed = Number(props.value) > 0;
   const isMT = props.mtTeethNums?.includes(props.teethGroupIndex);
 
-  const getStatusColorStyle = (): StyleProp<TextStyle> => {
+  const getStatusColorStyle = (index: number): StyleProp<TextStyle> => {
     const len = TEETH_MATH * 2;
 
     // 欠損時の色
     if (isMT) {
       return !props.isHideNum
         ? {
-            width: len * 2,
+            width: len,
             height: len,
             backgroundColor: "#696969",
             borderWidth: 0,
@@ -36,20 +34,18 @@ export default function TextInputMolecularPcr(props: PcrTextInputPropsEx) {
     }
     let indexStyle: StyleProp<TextStyle>;
     // 偶数の場合は縦長、奇数の場合は横長
-    const topIndex =
-      props.groupIndex % 4 === 0 ? 0 : -len * (1 + 0.5 * props.groupIndex);
+    const topIndex = index % 4 === 0 ? 0 : -len * (1 + 0.5 * index);
     const leftIndex =
-      props.groupIndex % 2 === 0
-        ? (Math.pow(-1, props.groupIndex / 2) * len) / 2
-        : 0;
+      index % 2 === 0 ? -(Math.pow(-1, index / 2) * len) / 2 : 0;
     const color = "transparent";
-    // props.index % 4 === 0
-    //   ? "red"
-    //   : props.index % 4 === 1
-    //   ? "green"
-    //   : props.index % 4 === 2
-    //   ? "blue"
-    //   : "pink";
+    // const color =
+    //   index % 4 === 0
+    //     ? "red"
+    //     : index % 4 === 1
+    //     ? "green"
+    //     : index % 4 === 2
+    //     ? "blue"
+    //     : "pink";
     indexStyle = {
       position: "absolute",
       transform: [{ rotate: "-45deg" }, { scale: 0.70710678118 }],
@@ -66,6 +62,7 @@ export default function TextInputMolecularPcr(props: PcrTextInputPropsEx) {
     const style = {
       ...indexStyle,
       backgroundColor: isInputed ? "red" : "#ededed",
+      // backgroundColor: color,TODO: 後で治す,
     } as StyleProp<TextStyle>;
     if (isFocus) {
       Object.assign(style, {
@@ -84,10 +81,18 @@ export default function TextInputMolecularPcr(props: PcrTextInputPropsEx) {
     >
       <TextInputTeethMolecular
         {...props}
-        value={undefined}
+        value={props.teethValue?.index.toString() ?? "0"}
+        // value={undefined}
         editable={false}
         onTouchStart={() => onFocus()}
-        style={[props.style, getStatusColorStyle()]}
+        style={[
+          props.style,
+          getStatusColorStyle(
+            props.teethValue?.index !== undefined
+              ? props.teethValue.index % 4
+              : 0
+          ),
+        ]}
       />
     </View>
   );

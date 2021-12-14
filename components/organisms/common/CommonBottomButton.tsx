@@ -75,6 +75,12 @@ export const UPSET_BUTTON_NAMES = [
     color: "#3366CC",
     status: TEETH_STATUS.MT,
   } as buttonType,
+  {
+    value: 102,
+    display: "排膿",
+    color: "#FFCC00",
+    status: TEETH_STATUS.DRAINAGE,
+  } as buttonType,
 ];
 
 export default function CommonBottomButton(props: CommonButtonPropsType) {

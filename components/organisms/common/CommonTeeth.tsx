@@ -3,8 +3,10 @@ import { View } from "react-native";
 import { AppContext } from "../../../App";
 import { TEETH_TYPE } from "../../../constants/Constant";
 import TextInputLargeMolecular from "../../moleculars/TextInputLargeMolecular";
+import TextInputMolecularPcr from "../../moleculars/TextInputMolecularPcr";
 import TextInputPcrMolecular from "../../moleculars/TextInputPcrMolecular";
 import TextInputSmallMolecular from "../../moleculars/TextInputSmallMolecular";
+import { TEETH_MATH } from "../../moleculars/TextInputTeethMolecular";
 
 export type teethProps = {
   teethValues: TEETH_TYPE[]; // 192 or 32の歯
@@ -22,6 +24,7 @@ export type teethProps = {
 };
 
 export const PPD_PARTS = [0, 1, 2];
+const PCR_MATH_4 = [0, 1, 2, 3];
 
 /**
  * 横３マス
@@ -49,12 +52,43 @@ export default function CommonTeeth(props: teethProps) {
   };
 
   const textInputProps = (props: any) => {
-    if (props.isPcr)
-      return <TextInputPcrMolecular {...props} index={props.teethValues % 4} />;
+    if (props.isPcr) return <TextInputMolecularPcr {...props} />;
     return props.isPrecision ? (
       <TextInputSmallMolecular {...props} />
     ) : (
       <TextInputLargeMolecular {...props} />
+    );
+  };
+
+  const pcrTeeth = () => {
+    const len = TEETH_MATH * 2;
+    const focusIndex = [
+      props.teethValues[indexInit]?.index,
+      props.teethValues[indexInit + 1]?.index,
+      props.teethValues[indexInit + 2]?.index,
+      props.teethValues[indexInit + 3]?.index,
+    ].indexOf(props.focusNumber);
+    return (
+      <View
+        style={{
+          overflow: "hidden",
+          maxWidth: len,
+          maxHeight: len,
+          minWidth: len,
+          minHeight: len,
+          // borderColor: "#696969",
+          // backgroundColor: "#696969",
+          // borderWidth: focusIndex === 0 ? 2 : 0.5,
+          borderStyle: "solid",
+          borderWidth: 0.5,
+          // borderLeftWidth: focusIndex === 0 ? 2 : 0.5,
+          // borderTopWidth: focusIndex === 0 ? 2 : 0.5,
+          // borderRightWidth: focusIndex === 0 ? 2 : 0.5,
+          // borderBottomWidth: focusIndex === 0 ? 2 : 0.5,
+        }}
+      >
+        {PCR_MATH_4.map((math) => teeth(math))}
+      </View>
     );
   };
 
@@ -79,8 +113,9 @@ export default function CommonTeeth(props: teethProps) {
 
   // (16 x 段番号 + 歯のグループ番号)
   const times = props.isPrecision ? 3 : 1;
-  const indexInit =
-    16 * props.teethRows * times + (props.teethGroupIndex % 16) * times;
+  const indexInit = props.isPcr
+    ? props.teethGroupIndex * 4
+    : 16 * props.teethRows * times + (props.teethGroupIndex % 16) * times;
 
   return (
     <View
@@ -90,7 +125,7 @@ export default function CommonTeeth(props: teethProps) {
       }}
     >
       {props.isPcr
-        ? teeth(0)
+        ? pcrTeeth()
         : props.isPrecision
         ? PPD_PARTS.map((count) => teeth(count))
         : teeth(0)}

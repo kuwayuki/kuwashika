@@ -49,12 +49,12 @@ export default function PcrPage({ navigation }: RootTabScreenProps<"TabPCR">) {
     const temp: TEETH_TYPE[] = [
       ...appContext.currentPerson.currentData.PCR.precision,
     ];
-    for (let i = 0; i < 192; i++) {
+    for (let i = 0; i < 128; i++) {
       temp[i] = {
         ...temp[i],
         index: i,
-        teethRow: Math.floor(i / 48),
-        teethGroupIndex: Math.floor((i % 48) / 3 + (i < 192 / 2 ? 0 : 16)),
+        teethRow: Math.floor(i / 64),
+        teethGroupIndex: Math.floor(i / 4),
       } as TEETH_TYPE;
     }
     setTeethValues(temp);
@@ -62,12 +62,12 @@ export default function PcrPage({ navigation }: RootTabScreenProps<"TabPCR">) {
     const temp2: TEETH_TYPE[] = [
       ...appContext.currentPerson.currentData.PCR.basic,
     ];
-    for (let i = 0; i < 32; i++) {
+    for (let i = 0; i < 128; i++) {
       temp2[i] = {
         ...temp2[i],
         index: i,
-        teethRow: Math.floor(i / 16),
-        teethGroupIndex: i,
+        teethRow: Math.floor(i / 64),
+        teethGroupIndex: Math.floor(i / 4),
       } as TEETH_TYPE;
     }
     setTeethValuesSimple(temp2);
