@@ -83,6 +83,24 @@ export const UPSET_BUTTON_NAMES = [
   } as buttonType,
 ];
 
+export const PCR_BUTTON_NAMES = [
+  { value: 0, status: TEETH_STATUS.NORMAL } as buttonType,
+  { value: 1, status: TEETH_STATUS.NORMAL } as buttonType,
+  { value: 2, status: TEETH_STATUS.NORMAL } as buttonType,
+  {
+    value: 100,
+    display: "MT",
+    color: "#3366CC",
+    status: TEETH_STATUS.MT,
+  } as buttonType,
+  {
+    value: 110,
+    display: "CL",
+    color: "#FFCC00",
+    status: TEETH_STATUS.DRAINAGE,
+  } as buttonType,
+];
+
 export default function CommonBottomButton(props: CommonButtonPropsType) {
   const appContext = React.useContext(AppContext);
 
@@ -176,7 +194,7 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
       ? PPD_BUTTON_NAMES
       : props.tabPage === TAB_PAGE.UPSET
       ? UPSET_BUTTON_NAMES
-      : UPSET_BUTTON_NAMES;
+      : PCR_BUTTON_NAMES;
 
   return (
     <View

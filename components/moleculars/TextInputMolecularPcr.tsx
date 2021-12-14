@@ -34,7 +34,8 @@ export default function TextInputMolecularPcr(props: PcrTextInputPropsEx) {
     }
     let indexStyle: StyleProp<TextStyle>;
     // 偶数の場合は縦長、奇数の場合は横長
-    const topIndex = index % 4 === 0 ? 0 : -len * (1 + 0.5 * index);
+    const topIndex =
+      index % 2 === 0 ? 0 : index % 4 === 1 ? -len * 0.5 : len * 0.5;
     const leftIndex =
       index % 2 === 0 ? -(Math.pow(-1, index / 2) * len) / 2 : 0;
     const color = "transparent";
@@ -57,12 +58,14 @@ export default function TextInputMolecularPcr(props: PcrTextInputPropsEx) {
       borderColor: "black",
       backgroundColor: color,
       borderStyle: "solid",
+      zIndex: index,
     };
 
     const style = {
       ...indexStyle,
       backgroundColor: isInputed ? "red" : "#ededed",
-      // backgroundColor: color,TODO: 後で治す,
+      // backgroundColor: color,
+      // TODO: 後で治す,
     } as StyleProp<TextStyle>;
     if (isFocus) {
       Object.assign(style, {
@@ -73,28 +76,19 @@ export default function TextInputMolecularPcr(props: PcrTextInputPropsEx) {
   };
 
   return (
-    <View
-      style={{
-        minWidth: TEETH_MATH * 2,
-        minHeight: TEETH_MATH * 2,
-      }}
-    >
-      <TextInputTeethMolecular
-        {...props}
-        value={props.teethValue?.index.toString() ?? "0"}
-        // value={undefined}
-        editable={false}
-        onTouchStart={() => onFocus()}
-        style={[
-          props.style,
-          getStatusColorStyle(
-            props.teethValue?.index !== undefined
-              ? props.teethValue.index % 4
-              : 0
-          ),
-        ]}
-      />
-    </View>
+    <TextInputTeethMolecular
+      {...props}
+      // value={props.teethValue?.index.toString() ?? "0"}
+      value={undefined}
+      editable={false}
+      onTouchStart={() => onFocus()}
+      style={[
+        props.style,
+        getStatusColorStyle(
+          props.teethValue?.index !== undefined ? props.teethValue.index % 4 : 0
+        ),
+      ]}
+    />
   );
 }
 

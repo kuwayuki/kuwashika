@@ -34,21 +34,37 @@ export default function CommonTeeth(props: teethProps) {
   const appContext = React.useContext(AppContext);
 
   const onTouchBlDrAction = (teethNum: number) => {
-    if (appContext.pressedValue !== 101 && appContext.pressedValue !== 102)
+    if (
+      appContext.pressedValue !== 101 &&
+      appContext.pressedValue !== 102 &&
+      appContext.pressedValue !== 110
+    )
       return;
 
-    // 出血及び排膿
-    props.setTeethValue(
-      teethNum,
-      {
-        ...props.teethValues[teethNum],
-        status:
-          appContext.pressedValue === 101
-            ? { ...props.teethValues[teethNum].status, isBleeding: true }
-            : { ...props.teethValues[teethNum].status, isDrainage: true },
-      } as TEETH_TYPE,
-      props.isPrecision
-    );
+    if (appContext.pressedValue !== 110) {
+      // 出血及び排膿
+      props.setTeethValue(
+        teethNum,
+        {
+          ...props.teethValues[teethNum],
+          status:
+            appContext.pressedValue === 101
+              ? { ...props.teethValues[teethNum].status, isBleeding: true }
+              : { ...props.teethValues[teethNum].status, isDrainage: true },
+        } as TEETH_TYPE,
+        props.isPrecision
+      );
+    } else {
+      // PCR
+      props.setTeethValue(
+        teethNum,
+        {
+          ...props.teethValues[teethNum],
+          value: props.teethValues[teethNum]?.value === 1 ? 0 : 1,
+        } as TEETH_TYPE,
+        props.isPrecision
+      );
+    }
   };
 
   const textInputProps = (props: any) => {
@@ -62,12 +78,12 @@ export default function CommonTeeth(props: teethProps) {
 
   const pcrTeeth = () => {
     const len = TEETH_MATH * 2;
-    const focusIndex = [
+    const isFocus = [
       props.teethValues[indexInit]?.index,
       props.teethValues[indexInit + 1]?.index,
       props.teethValues[indexInit + 2]?.index,
       props.teethValues[indexInit + 3]?.index,
-    ].indexOf(props.focusNumber);
+    ].includes(props.focusNumber);
     return (
       <View
         style={{
@@ -80,7 +96,7 @@ export default function CommonTeeth(props: teethProps) {
           // backgroundColor: "#696969",
           // borderWidth: focusIndex === 0 ? 2 : 0.5,
           borderStyle: "solid",
-          borderWidth: 0.5,
+          borderWidth: isFocus ? 2 : 0.5,
           // borderLeftWidth: focusIndex === 0 ? 2 : 0.5,
           // borderTopWidth: focusIndex === 0 ? 2 : 0.5,
           // borderRightWidth: focusIndex === 0 ? 2 : 0.5,
