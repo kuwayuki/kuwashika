@@ -1,7 +1,12 @@
 import * as React from "react";
 import { View } from "react-native";
 import { AppContext } from "../../../App";
-import { teethType, TEETH_DOWN, TEETH_UP } from "../../../constants/Constant";
+import {
+  teethType,
+  TEETH_DOWN,
+  TEETH_TYPE,
+  TEETH_UP,
+} from "../../../constants/Constant";
 import TextReadMolecular from "../../moleculars/TextReadMolecular";
 import { PcrContext } from "../../pages/PcrPage";
 import PcrOneBlockTeeth from "./PcrOneBlockTeeth";
@@ -10,17 +15,41 @@ export default function PcrAllTeeth() {
   const appContext = React.useContext(AppContext);
   const pcrContext = React.useContext(PcrContext);
 
-  const onTouchMtAction = (teethNum: number) => {
-    if (appContext.pressedValue !== 100) return;
-
-    // MT用歯のグループクリック時
-    let temp = [...appContext.mtTeethNums];
-    if (appContext.mtTeethNums.includes(teethNum)) {
-      temp = temp.filter((mtTeethNum) => mtTeethNum !== teethNum);
-    } else {
-      temp.push(teethNum);
+  const onTouchMtAction = (teethGroupIndex: number) => {
+    if (pcrContext.focusNumber !== teethGroupIndex * 4) {
+      pcrContext.setFocusNumber(teethGroupIndex * 4);
+      return;
     }
-    appContext.setMtTeethNums(temp);
+    const tempTeeths = appContext.isPrecision
+      ? [...pcrContext.teethValues]
+      : [...pcrContext.teethValuesSimple];
+    // PCRの場合は、タッチ時に対象を全て選択・非選択状態にする
+    const selectValue = tempTeeths
+      .filter((teeth) => teeth.teethGroupIndex === teethGroupIndex)
+      .every((teethValue) => teethValue.value === 1)
+      ? 0
+      : 1;
+    const selectTeeths: TEETH_TYPE[] = [];
+    tempTeeths.forEach((teeth) => {
+      if (teeth.teethGroupIndex === teethGroupIndex) {
+        selectTeeths.push({ ...teeth, value: selectValue });
+      } else {
+        selectTeeths.push(teeth);
+      }
+    });
+    appContext.isPrecision
+      ? pcrContext.setTeethValues(selectTeeths)
+      : pcrContext.setTeethValuesSimple(selectTeeths);
+    // if (appContext.pressedValue !== 100) return;
+
+    // // MT用歯のグループクリック時
+    // let temp = [...appContext.mtTeethNums];
+    // if (appContext.mtTeethNums.includes(teethNum)) {
+    //   temp = temp.filter((mtTeethNum) => mtTeethNum !== teethNum);
+    // } else {
+    //   temp.push(teethNum);
+    // }
+    // appContext.setMtTeethNums(temp);
   };
 
   const teethBlock = (teeth: teethType) => {

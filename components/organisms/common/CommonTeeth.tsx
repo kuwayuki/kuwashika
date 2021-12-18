@@ -24,7 +24,7 @@ export type teethProps = {
 };
 
 export const PPD_PARTS = [0, 1, 2];
-const PCR_MATH_4 = [0, 1, 2, 3];
+export const PCR_MATH_4 = [0, 1, 2, 3];
 
 /**
  * 横３マス
