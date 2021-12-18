@@ -34,27 +34,7 @@ export default function CommonTeeth(props: teethProps) {
   const appContext = React.useContext(AppContext);
 
   const onTouchBlDrAction = (teethNum: number) => {
-    if (
-      appContext.pressedValue !== 101 &&
-      appContext.pressedValue !== 102 &&
-      appContext.pressedValue !== 110
-    )
-      return;
-
-    if (appContext.pressedValue !== 110) {
-      // 出血及び排膿
-      props.setTeethValue(
-        teethNum,
-        {
-          ...props.teethValues[teethNum],
-          status:
-            appContext.pressedValue === 101
-              ? { ...props.teethValues[teethNum].status, isBleeding: true }
-              : { ...props.teethValues[teethNum].status, isDrainage: true },
-        } as TEETH_TYPE,
-        props.isPrecision
-      );
-    } else {
+    if (props.isPcr) {
       // PCR
       props.setTeethValue(
         teethNum,
@@ -64,6 +44,28 @@ export default function CommonTeeth(props: teethProps) {
         } as TEETH_TYPE,
         props.isPrecision
       );
+    } else {
+      if (
+        appContext.pressedValue !== 101 &&
+        appContext.pressedValue !== 102 &&
+        appContext.pressedValue !== 110
+      )
+        return;
+
+      if (appContext.pressedValue !== 110) {
+        // 出血及び排膿
+        props.setTeethValue(
+          teethNum,
+          {
+            ...props.teethValues[teethNum],
+            status:
+              appContext.pressedValue === 101
+                ? { ...props.teethValues[teethNum].status, isBleeding: true }
+                : { ...props.teethValues[teethNum].status, isDrainage: true },
+          } as TEETH_TYPE,
+          props.isPrecision
+        );
+      }
     }
   };
 

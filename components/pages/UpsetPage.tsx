@@ -35,7 +35,14 @@ export default function UpsetPage({
    * 患者データから表示再読み込み
    */
   React.useEffect(() => {
-    if (!appContext.currentPerson || !appContext.isReload) return;
+    setFocusNumber(0);
+  }, []);
+
+  /**
+   * 患者データから表示再読み込み
+   */
+  React.useEffect(() => {
+    if (!appContext.currentPerson) return;
 
     const temp2: TEETH_TYPE[] = [
       ...appContext.currentPerson.currentData.UPSET.basic,

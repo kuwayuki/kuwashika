@@ -44,7 +44,7 @@ export default function PcrPage({ navigation }: RootTabScreenProps<"TabPCR">) {
    * 患者データから表示再読み込み
    */
   React.useEffect(() => {
-    if (!appContext.currentPerson || !appContext.isReload) return;
+    if (!appContext.currentPerson) return;
 
     const temp: TEETH_TYPE[] = [
       ...appContext.currentPerson.currentData.PCR.precision,

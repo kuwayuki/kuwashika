@@ -1,6 +1,8 @@
 import { TEETH_TYPE } from "./Constant";
 import dayjs from "dayjs";
 import "dayjs/locale/ja";
+import { TEETH_MATH } from "../components/moleculars/TextInputTeethMolecular";
+import { NativeScrollEvent } from "react-native";
 
 /**
  * Settingファイルに保存されているデータ
@@ -115,4 +117,32 @@ export const formatDate = (date: Date, type: DateFormat): string => {
     default:
       return "";
   }
+};
+export const getScrollPosition = (
+  nativeEvent: NativeScrollEvent,
+  index?: number,
+  isPrecision?: boolean
+): any => {
+  const partsTimesX = isPrecision ? 3 : 1;
+  const partsTimesY = isPrecision ? 4 : 2;
+  const maxColumns = 16 * partsTimesX;
+  const MAX_WIDTH = 48 * TEETH_MATH;
+
+  // 左から何番目？
+  let indexPositionX = Math.floor(index % maxColumns);
+  if (indexPositionX > 0) indexPositionX++;
+  // 上から何番目？
+  const indexPositionY = Math.floor(index / maxColumns);
+
+  // 一マス分のサイズ
+  const timesX = (MAX_WIDTH * nativeEvent.zoomScale) / maxColumns;
+  const bornusY = nativeEvent.layoutMeasurement.height * nativeEvent.zoomScale;
+  // 端っこに行くにつれて差分を徐々に倍率を下げる（真ん中が最大）
+  const positionX =
+    timesX * indexPositionX -
+    (nativeEvent.zoomScale >= 1 ? 300 : 100 * nativeEvent.zoomScale);
+  const positionY =
+    (nativeEvent.contentSize.height / partsTimesY) * indexPositionY +
+    (indexPositionY < partsTimesY / 2 ? -bornusY : bornusY);
+  return { x: positionX, y: positionY };
 };
