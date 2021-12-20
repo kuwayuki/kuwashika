@@ -40,16 +40,6 @@ export default function PcrAllTeeth() {
     appContext.isPrecision
       ? pcrContext.setTeethValues(selectTeeths)
       : pcrContext.setTeethValuesSimple(selectTeeths);
-    // if (appContext.pressedValue !== 100) return;
-
-    // // MT用歯のグループクリック時
-    // let temp = [...appContext.mtTeethNums];
-    // if (appContext.mtTeethNums.includes(teethNum)) {
-    //   temp = temp.filter((mtTeethNum) => mtTeethNum !== teethNum);
-    // } else {
-    //   temp.push(teethNum);
-    // }
-    // appContext.setMtTeethNums(temp);
   };
 
   const teethBlock = (teeth: teethType) => {
