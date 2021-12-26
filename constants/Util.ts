@@ -155,7 +155,7 @@ export const getScrollPosition = (
 
   // 左から何番目？
   let indexPositionX = Math.floor(index % maxColumns);
-  if (indexPositionX > 0) indexPositionX++;
+  if (indexPositionX > 0) indexPositionX = indexPositionX - 2;
   // 上から何番目？
   const indexPositionY = Math.floor(index / maxColumns);
 
