@@ -21,6 +21,7 @@ import {
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
+import { LogBox } from "react-native"; // TODO: 後で消す
 
 // 全ページの共通項目
 export type appContext = {
@@ -58,6 +59,7 @@ export type appContext = {
 export const AppContext = React.createContext({} as appContext);
 
 export default function App() {
+  LogBox.ignoreAllLogs();
   const [currentPerson, setCurrentPerson] = React.useState<PersonType>();
   const [settingData, setSettingData] = React.useState<DataType>(undefined);
   const [inspectionDate, setInspectionDate] = React.useState(new Date());

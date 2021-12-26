@@ -52,6 +52,28 @@ export type PersonDataType = {
   };
 };
 
+const INIT_DATA = (isPresion = false) => {
+  let temp: TEETH_TYPE[] = [];
+  if (isPresion) {
+    for (let i = 0; i < 192; i++) {
+      temp.push({
+        index: i,
+        teethRow: Math.floor(i / 48),
+        teethGroupIndex: Math.floor((i % 48) / 3 + (i < 192 / 2 ? 0 : 16)),
+      } as TEETH_TYPE);
+    }
+  } else {
+    for (let i = 0; i < 32; i++) {
+      temp.push({
+        index: i,
+        teethRow: Math.floor(i / 16),
+        teethGroupIndex: i,
+      } as TEETH_TYPE);
+    }
+  }
+  return temp;
+};
+
 export const INIT_PERSON: PersonDataType = {
   isPrecision: false,
   inspectionDataNumber: 1,
@@ -60,11 +82,13 @@ export const INIT_PERSON: PersonDataType = {
   date: new Date(),
   mtTeethNums: [],
   PPD: {
-    precision: [],
-    basic: [],
+    precision: INIT_DATA(true),
+    basic: INIT_DATA(),
+    // precision: [],
+    // basic: [],
   },
   UPSET: {
-    basic: [],
+    basic: INIT_DATA(),
   },
   PCR: {
     precision: [],
@@ -155,6 +179,22 @@ export const pcrCalculation = (
 ) => {
   const filled = teethValues.filter(
     (teeth) => teeth.value === 1 && !mtTeethNums.includes(teeth.teethGroupIndex)
+  );
+  const calc =
+    (filled.length / (teethValues.length - mtTeethNums.length)) * 100;
+  return Math.round(calc * 10) / 10;
+};
+
+// 各数値 ÷ (全歯数 x 4面)
+export const ppdCalculation = (
+  teethValues: TEETH_TYPE[],
+  mtTeethNums: number[],
+  countNum: number[]
+) => {
+  const filled = teethValues.filter(
+    (teeth) =>
+      countNum.includes(teeth.value) &&
+      !mtTeethNums.includes(teeth.teethGroupIndex)
   );
   const calc =
     (filled.length / (teethValues.length - mtTeethNums.length)) * 100;

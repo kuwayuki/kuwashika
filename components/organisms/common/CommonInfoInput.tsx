@@ -22,6 +22,13 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
    */
   React.useEffect(() => {
     if (!appContext.currentPerson) return;
+    const currentData = appContext.currentPerson.currentData;
+    if (
+      currentData.isPrecision === appContext.isPrecision &&
+      currentData.date === appContext.inspectionDate &&
+      currentData.mtTeethNums === appContext.mtTeethNums
+    )
+      return;
 
     const data: PersonDataType = {
       ...appContext.currentPerson.currentData,
