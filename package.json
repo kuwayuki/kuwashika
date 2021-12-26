@@ -40,7 +40,10 @@
     "react-native-screens": "~3.8.0",
     "react-native-tab-view": "^3.1.1",
     "react-native-web": "0.17.1",
-    "react-to-print": "^2.14.0"
+    "react-to-print": "^2.14.0",
+    "expo-store-review": "~5.0.3",
+    "expo-ads-admob": "~11.0.3",
+    "expo-app-loading": "~1.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
