@@ -106,7 +106,7 @@ export default function PcrPage({ navigation }: RootTabScreenProps<"TabPCR">) {
     teethValue: TEETH_TYPE,
     isPrecision = false
   ) => {
-    const temp = isPrecision ? [...teethValues] : [...teethValuesSimple];
+    const temp = isPrecision ? [...teethValuesSimple] : [...teethValuesSimple]; // TODO: 直す？
     if (teethValue.value < 10) {
       temp[index] = {
         ...teethValue,
@@ -136,7 +136,9 @@ export default function PcrPage({ navigation }: RootTabScreenProps<"TabPCR">) {
         value: teethValue.value,
       } as TEETH_TYPE;
     }
-    isPrecision ? setTeethValues([...temp]) : setTeethValuesSimple([...temp]);
+    isPrecision
+      ? setTeethValuesSimple([...temp])
+      : setTeethValuesSimple([...temp]); // TODO: 直す？
   };
 
   return (

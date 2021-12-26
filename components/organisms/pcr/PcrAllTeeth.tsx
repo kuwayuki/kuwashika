@@ -22,7 +22,7 @@ export default function PcrAllTeeth() {
       return;
     }
     const tempTeeths = appContext.isPrecision
-      ? [...pcrContextState.teethValues]
+      ? [...pcrContextState.teethValuesSimple] // TODO: 直す？
       : [...pcrContextState.teethValuesSimple];
     // PCRの場合は、タッチ時に対象を全て選択・非選択状態にする
     const selectValue = tempTeeths
@@ -39,7 +39,7 @@ export default function PcrAllTeeth() {
       }
     });
     appContext.isPrecision
-      ? pcrContextDispatch.setTeethValues(selectTeeths)
+      ? pcrContextDispatch.setTeethValuesSimple(selectTeeths) // TODO: 直す？
       : pcrContextDispatch.setTeethValuesSimple(selectTeeths);
   };
 
@@ -48,7 +48,7 @@ export default function PcrAllTeeth() {
       <PcrOneBlockTeeth
         teethValues={
           appContext.isPrecision
-            ? pcrContextState.teethValues
+            ? pcrContextState.teethValuesSimple // TODO: 直す？
             : pcrContextState.teethValuesSimple
         }
         setTeethValue={pcrContextDispatch.setTeethValue}
