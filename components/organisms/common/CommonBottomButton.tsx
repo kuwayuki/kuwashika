@@ -14,6 +14,7 @@ type buttonType = {
   value: number;
   color: string;
   display: string;
+  isDisabled?: boolean;
 };
 type CommonButtonPropsType = {
   tabPage: TAB_PAGE;
@@ -45,12 +46,6 @@ export const PPD_BUTTON_NAMES = [
   { value: 11, display: "-", status: TEETH_STATUS.NORMAL } as buttonType,
   // { value: 11, display: "→", status: TEETH_STATUS.NORMAL } as buttonType,
   {
-    value: 100,
-    display: "MT",
-    color: "#3366CC",
-    status: TEETH_STATUS.MT,
-  } as buttonType,
-  {
     value: 101,
     display: "出血",
     color: "#FF3366",
@@ -62,6 +57,12 @@ export const PPD_BUTTON_NAMES = [
     color: "#FFCC00",
     status: TEETH_STATUS.DRAINAGE,
   } as buttonType,
+  {
+    value: 100,
+    display: "MT",
+    color: "#3366CC",
+    status: TEETH_STATUS.MT,
+  } as buttonType,
 ];
 
 export const UPSET_BUTTON_NAMES = [
@@ -69,17 +70,31 @@ export const UPSET_BUTTON_NAMES = [
   { value: 1, status: TEETH_STATUS.NORMAL } as buttonType,
   { value: 2, status: TEETH_STATUS.NORMAL } as buttonType,
   { value: 3, status: TEETH_STATUS.NORMAL } as buttonType,
+  { value: 4, status: TEETH_STATUS.NORMAL, isDisabled: true } as buttonType,
+  { value: 5, status: TEETH_STATUS.NORMAL, isDisabled: true } as buttonType,
+  { value: 6, status: TEETH_STATUS.NORMAL, isDisabled: true } as buttonType,
+  { value: 7, status: TEETH_STATUS.NORMAL, isDisabled: true } as buttonType,
+  { value: 8, status: TEETH_STATUS.NORMAL, isDisabled: true } as buttonType,
+  { value: 9, status: TEETH_STATUS.NORMAL, isDisabled: true } as buttonType,
   {
-    value: 100,
-    display: "MT",
-    color: "#3366CC",
-    status: TEETH_STATUS.MT,
+    value: 101,
+    display: "出血",
+    color: "#FF3366",
+    status: TEETH_STATUS.BLLEDING,
+    isDisabled: true,
   } as buttonType,
   {
     value: 102,
     display: "排膿",
     color: "#FFCC00",
     status: TEETH_STATUS.DRAINAGE,
+    isDisabled: true,
+  } as buttonType,
+  {
+    value: 100,
+    display: "MT",
+    color: "#3366CC",
+    status: TEETH_STATUS.MT,
   } as buttonType,
 ];
 
@@ -88,16 +103,16 @@ export const PCR_BUTTON_NAMES = [
   { value: 1, status: TEETH_STATUS.NORMAL } as buttonType,
   { value: 2, status: TEETH_STATUS.NORMAL } as buttonType,
   {
-    value: 100,
-    display: "MT",
-    color: "#3366CC",
-    status: TEETH_STATUS.MT,
-  } as buttonType,
-  {
     value: 110,
     display: "CL",
     color: "#FFCC00",
     status: TEETH_STATUS.DRAINAGE,
+  } as buttonType,
+  {
+    value: 100,
+    display: "MT",
+    color: "#3366CC",
+    status: TEETH_STATUS.MT,
   } as buttonType,
 ];
 
@@ -215,6 +230,7 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
                 ? { backgroundColor: button.color }
                 : undefined
             }
+            disabled={button.isDisabled}
             onPress={() => buttonAction(button)}
           >
             {button.display ?? button.value}
@@ -233,6 +249,7 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
                   }
                 : undefined,
             ]}
+            disabled={button.isDisabled}
             onPress={() => buttonAction(button)}
           >
             {button.display ?? button.value}

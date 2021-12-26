@@ -14,8 +14,13 @@ export enum PRESS {
 export default function ButtonAtom(props: TouchableOpacityProps) {
   return (
     <TouchableOpacity
-      style={[styles.button, props.style]}
+      style={[
+        styles.button,
+        props.style,
+        props.disabled && { backgroundColor: "#555555" },
+      ]}
       onPress={props.onPress}
+      disabled={props.disabled}
     >
       <Text style={styles.text}>{props.children}</Text>
     </TouchableOpacity>
