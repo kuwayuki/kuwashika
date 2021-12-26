@@ -1,7 +1,7 @@
 import * as React from "react";
 import { StatusBar, StyleSheet, View } from "react-native";
 import { Icon } from "react-native-elements";
-import { AppContext } from "../../../App";
+import { AppContextDispatch, AppContextState } from "../../../App";
 import { TAB_PAGE } from "../../../constants/Constant";
 import { PersonDataType, PersonType } from "../../../constants/Util";
 import DatePickerAtom from "../../atoms/DatePickerAtom";
@@ -15,32 +15,33 @@ type CommonInfoInputPropsType = {
 };
 
 export default function CommonInfoInput(props: CommonInfoInputPropsType) {
-  const appContext = React.useContext(AppContext);
+  const appContextState = React.useContext(AppContextState);
+  const appContextDispatch = React.useContext(AppContextDispatch);
 
   /**
    * データが変更される度に編集データを更新
    */
   React.useEffect(() => {
-    if (!appContext.currentPerson) return;
-    const currentData = appContext.currentPerson.currentData;
+    if (!appContextState.currentPerson) return;
+    const currentData = appContextState.currentPerson.currentData;
     if (
-      currentData.isPrecision === appContext.isPrecision &&
-      currentData.date === appContext.inspectionDate &&
-      currentData.mtTeethNums === appContext.mtTeethNums
+      currentData.isPrecision === appContextState.isPrecision &&
+      currentData.date === appContextState.inspectionDate &&
+      currentData.mtTeethNums === appContextState.mtTeethNums
     )
       return;
 
     const data: PersonDataType = {
-      ...appContext.currentPerson.currentData,
-      date: appContext.inspectionDate,
-      isPrecision: appContext.isPrecision,
-      mtTeethNums: appContext.mtTeethNums,
+      ...appContextState.currentPerson.currentData,
+      date: appContextState.inspectionDate,
+      isPrecision: appContextState.isPrecision,
+      mtTeethNums: appContextState.mtTeethNums,
     };
-    appContext.setCurrentPersonData(data);
+    appContextDispatch.setCurrentPersonData(data);
   }, [
-    appContext.inspectionDate,
-    appContext.isPrecision,
-    appContext.mtTeethNums,
+    appContextState.inspectionDate,
+    appContextState.isPrecision,
+    appContextState.mtTeethNums,
   ]);
 
   return (
@@ -66,35 +67,35 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
       >
         <TitleAndAction title={"検査日"}>
           <DatePickerAtom
-            date={appContext.inspectionDate}
-            setDate={appContext.setInspectionDate}
+            date={appContextState.inspectionDate}
+            setDate={appContextDispatch.setInspectionDate}
           />
         </TitleAndAction>
         <TitleAndAction title={"患者番号"}>
           <DropDownPickerAtom
-            items={appContext.patients}
-            value={appContext.patientNumber}
-            setValue={appContext.setPatientNumber}
+            items={appContextState.patients}
+            value={appContextState.patientNumber}
+            setValue={appContextDispatch.setPatientNumber}
             width={88}
           />
         </TitleAndAction>
         <TitleAndAction title={"検査データ"}>
           <DropDownPickerAtom
-            items={appContext.inspectionData}
-            value={appContext.inspectionDataNumber}
-            setValue={appContext.setInspectionDataNumber}
+            items={appContextState.inspectionData}
+            value={appContextState.inspectionDataNumber}
+            setValue={appContextDispatch.setInspectionDataNumber}
             width={160}
           />
         </TitleAndAction>
         <TitleAndAction
-          title={appContext.isPrecision ? "精密" : "基本"}
+          title={appContextState.isPrecision ? "精密" : "基本"}
           style={props.tabPage && { display: "none" }}
         >
           <SwitchAtom
             onValueChange={() =>
-              appContext.setPrecision(!appContext.isPrecision)
+              appContextDispatch.setPrecision(!appContextState.isPrecision)
             }
-            value={appContext.isPrecision}
+            value={appContextState.isPrecision}
           />
         </TitleAndAction>
       </View>
@@ -111,7 +112,7 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
           name="cog"
           type="font-awesome"
           color="#999999"
-          onPress={() => appContext.setModalNumber(100)}
+          onPress={() => appContextDispatch.setModalNumber(100)}
           // onPress={() => appContext.setRegistDatabase(undefined)}
           // onPress={() => appContext.setRegistDatabase(appContext.currentPerson)}
         />

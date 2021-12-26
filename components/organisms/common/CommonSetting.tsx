@@ -1,22 +1,17 @@
 import * as React from "react";
-import { Modal, StyleSheet, View } from "react-native";
-import { AppContext } from "../../../App";
-import {
-  DataType,
-  INIT_PERSON,
-  INIT_SETTING_DATA,
-  SettingType,
-} from "../../../constants/Util";
+import { StyleSheet, View } from "react-native";
+import { Card } from "react-native-elements";
+import { AppContextDispatch, AppContextState } from "../../../App";
 import { DropdownType } from "../../atoms/DropDownPickerAtom";
 import ModalAtom from "../../atoms/ModalAtom";
 import PressableAtom from "../../atoms/PressableAtom";
 import SwitchAtom from "../../atoms/SwitchAtom";
-import TextInputAtom from "../../atoms/TextInputAtom";
 import TitleAndAction from "../../moleculars/TitleAndAction";
-import { Card } from "react-native-elements";
 
 export default function CommonSetting() {
-  const appContext = React.useContext(AppContext);
+  const appContext = React.useContext(AppContextState);
+  const appContextDispatch = React.useContext(AppContextDispatch);
+
   const [patientNumber, setPatientNumber] = React.useState<number>();
   const [patientName, setPatientName] = React.useState<string>(undefined);
 
@@ -42,8 +37,8 @@ export default function CommonSetting() {
     // 患者番号の追加
     const temp: DropdownType[] = [...appContext.patients];
     temp.push({ label: patientNumber.toString(), value: patientNumber });
-    appContext.setPatients(temp);
-    appContext.setPatientNumber(patientNumber);
+    appContextDispatch.setPatients(temp);
+    appContextDispatch.setPatientNumber(patientNumber);
 
     // // 全体データの更新
     // appContext.registSettingData({
@@ -52,33 +47,36 @@ export default function CommonSetting() {
     // } as DataType);
 
     // モーダルを閉じる
-    appContext.setModalNumber(0);
+    appContextDispatch.setModalNumber(0);
   };
 
   // データの初期化
   const cancel = () => {
     // Modalを閉じて、前の患者番号に戻す
-    appContext.setModalNumber(0);
-    appContext.setPatientNumber(appContext.currentPerson.patientNumber);
+    appContextDispatch.setModalNumber(0);
+    appContextDispatch.setPatientNumber(appContext.currentPerson.patientNumber);
   };
 
   // データの初期化
   const initData = async () => {
     // 全体データの更新
-    appContext.setModalNumber(0);
-    await appContext.deletePerson();
+    appContextDispatch.setModalNumber(0);
+    await appContextDispatch.deletePerson();
   };
 
   // ユーザーの削除
   const deletePatientData = async () => {
-    appContext.setModalNumber(0);
-    await appContext.deletePerson(appContext.patientNumber);
+    appContextDispatch.setModalNumber(0);
+    await appContextDispatch.deletePerson(appContext.patientNumber);
   };
 
   // 検査データの削除
   const deleteInspectionData = async () => {
-    appContext.setModalNumber(0);
-    await appContext.deletePerson(undefined, appContext.inspectionDataNumber);
+    appContextDispatch.setModalNumber(0);
+    await appContextDispatch.deletePerson(
+      undefined,
+      appContext.inspectionDataNumber
+    );
   };
 
   return (
@@ -102,7 +100,7 @@ export default function CommonSetting() {
             <TitleAndAction title={appContext.isPrecision ? "精密" : "基本"}>
               <SwitchAtom
                 onValueChange={() =>
-                  appContext.setPrecision(!appContext.isPrecision)
+                  appContextDispatch.setPrecision(!appContext.isPrecision)
                 }
                 value={appContext.isPrecision}
               />

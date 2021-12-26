@@ -1,8 +1,7 @@
 import * as React from "react";
 import { StyleSheet, View } from "react-native";
-import { AppContext } from "../../../App";
+import { AppContextDispatch, AppContextState } from "../../../App";
 import { INSPACTION_ITEMS } from "../../../constants/Constant";
-import { INIT_PERSON, PersonType } from "../../../constants/Util";
 import DropDownPickerAtom, {
   DropdownType,
 } from "../../atoms/DropDownPickerAtom";
@@ -12,7 +11,9 @@ import TextInputAtom from "../../atoms/TextInputAtom";
 import TitleAndAction from "../../moleculars/TitleAndAction";
 
 export default function CommonInspection() {
-  const appContext = React.useContext(AppContext);
+  const appContextState = React.useContext(AppContextState);
+  const appContextDispatch = React.useContext(AppContextDispatch);
+
   const [inspectionDataKindNumber, setInspectionDataKindNumber] =
     React.useState<number>(undefined);
   const [inspectionName, setInspectionName] = React.useState<string>(undefined);
@@ -21,18 +22,18 @@ export default function CommonInspection() {
     const items = INSPACTION_ITEMS.map((item) => item.value);
     const index =
       items.indexOf(
-        appContext.currentPerson.currentData.inspectionDataKindNumber
+        appContextState.currentPerson.currentData.inspectionDataKindNumber
       ) + 1;
     setInspectionDataKindNumber(INSPACTION_ITEMS[index < 3 ? index : 0].value);
   }, []);
 
   const savePatient = () => {
-    const currentPerson = appContext.currentPerson;
+    const currentPerson = appContextState.currentPerson;
     const numbers = currentPerson.data.map((data) => data.inspectionDataNumber);
     const nextDataNumber = Math.max(...numbers) + 1;
 
     // 検査データの追加
-    const temp: DropdownType[] = [...appContext.inspectionData];
+    const temp: DropdownType[] = [...appContextState.inspectionData];
     // 任意入力以外はそのまま設定
     const addData = INSPACTION_ITEMS.find(
       (item) => item.value === inspectionDataKindNumber
@@ -45,25 +46,25 @@ export default function CommonInspection() {
       value: nextDataNumber,
       kind: inspectionDataKindNumber,
     });
-    appContext.setInspectionData(temp);
-    appContext.setInspectionDataNumber(nextDataNumber);
+    appContextDispatch.setInspectionData(temp);
+    appContextDispatch.setInspectionDataNumber(nextDataNumber);
 
     // 現在データの引き継ぎ
-    appContext.setCurrentPersonData({
-      ...appContext.currentPerson.currentData,
+    appContextDispatch.setCurrentPersonData({
+      ...appContextState.currentPerson.currentData,
       inspectionDataNumber: nextDataNumber,
       inspectionDataKindNumber: inspectionDataKindNumber,
       inspectionDataName: addData.label,
     });
 
     // モーダルを閉じる
-    appContext.setModalNumber(0);
+    appContextDispatch.setModalNumber(0);
   };
   const cancel = () => {
     // Modalを閉じて、前の検査番号に戻す
-    appContext.setModalNumber(0);
-    appContext.setInspectionDataNumber(
-      appContext.currentPerson.currentData.inspectionDataNumber
+    appContextDispatch.setModalNumber(0);
+    appContextDispatch.setInspectionDataNumber(
+      appContextState.currentPerson.currentData.inspectionDataNumber
     );
   };
 

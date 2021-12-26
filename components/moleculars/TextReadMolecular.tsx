@@ -13,6 +13,7 @@ export default function TextReadMolecular(props: teethGroupProps) {
 const styles = StyleSheet.create({
   input: {
     width: TEETH_MATH * 2,
+    height: TEETH_MATH,
     fontWeight: "bold",
   },
 });

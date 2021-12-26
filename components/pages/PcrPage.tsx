@@ -1,7 +1,7 @@
 import * as React from "react";
-import { AppContext } from "../../App";
+import { AppContextDispatch, AppContextState } from "../../App";
 import { TEETH_TYPE } from "../../constants/Constant";
-import { PersonDataType, PersonType } from "../../constants/Util";
+import { PersonDataType } from "../../constants/Util";
 import { RootTabScreenProps } from "../../types";
 import PcrTemplate from "../templates/PcrTemplate";
 
@@ -21,7 +21,8 @@ export type pcrContext = {
 export const PcrContext = React.createContext({} as pcrContext);
 
 export default function PcrPage({ navigation }: RootTabScreenProps<"TabPCR">) {
-  const appContext = React.useContext(AppContext);
+  const appContextState = React.useContext(AppContextState);
+  const appContextDispatch = React.useContext(AppContextDispatch);
 
   const [focusNumber, setFocusNumber] = React.useState(0);
   const [teethValues, setTeethValues] = React.useState<TEETH_TYPE[]>([]);
@@ -35,19 +36,19 @@ export default function PcrPage({ navigation }: RootTabScreenProps<"TabPCR">) {
   React.useEffect(() => {
     setFocusNumber(0);
   }, [
-    appContext.patientNumber,
-    appContext.inspectionDataNumber,
-    appContext.isPrecision,
+    appContextState.patientNumber,
+    appContextState.inspectionDataNumber,
+    appContextState.isPrecision,
   ]);
 
   /**
    * 患者データから表示再読み込み
    */
   React.useEffect(() => {
-    if (!appContext.currentPerson) return;
+    if (!appContextState.currentPerson) return;
 
     const temp: TEETH_TYPE[] = [
-      ...appContext.currentPerson.currentData.PCR.precision,
+      ...appContextState.currentPerson.currentData.PCR.precision,
     ];
     for (let i = 0; i < 128; i++) {
       temp[i] = {
@@ -60,7 +61,7 @@ export default function PcrPage({ navigation }: RootTabScreenProps<"TabPCR">) {
     setTeethValues(temp);
 
     const temp2: TEETH_TYPE[] = [
-      ...appContext.currentPerson.currentData.PCR.basic,
+      ...appContextState.currentPerson.currentData.PCR.basic,
     ];
     for (let i = 0; i < 128; i++) {
       temp2[i] = {
@@ -72,23 +73,23 @@ export default function PcrPage({ navigation }: RootTabScreenProps<"TabPCR">) {
     }
     setTeethValuesSimple(temp2);
 
-    appContext.setMtTeethNums([
-      ...appContext.currentPerson.currentData.mtTeethNums,
+    appContextDispatch.setMtTeethNums([
+      ...appContextState.currentPerson.currentData.mtTeethNums,
     ]);
-    appContext.setReload(false);
-  }, [appContext.isReload]);
+    appContextDispatch.setReload(false);
+  }, [appContextState.isReload]);
 
   /** データが変更される度に編集データを更新 */
   React.useEffect(() => {
-    if (!appContext.currentPerson) return;
+    if (!appContextState.currentPerson) return;
     const data: PersonDataType = {
-      ...appContext.currentPerson.currentData,
+      ...appContextState.currentPerson.currentData,
       PCR: {
         precision: teethValues,
         basic: teethValuesSimple,
       },
     };
-    appContext.setCurrentPersonData(data);
+    appContextDispatch.setCurrentPersonData(data);
   }, [teethValues, teethValuesSimple]);
 
   /**

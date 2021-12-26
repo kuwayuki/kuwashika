@@ -1,10 +1,9 @@
 import * as React from "react";
 import { View } from "react-native";
-import { AppContext } from "../../../App";
+import { AppContextState } from "../../../App";
 import { TEETH_TYPE } from "../../../constants/Constant";
 import TextInputLargeMolecular from "../../moleculars/TextInputLargeMolecular";
 import TextInputMolecularPcr from "../../moleculars/TextInputMolecularPcr";
-import TextInputPcrMolecular from "../../moleculars/TextInputPcrMolecular";
 import TextInputSmallMolecular from "../../moleculars/TextInputSmallMolecular";
 import { TEETH_MATH } from "../../moleculars/TextInputTeethMolecular";
 
@@ -31,7 +30,7 @@ export const PCR_MATH_4 = [0, 1, 2, 3];
  * @returns
  */
 export default function CommonTeeth(props: teethProps) {
-  const appContext = React.useContext(AppContext);
+  const appContext = React.useContext(AppContextState);
 
   const onTouchBlDrAction = (teethNum: number) => {
     if (props.isPcr) {

@@ -4,7 +4,7 @@ import {
   NativeSyntheticEvent,
   StyleSheet,
 } from "react-native";
-import { AppContext } from "../../App";
+import { AppContextState } from "../../App";
 import { TAB_PAGE } from "../../constants/Constant";
 import { getScrollPosition } from "../../constants/Util";
 import ScrollViewAtom from "../atoms/ScrollViewAtom";
@@ -14,7 +14,7 @@ import PcrAllTeeth from "../organisms/pcr/PcrAllTeeth";
 import { PcrContext } from "../pages/PcrPage";
 
 export default function PcrTemplate() {
-  const appContext = React.useContext(AppContext);
+  const appContext = React.useContext(AppContextState);
   const pcrContext = React.useContext(PcrContext);
   const [nativeEvent, setNativeEvent] = React.useState<NativeScrollEvent>({
     zoomScale: 1.24,

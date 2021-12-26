@@ -1,6 +1,6 @@
 import * as React from "react";
 import { StyleSheet, View } from "react-native";
-import { AppContext } from "../../../App";
+import { AppContextDispatch, AppContextState } from "../../../App";
 import { INIT_PERSON, PersonType } from "../../../constants/Util";
 import { DropdownType } from "../../atoms/DropDownPickerAtom";
 import ModalAtom from "../../atoms/ModalAtom";
@@ -9,13 +9,15 @@ import TextInputAtom from "../../atoms/TextInputAtom";
 import TitleAndAction from "../../moleculars/TitleAndAction";
 
 export default function CommonPatient() {
-  const appContext = React.useContext(AppContext);
+  const appContextState = React.useContext(AppContextState);
+  const appContextDispatch = React.useContext(AppContextDispatch);
+
   const [patientNumber, setPatientNumber] = React.useState<number>(undefined);
   const [patientName, setPatientName] = React.useState<string>(undefined);
 
   const savePatient = () => {
     if (
-      appContext.patients
+      appContextState.patients
         .map((patient) => patient.value)
         .includes(patientNumber)
     ) {
@@ -24,33 +26,35 @@ export default function CommonPatient() {
     }
 
     // 患者番号の追加
-    const temp: DropdownType[] = [...appContext.patients];
+    const temp: DropdownType[] = [...appContextState.patients];
     temp.push({ label: patientNumber.toString(), value: patientNumber });
-    appContext.setPatients(temp);
-    appContext.setPatientNumber(patientNumber);
+    appContextDispatch.setPatients(temp);
+    appContextDispatch.setPatientNumber(patientNumber);
 
     // 全体データの更新
-    appContext.registPatientData({
+    appContextDispatch.registPatientData({
       patientNumber: patientNumber,
       data: [INIT_PERSON],
     } as PersonType);
 
     // 全体データの更新
-    appContext.registSettingData({
-      ...appContext.settingData,
+    appContextDispatch.registSettingData({
+      ...appContextState.settingData,
       persons: [
-        ...appContext.settingData.persons,
+        ...appContextState.settingData.persons,
         { patientNumber: patientNumber, patientName: patientName },
       ],
     });
 
     // モーダルを閉じる
-    appContext.setModalNumber(0);
+    appContextDispatch.setModalNumber(0);
   };
   const cancel = () => {
     // Modalを閉じて、前の患者番号に戻す
-    appContext.setModalNumber(0);
-    appContext.setPatientNumber(appContext.currentPerson.patientNumber);
+    appContextDispatch.setModalNumber(0);
+    appContextDispatch.setPatientNumber(
+      appContextState.currentPerson.patientNumber
+    );
   };
 
   return (

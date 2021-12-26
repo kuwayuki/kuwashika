@@ -22,7 +22,7 @@ export default function TextInputMolecular(props: TextInputPropsEx) {
       return !props.isHideNum
         ? {
             backgroundColor: "#696969",
-            borderWidth: 0,
+            borderWidth: 0.3,
             color: "#696969",
           }
         : { backgroundColor: "#696969" };

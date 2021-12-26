@@ -24,39 +24,44 @@ import Navigation from "./navigation";
 import { LogBox } from "react-native"; // TODO: 後で消す
 
 // 全ページの共通項目
-export type appContext = {
+export type appContextState = {
   isReload: boolean;
-  setReload: (isRelaod: boolean) => void;
   isInitRead: boolean;
-  setInitRead: (isInitRead: boolean) => void;
   settingData: DataType;
-  setSettingData: (settingData: DataType) => void;
   currentPerson: PersonType;
+  modalNumber: number;
+  inspectionDate: Date;
+  patients: DropdownType[];
+  patientNumber: number;
+  inspectionDataNumber: number;
+  inspectionData: DropdownType[];
+  isPrecision: boolean;
+  mtTeethNums: number[];
+  pressedValue: number;
+};
+export const AppContextState = React.createContext({} as appContextState);
+
+// 全ページの共通項目
+export type appContextDispatch = {
+  setReload: (isRelaod: boolean) => void;
+  setInitRead: (isInitRead: boolean) => void;
+  setSettingData: (settingData: DataType) => void;
   setCurrentPerson: (currentPerson: PersonType) => void;
   setCurrentPersonData: (currentData: PersonDataType) => void;
-  modalNumber: number;
   setModalNumber: (modalNumber: number) => void;
-  inspectionDate: Date;
   setInspectionDate: (inspectionDate: Date) => void;
-  patients: DropdownType[];
   setPatients: (patientNumber: DropdownType[]) => void;
-  patientNumber: number;
   setPatientNumber: (patientNumber: number) => void;
-  inspectionDataNumber: number;
   setInspectionDataNumber: (inspectionData: number) => void;
-  inspectionData: DropdownType[];
   setInspectionData: (inspectionData: DropdownType[]) => void;
-  isPrecision: boolean;
   setPrecision: (isPrecision: boolean) => void;
   registSettingData: (settingData?: DataType) => void;
   registPatientData: (currentPerson: PersonType) => void;
-  mtTeethNums: number[];
   setMtTeethNums: (mtTeethNums: number[]) => void;
-  pressedValue: number;
   setPressedValue: (pressedValue: number) => void;
   deletePerson: (patientNumber?: number, inspectionDataNumber?: number) => void;
 };
-export const AppContext = React.createContext({} as appContext);
+export const AppContextDispatch = React.createContext({} as appContextDispatch);
 
 export default function App() {
   LogBox.ignoreAllLogs();
@@ -359,48 +364,53 @@ export default function App() {
     return null;
   } else {
     return (
-      <AppContext.Provider
+      <AppContextState.Provider
         value={{
           isReload,
-          setReload,
           isInitRead,
-          setInitRead,
           settingData,
-          setSettingData,
           currentPerson,
-          setCurrentPerson,
-          setCurrentPersonData,
           modalNumber,
-          setModalNumber,
           inspectionDate,
-          setInspectionDate,
           patients,
-          setPatients,
           patientNumber,
-          setPatientNumber,
           inspectionDataNumber,
-          setInspectionDataNumber,
           inspectionData,
-          setInspectionData,
           isPrecision,
-          setPrecision,
-          registSettingData,
-          registPatientData,
           mtTeethNums,
-          setMtTeethNums,
           pressedValue,
-          setPressedValue,
-          deletePerson,
         }}
       >
-        {modalNumber === 1 && <CommonPatient />}
-        {modalNumber === 2 && <CommonInspection />}
-        {modalNumber === 100 && <CommonSetting />}
-        <SafeAreaProvider>
-          <Navigation colorScheme={colorScheme} />
-          <StatusBar />
-        </SafeAreaProvider>
-      </AppContext.Provider>
+        <AppContextDispatch.Provider
+          value={{
+            setReload,
+            setInitRead,
+            setSettingData,
+            setCurrentPerson,
+            setCurrentPersonData,
+            setModalNumber,
+            setInspectionDate,
+            setPatients,
+            setPatientNumber,
+            setInspectionDataNumber,
+            setInspectionData,
+            setPrecision,
+            registSettingData,
+            registPatientData,
+            setMtTeethNums,
+            setPressedValue,
+            deletePerson,
+          }}
+        >
+          {modalNumber === 1 && <CommonPatient />}
+          {modalNumber === 2 && <CommonInspection />}
+          {modalNumber === 100 && <CommonSetting />}
+          <SafeAreaProvider>
+            <Navigation colorScheme={colorScheme} />
+            <StatusBar />
+          </SafeAreaProvider>
+        </AppContextDispatch.Provider>
+      </AppContextState.Provider>
     );
   }
 }

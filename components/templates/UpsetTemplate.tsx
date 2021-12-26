@@ -4,7 +4,7 @@ import {
   NativeSyntheticEvent,
   StyleSheet,
 } from "react-native";
-import { AppContext } from "../../App";
+import { AppContextState } from "../../App";
 import { TAB_PAGE } from "../../constants/Constant";
 import { getScrollPosition } from "../../constants/Util";
 import ScrollViewAtom from "../atoms/ScrollViewAtom";
@@ -16,7 +16,7 @@ import UpsetAllTeeth from "../organisms/upset/UpsetAllTeeth";
 import { UpsetContext } from "../pages/UpsetPage";
 
 export default function UpsetTemplate() {
-  const appContext = React.useContext(AppContext);
+  const appContext = React.useContext(AppContextState);
   const upsetContext = React.useContext(UpsetContext);
   const [nativeEvent, setNativeEvent] = React.useState<NativeScrollEvent>({
     zoomScale: 0.99,

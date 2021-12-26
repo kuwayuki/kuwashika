@@ -1,9 +1,9 @@
 import * as React from "react";
 import { ScrollView, ScrollViewProps, StyleSheet } from "react-native";
-import { AppContext } from "../../App";
+import { AppContextState } from "../../App";
 
 const ScrollViewAtom = React.forwardRef((props: ScrollViewProps, ref: any) => {
-  const appContext = React.useContext(AppContext);
+  const appContext = React.useContext(AppContextState);
 
   React.useEffect(() => {
     if (!ref) return;

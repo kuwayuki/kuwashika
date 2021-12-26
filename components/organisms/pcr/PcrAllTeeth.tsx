@@ -1,6 +1,6 @@
 import * as React from "react";
 import { View } from "react-native";
-import { AppContext } from "../../../App";
+import { AppContextState } from "../../../App";
 import {
   teethType,
   TEETH_DOWN,
@@ -12,7 +12,7 @@ import { PcrContext } from "../../pages/PcrPage";
 import PcrOneBlockTeeth from "./PcrOneBlockTeeth";
 
 export default function PcrAllTeeth() {
-  const appContext = React.useContext(AppContext);
+  const appContext = React.useContext(AppContextState);
   const pcrContext = React.useContext(PcrContext);
 
   const onTouchMtAction = (teethGroupIndex: number) => {

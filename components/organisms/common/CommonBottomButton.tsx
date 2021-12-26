@@ -1,6 +1,6 @@
 import * as React from "react";
 import { StyleSheet, View } from "react-native";
-import { AppContext } from "../../../App";
+import { AppContextDispatch, AppContextState } from "../../../App";
 import {
   TAB_PAGE,
   TEETH_STATUS,
@@ -117,7 +117,8 @@ export const PCR_BUTTON_NAMES = [
 ];
 
 export default function CommonBottomButton(props: CommonButtonPropsType) {
-  const appContext = React.useContext(AppContext);
+  const appContext = React.useContext(AppContextState);
+  const appContextDispatch = React.useContext(AppContextDispatch);
 
   // １列の最大値
   const rows = props.teethValues.filter((value) => value.teethRow === 0);
@@ -173,7 +174,7 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
     } else {
       props.setFocusNumber(nextIndex);
       props.moveScroll(nextIndex);
-      appContext.setPressedValue(-1);
+      appContextDispatch.setPressedValue(-1);
     }
   };
 
@@ -198,7 +199,7 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
         moveFocus(props.focusNumber);
       }
     } else {
-      appContext.setPressedValue(
+      appContextDispatch.setPressedValue(
         appContext.pressedValue === button.value ? -1 : button.value
       );
     }

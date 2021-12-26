@@ -1,40 +1,42 @@
 import * as React from "react";
 import { View } from "react-native";
-import { AppContext } from "../../../App";
+import { AppContextDispatch, AppContextState } from "../../../App";
 import { teethType, TEETH_DOWN, TEETH_UP } from "../../../constants/Constant";
 import TextReadMolecular from "../../moleculars/TextReadMolecular";
 import { PpdContext } from "../../pages/PpdPage";
 import PpdOneBlockTeeth from "./PpdOneBlockTeeth";
 
 export default function PpdAllTeeth() {
-  const appContext = React.useContext(AppContext);
+  const appContextState = React.useContext(AppContextState);
+  const appContextDispatch = React.useContext(AppContextDispatch);
+
   const ppdContext = React.useContext(PpdContext);
 
   const onTouchMtAction = (teethNum: number) => {
-    if (appContext.pressedValue !== 100) return;
+    if (appContextState.pressedValue !== 100) return;
 
     // MT用歯のグループクリック時
-    let temp = [...appContext.mtTeethNums];
-    if (appContext.mtTeethNums.includes(teethNum)) {
+    let temp = [...appContextState.mtTeethNums];
+    if (appContextState.mtTeethNums.includes(teethNum)) {
       temp = temp.filter((mtTeethNum) => mtTeethNum !== teethNum);
     } else {
       temp.push(teethNum);
     }
-    appContext.setMtTeethNums(temp);
+    appContextDispatch.setMtTeethNums(temp);
   };
 
   const teethBlock = (teeth: teethType) => {
     return (
       <PpdOneBlockTeeth
         teethValues={
-          appContext.isPrecision
+          appContextState.isPrecision
             ? ppdContext.teethValues
             : ppdContext.teethValuesSimple
         }
         setTeethValue={ppdContext.setTeethValue}
         teethRows={teeth.teethRow}
         teethGroupIndex={teeth.teethGroupIndex}
-        isPrecision={appContext.isPrecision}
+        isPrecision={appContextState.isPrecision}
         focusNumber={ppdContext.focusNumber}
         setFocusNumber={ppdContext.setFocusNumber}
       />
@@ -60,7 +62,7 @@ export default function PpdAllTeeth() {
             value={teeth.teethNum.toString()}
             onTouchEnd={() => onTouchMtAction(teeth.teethGroupIndex)}
             teethGroupIndex={teeth.teethGroupIndex}
-            mtTeethNums={appContext.mtTeethNums}
+            mtTeethNums={appContextState.mtTeethNums}
             isHideNum={true}
           />
           {!isUp && teethBlock(teeth)}
