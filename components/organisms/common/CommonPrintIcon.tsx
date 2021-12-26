@@ -1,9 +1,17 @@
 import * as Print from "expo-print";
 import * as React from "react";
+import dayjs from "dayjs";
+import "dayjs/locale/ja"; // これimportしないとエラー吐かれる
 import { StyleSheet } from "react-native";
 import { Icon } from "react-native-elements";
 import { AppContext } from "../../../App";
-import { teethType, TEETH_ALL, TEETH_TYPE } from "../../../constants/Constant";
+import {
+  PRINT_TITLE,
+  teethType,
+  TEETH_ALL,
+  TEETH_TYPE,
+} from "../../../constants/Constant";
+import { pcrCalculation } from "../../../constants/Util";
 
 export const SIZE = 48;
 export default function CommonPrintIcon() {
@@ -19,25 +27,41 @@ export default function CommonPrintIcon() {
     });
   };
 
-  const createTr = (td: any, thName?: string, isNo = false) => {
+  const createTr = (
+    td: any,
+    thName?: string,
+    isNo = false,
+    statisticsTitle?: string,
+    statisticsValue?: string,
+    rowSpanNum?: number
+  ) => {
+    const rowSpan = rowSpanNum ? `rowspan="${rowSpanNum}"` : "";
     return `<tr align="center" style="border: 1px solid #595959; ${
       isNo && "background: #FFFFFF"
-    }">${createTh(thName)}${td}${createTh(thName)}${createTh(thName)}</tr>`;
+    }">${createTh(thName, rowSpan)}${td}${createTh(
+      statisticsTitle ?? "",
+      rowSpan
+    )}${createTh(statisticsValue ?? "", rowSpan)}</tr>`;
   };
 
-  const createTh = (thName?: string) => {
+  const createTh = (thName?: string, rowSpan?: string) => {
     if (thName === undefined) return "";
-    return `<th>${thName}</th>`;
+    return `<th ${rowSpan}>${thName}</th>`;
   };
 
-  const createTd = (teeth: TEETH_TYPE | string, isPrecision = false) => {
-    let styles = `border: 1px solid #595959; font-size: 8pt; width: ${SIZE}px; height: ${SIZE}px;`;
+  const createTd = (
+    teeth: TEETH_TYPE | string,
+    isPrecision = false,
+    isHalfHeight = false
+  ) => {
+    const heightSize = isHalfHeight ? SIZE / 2 : SIZE;
+    let styles = `border: 1px solid #595959; font-size: 8pt; width: ${SIZE}px; height: ${heightSize}px;`;
     const value = typeof teeth !== "string" ? teeth.value ?? "" : teeth;
     if (typeof teeth !== "string") {
       const isMT = appContext.mtTeethNums?.includes(teeth.teethGroupIndex);
 
       if (isMT) {
-        styles = `color:#696969; background-color:#696969; border:0px; width: ${SIZE}px; height: ${SIZE}px;`;
+        styles = `color:#696969; background-color:#696969; border:0px; width: ${SIZE}px; height: ${heightSize}px;`;
       } else {
         const isDrainage = teeth.status?.isDrainage;
         const isBleeding = teeth.status?.isBleeding;
@@ -97,7 +121,7 @@ export default function CommonPrintIcon() {
     // ヘッダー(真ん中のナンバー)を作成
     let No: string[] = ["", ""];
     TEETH_ALL.forEach((teeth: teethType) => {
-      const td = createTd(teeth.teethNum.toString(), isPrecision);
+      const td = createTd(teeth.teethNum.toString(), isPrecision, true);
       No[teeth.teethRow] += td;
     });
 
@@ -108,7 +132,7 @@ export default function CommonPrintIcon() {
       : currentPersonData.PPD.basic;
     ppdData.forEach((teeth: TEETH_TYPE) => {
       if (teeth.teethRow === undefined) return;
-      const td = createTd(teeth);
+      const td = createTd(teeth, undefined, isPrecision);
       ppdTd[teeth.teethRow] += td;
     });
 
@@ -151,16 +175,50 @@ export default function CommonPrintIcon() {
       font-size: 8px;
     "
   >
-    ${createTr(pcrTd[0], "PCR")}
-    ${createTr(upsetTd[0], "動揺度")}
-    ${createTr(ppdTd[0], "PPD: B")}
+    ${createTr(
+      pcrTd[0],
+      "PCR",
+      undefined,
+      PRINT_TITLE[1],
+      currentPersonData.inspectionDataName
+    )}
+    ${createTr(
+      upsetTd[0],
+      "動揺度",
+      undefined,
+      PRINT_TITLE[2],
+      dayjs(currentPersonData.date).locale("ja").format("YYYY/MM/DD")
+    )}
+    ${createTr(
+      ppdTd[0],
+      "PPD: B",
+      undefined,
+      PRINT_TITLE[3],
+      (32 - currentPersonData.mtTeethNums.length).toString()
+    )}
     ${isPrecision ? createTr(ppdTd[1], "PPD: P") : "</>"}
-    ${createTr(No[0], "", true)}
+    ${createTr(No[0], "", true, PRINT_TITLE[4], undefined, 1)}
     ${createTr(No[1], "", true)}
-    ${createTr(ppdTd[isPrecision ? 2 : 1], isPrecision ? "PPD: L" : "PPD")}
+    ${createTr(
+      ppdTd[isPrecision ? 2 : 1],
+      isPrecision ? "PPD: L" : "PPD",
+      undefined,
+      PRINT_TITLE[5]
+    )}
     ${isPrecision ? createTr(ppdTd[3], "PPD: B") : "</>"}
-    ${createTr(upsetTd[1], "動揺度")}
-    ${createTr(pcrTd[1], "PCR")}
+    ${createTr(upsetTd[1], "動揺度", undefined, PRINT_TITLE[6])}
+    ${createTr(
+      pcrTd[1],
+      "PCR",
+      undefined,
+      PRINT_TITLE[7],
+      pcrCalculation(
+        isPrecision
+          ? currentPersonData.PCR.precision
+          : currentPersonData.PCR.basic,
+        currentPersonData.mtTeethNums
+      ) + "%"
+    )}
     </table>
   <hr width: 100% size="1" color="#cc6666" style="border-style: dashed" />
   </html>

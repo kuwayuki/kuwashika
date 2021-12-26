@@ -107,3 +107,13 @@ export const INSPACTION_ITEMS: DropdownType[] = [
   { label: "SRP/P重防", value: 3 },
   { label: "任意入力", value: 10 },
 ];
+
+export const PRINT_TITLE = {
+  1: "データ",
+  2: "検査日",
+  3: "現在歯数",
+  4: "1~3mm",
+  5: "4~5mm",
+  6: "6mm以上",
+  7: "PCR",
+};

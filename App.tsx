@@ -12,7 +12,6 @@ import {
   DataType,
   DateFormat,
   formatDate,
-  InitSettingData,
   INIT_PERSON,
   INIT_SETTING_DATA,
   PersonDataType,

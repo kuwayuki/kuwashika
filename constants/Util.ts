@@ -118,6 +118,7 @@ export const formatDate = (date: Date, type: DateFormat): string => {
       return "";
   }
 };
+
 export const getScrollPosition = (
   nativeEvent: NativeScrollEvent,
   index?: number,
@@ -145,4 +146,17 @@ export const getScrollPosition = (
     (nativeEvent.contentSize.height / partsTimesY) * indexPositionY +
     (indexPositionY < partsTimesY / 2 ? -bornusY : bornusY);
   return { x: positionX, y: positionY };
+};
+
+// 塗りつぶした数 ÷ (全歯数 x 4面)
+export const pcrCalculation = (
+  teethValues: TEETH_TYPE[],
+  mtTeethNums: number[]
+) => {
+  const filled = teethValues.filter(
+    (teeth) => teeth.value === 1 && !mtTeethNums.includes(teeth.teethGroupIndex)
+  );
+  const calc =
+    (filled.length / (teethValues.length - mtTeethNums.length)) * 100;
+  return Math.round(calc * 10) / 10;
 };
