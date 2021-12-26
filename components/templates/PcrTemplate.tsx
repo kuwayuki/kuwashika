@@ -11,11 +11,11 @@ import ScrollViewAtom from "../atoms/ScrollViewAtom";
 import CommonInfoInput from "../organisms/common/CommonInfoInput";
 import { View } from "../organisms/common/Themed";
 import PcrAllTeeth from "../organisms/pcr/PcrAllTeeth";
-import { PcrContext } from "../pages/PcrPage";
+import { PcrContextState } from "../pages/PcrPage";
 
 export default function PcrTemplate() {
   const appContext = React.useContext(AppContextState);
-  const pcrContext = React.useContext(PcrContext);
+  const pcrContext = React.useContext(PcrContextState);
   const [nativeEvent, setNativeEvent] = React.useState<NativeScrollEvent>({
     zoomScale: 1.24,
     contentSize: { width: 1823, height: 232 },

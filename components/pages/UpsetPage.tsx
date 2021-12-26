@@ -5,14 +5,20 @@ import { PersonDataType } from "../../constants/Util";
 import { RootTabScreenProps } from "../../types";
 import UpsetTemplate from "../templates/UpsetTemplate";
 
-export type upsetContext = {
+export type upsetContextState = {
   focusNumber: number;
-  setFocusNumber: (focusNumber: number) => void;
   teethValuesSimple: TEETH_TYPE[]; // 32の歯
+};
+export const UpsetContextState = React.createContext({} as upsetContextState);
+
+export type upsetContextDispatch = {
+  setFocusNumber: (focusNumber: number) => void;
   setTeethValuesSimple: (teethValues: TEETH_TYPE[]) => void;
   setTeethValue: (index: number, teethValue: TEETH_TYPE) => void;
 };
-export const UpsetContext = React.createContext({} as upsetContext);
+export const UpsetContextDispatch = React.createContext(
+  {} as upsetContextDispatch
+);
 
 export default function UpsetPage({
   navigation,
@@ -116,16 +122,21 @@ export default function UpsetPage({
   };
 
   return (
-    <UpsetContext.Provider
+    <UpsetContextState.Provider
       value={{
         focusNumber,
-        setFocusNumber,
-        setTeethValue,
         teethValuesSimple,
-        setTeethValuesSimple,
       }}
     >
-      <UpsetTemplate />
-    </UpsetContext.Provider>
+      <UpsetContextDispatch.Provider
+        value={{
+          setFocusNumber,
+          setTeethValue,
+          setTeethValuesSimple,
+        }}
+      >
+        <UpsetTemplate />
+      </UpsetContextDispatch.Provider>
+    </UpsetContextState.Provider>
   );
 }

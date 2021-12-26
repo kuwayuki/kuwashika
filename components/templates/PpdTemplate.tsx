@@ -12,11 +12,12 @@ import CommonBottomButton from "../organisms/common/CommonBottomButton";
 import CommonInfoInput from "../organisms/common/CommonInfoInput";
 import { View } from "../organisms/common/Themed";
 import PpdAllTeeth from "../organisms/ppd/PpdAllTeeth";
-import { PpdContext } from "../pages/PpdPage";
+import { PpdContextDispatch, PpdContextState } from "../pages/PpdPage";
 
 export default function PpdTemplate() {
   const appContext = React.useContext(AppContextState);
-  const ppdContext = React.useContext(PpdContext);
+  const ppdContextState = React.useContext(PpdContextState);
+  const ppdContextDispatch = React.useContext(PpdContextDispatch);
   const [nativeEvent, setNativeEvent] = React.useState<NativeScrollEvent>({
     zoomScale: 0.99,
     contentSize: { width: 1823, height: 232 },
@@ -33,7 +34,7 @@ export default function PpdTemplate() {
     if (scrollViewRef.current) {
       const position = getScrollPosition(
         nativeEvent,
-        index ?? ppdContext.focusNumber,
+        index ?? ppdContextState.focusNumber,
         appContext.isPrecision
       );
       scrollViewRef.current.scrollTo({ ...position });
@@ -60,14 +61,14 @@ export default function PpdTemplate() {
       {
         <CommonBottomButton
           tabPage={TAB_PAGE.PPD}
-          focusNumber={ppdContext.focusNumber}
-          setFocusNumber={ppdContext.setFocusNumber}
+          focusNumber={ppdContextState.focusNumber}
+          setFocusNumber={ppdContextDispatch.setFocusNumber}
           teethValues={
             appContext.isPrecision
-              ? ppdContext.teethValues
-              : ppdContext.teethValuesSimple
+              ? ppdContextState.teethValues
+              : ppdContextState.teethValuesSimple
           }
-          setTeethValue={ppdContext.setTeethValue}
+          setTeethValue={ppdContextDispatch.setTeethValue}
           moveScroll={moveScroll}
           mtTeethNums={appContext.mtTeethNums}
           isPrecision={appContext.isPrecision}

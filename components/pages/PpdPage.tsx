@@ -1,16 +1,20 @@
 import * as React from "react";
 import { AppContextDispatch, AppContextState } from "../../App";
 import { TEETH_TYPE } from "../../constants/Constant";
-import { PersonDataType, PersonType } from "../../constants/Util";
+import { PersonDataType } from "../../constants/Util";
 import { RootTabScreenProps } from "../../types";
 import PpdTemplate from "../templates/PpdTemplate";
 
-export type ppdContext = {
+export type ppdContextState = {
   focusNumber: number;
-  setFocusNumber: (focusNumber: number) => void;
   teethValues: TEETH_TYPE[]; // 192の歯
-  setTeethValues: (teethValues: TEETH_TYPE[]) => void;
   teethValuesSimple: TEETH_TYPE[]; // 32の歯
+};
+export const PpdContextState = React.createContext({} as ppdContextState);
+
+export type ppdContextDispatch = {
+  setFocusNumber: (focusNumber: number) => void;
+  setTeethValues: (teethValues: TEETH_TYPE[]) => void;
   setTeethValuesSimple: (teethValues: TEETH_TYPE[]) => void;
   setTeethValue: (
     index: number,
@@ -18,7 +22,7 @@ export type ppdContext = {
     isPrecision?: boolean
   ) => void;
 };
-export const PpdContext = React.createContext({} as ppdContext);
+export const PpdContextDispatch = React.createContext({} as ppdContextDispatch);
 
 export default function PpdPage({
   navigation,
@@ -138,18 +142,23 @@ export default function PpdPage({
   };
 
   return (
-    <PpdContext.Provider
+    <PpdContextState.Provider
       value={{
         focusNumber,
-        setFocusNumber,
         teethValues,
-        setTeethValues,
-        setTeethValue,
         teethValuesSimple,
-        setTeethValuesSimple,
       }}
     >
-      <PpdTemplate />
-    </PpdContext.Provider>
+      <PpdContextDispatch.Provider
+        value={{
+          setFocusNumber,
+          setTeethValues,
+          setTeethValue,
+          setTeethValuesSimple,
+        }}
+      >
+        <PpdTemplate />
+      </PpdContextDispatch.Provider>
+    </PpdContextState.Provider>
   );
 }

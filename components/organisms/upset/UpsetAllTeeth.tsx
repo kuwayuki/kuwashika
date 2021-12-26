@@ -3,14 +3,15 @@ import { View } from "react-native";
 import { AppContextDispatch, AppContextState } from "../../../App";
 import { teethType, TEETH_DOWN, TEETH_UP } from "../../../constants/Constant";
 import TextReadMolecular from "../../moleculars/TextReadMolecular";
-import { UpsetContext } from "../../pages/UpsetPage";
+import { UpsetContextDispatch, UpsetContextState } from "../../pages/UpsetPage";
 import UpsetOneBlockTeeth from "./UpsetOneBlockTeeth";
 
 export default function UpsetAllTeeth() {
   const appContextState = React.useContext(AppContextState);
   const appContextDispatch = React.useContext(AppContextDispatch);
 
-  const upsetContext = React.useContext(UpsetContext);
+  const upsetContextState = React.useContext(UpsetContextState);
+  const upsetContextDispatch = React.useContext(UpsetContextDispatch);
 
   const onTouchMtAction = (teethNum: number) => {
     if (appContextState.pressedValue !== 100) return;
@@ -28,12 +29,12 @@ export default function UpsetAllTeeth() {
   const teethBlock = (teeth: teethType) => {
     return (
       <UpsetOneBlockTeeth
-        teethValues={upsetContext.teethValuesSimple}
-        setTeethValue={upsetContext.setTeethValue}
+        teethValues={upsetContextState.teethValuesSimple}
+        setTeethValue={upsetContextDispatch.setTeethValue}
         teethRows={teeth.teethRow}
         teethGroupIndex={teeth.teethGroupIndex}
-        focusNumber={upsetContext.focusNumber}
-        setFocusNumber={upsetContext.setFocusNumber}
+        focusNumber={upsetContextState.focusNumber}
+        setFocusNumber={upsetContextDispatch.setFocusNumber}
       />
     );
   };

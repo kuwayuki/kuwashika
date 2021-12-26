@@ -8,16 +8,16 @@ import { AppContextState } from "../../App";
 import { TAB_PAGE } from "../../constants/Constant";
 import { getScrollPosition } from "../../constants/Util";
 import ScrollViewAtom from "../atoms/ScrollViewAtom";
-import { TEETH_MATH } from "../moleculars/TextInputTeethMolecular";
 import CommonBottomButton from "../organisms/common/CommonBottomButton";
 import CommonInfoInput from "../organisms/common/CommonInfoInput";
 import { View } from "../organisms/common/Themed";
 import UpsetAllTeeth from "../organisms/upset/UpsetAllTeeth";
-import { UpsetContext } from "../pages/UpsetPage";
+import { UpsetContextDispatch, UpsetContextState } from "../pages/UpsetPage";
 
 export default function UpsetTemplate() {
   const appContext = React.useContext(AppContextState);
-  const upsetContext = React.useContext(UpsetContext);
+  const upsetContextState = React.useContext(UpsetContextState);
+  const upsetContextDispatch = React.useContext(UpsetContextDispatch);
   const [nativeEvent, setNativeEvent] = React.useState<NativeScrollEvent>({
     zoomScale: 0.99,
     contentSize: { width: 1823, height: 232 },
@@ -34,7 +34,7 @@ export default function UpsetTemplate() {
     if (scrollViewRef.current) {
       const position = getScrollPosition(
         nativeEvent,
-        index ?? upsetContext.focusNumber
+        index ?? upsetContextState.focusNumber
       );
       scrollViewRef.current.scrollTo({ ...position });
     }
@@ -60,10 +60,10 @@ export default function UpsetTemplate() {
       {
         <CommonBottomButton
           tabPage={TAB_PAGE.UPSET}
-          focusNumber={upsetContext.focusNumber}
-          setFocusNumber={upsetContext.setFocusNumber}
-          teethValues={upsetContext.teethValuesSimple}
-          setTeethValue={upsetContext.setTeethValue}
+          focusNumber={upsetContextState.focusNumber}
+          setFocusNumber={upsetContextDispatch.setFocusNumber}
+          teethValues={upsetContextState.teethValuesSimple}
+          setTeethValue={upsetContextDispatch.setTeethValue}
           moveScroll={moveScroll}
           mtTeethNums={appContext.mtTeethNums}
         />

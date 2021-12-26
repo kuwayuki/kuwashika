@@ -8,21 +8,22 @@ import {
   TEETH_UP,
 } from "../../../constants/Constant";
 import TextReadMolecular from "../../moleculars/TextReadMolecular";
-import { PcrContext } from "../../pages/PcrPage";
+import { PcrContextDispatch, PcrContextState } from "../../pages/PcrPage";
 import PcrOneBlockTeeth from "./PcrOneBlockTeeth";
 
 export default function PcrAllTeeth() {
   const appContext = React.useContext(AppContextState);
-  const pcrContext = React.useContext(PcrContext);
+  const pcrContextState = React.useContext(PcrContextState);
+  const pcrContextDispatch = React.useContext(PcrContextDispatch);
 
   const onTouchMtAction = (teethGroupIndex: number) => {
-    if (pcrContext.focusNumber !== teethGroupIndex * 4) {
-      pcrContext.setFocusNumber(teethGroupIndex * 4);
+    if (pcrContextState.focusNumber !== teethGroupIndex * 4) {
+      pcrContextDispatch.setFocusNumber(teethGroupIndex * 4);
       return;
     }
     const tempTeeths = appContext.isPrecision
-      ? [...pcrContext.teethValues]
-      : [...pcrContext.teethValuesSimple];
+      ? [...pcrContextState.teethValues]
+      : [...pcrContextState.teethValuesSimple];
     // PCRの場合は、タッチ時に対象を全て選択・非選択状態にする
     const selectValue = tempTeeths
       .filter((teeth) => teeth.teethGroupIndex === teethGroupIndex)
@@ -38,8 +39,8 @@ export default function PcrAllTeeth() {
       }
     });
     appContext.isPrecision
-      ? pcrContext.setTeethValues(selectTeeths)
-      : pcrContext.setTeethValuesSimple(selectTeeths);
+      ? pcrContextDispatch.setTeethValues(selectTeeths)
+      : pcrContextDispatch.setTeethValuesSimple(selectTeeths);
   };
 
   const teethBlock = (teeth: teethType) => {
@@ -47,15 +48,15 @@ export default function PcrAllTeeth() {
       <PcrOneBlockTeeth
         teethValues={
           appContext.isPrecision
-            ? pcrContext.teethValues
-            : pcrContext.teethValuesSimple
+            ? pcrContextState.teethValues
+            : pcrContextState.teethValuesSimple
         }
-        setTeethValue={pcrContext.setTeethValue}
+        setTeethValue={pcrContextDispatch.setTeethValue}
         teethRows={teeth.teethRow}
         teethGroupIndex={teeth.teethGroupIndex}
         isPrecision={appContext.isPrecision}
-        focusNumber={pcrContext.focusNumber}
-        setFocusNumber={pcrContext.setFocusNumber}
+        focusNumber={pcrContextState.focusNumber}
+        setFocusNumber={pcrContextDispatch.setFocusNumber}
       />
     );
   };

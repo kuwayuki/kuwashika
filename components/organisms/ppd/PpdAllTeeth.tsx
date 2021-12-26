@@ -3,14 +3,15 @@ import { View } from "react-native";
 import { AppContextDispatch, AppContextState } from "../../../App";
 import { teethType, TEETH_DOWN, TEETH_UP } from "../../../constants/Constant";
 import TextReadMolecular from "../../moleculars/TextReadMolecular";
-import { PpdContext } from "../../pages/PpdPage";
+import { PpdContextDispatch, PpdContextState } from "../../pages/PpdPage";
 import PpdOneBlockTeeth from "./PpdOneBlockTeeth";
 
 export default function PpdAllTeeth() {
   const appContextState = React.useContext(AppContextState);
   const appContextDispatch = React.useContext(AppContextDispatch);
 
-  const ppdContext = React.useContext(PpdContext);
+  const ppdContextState = React.useContext(PpdContextState);
+  const ppdContextDispatch = React.useContext(PpdContextDispatch);
 
   const onTouchMtAction = (teethNum: number) => {
     if (appContextState.pressedValue !== 100) return;
@@ -30,15 +31,15 @@ export default function PpdAllTeeth() {
       <PpdOneBlockTeeth
         teethValues={
           appContextState.isPrecision
-            ? ppdContext.teethValues
-            : ppdContext.teethValuesSimple
+            ? ppdContextState.teethValues
+            : ppdContextState.teethValuesSimple
         }
-        setTeethValue={ppdContext.setTeethValue}
+        setTeethValue={ppdContextDispatch.setTeethValue}
         teethRows={teeth.teethRow}
         teethGroupIndex={teeth.teethGroupIndex}
         isPrecision={appContextState.isPrecision}
-        focusNumber={ppdContext.focusNumber}
-        setFocusNumber={ppdContext.setFocusNumber}
+        focusNumber={ppdContextState.focusNumber}
+        setFocusNumber={ppdContextDispatch.setFocusNumber}
       />
     );
   };

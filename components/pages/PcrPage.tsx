@@ -5,12 +5,16 @@ import { PersonDataType } from "../../constants/Util";
 import { RootTabScreenProps } from "../../types";
 import PcrTemplate from "../templates/PcrTemplate";
 
-export type pcrContext = {
+export type pcrContextState = {
   focusNumber: number;
-  setFocusNumber: (focusNumber: number) => void;
   teethValues: TEETH_TYPE[]; // 192の歯
-  setTeethValues: (teethValues: TEETH_TYPE[]) => void;
   teethValuesSimple: TEETH_TYPE[]; // 32の歯
+};
+export const PcrContextState = React.createContext({} as pcrContextState);
+
+export type pcrContextDispatch = {
+  setFocusNumber: (focusNumber: number) => void;
+  setTeethValues: (teethValues: TEETH_TYPE[]) => void;
   setTeethValuesSimple: (teethValues: TEETH_TYPE[]) => void;
   setTeethValue: (
     index: number,
@@ -18,7 +22,7 @@ export type pcrContext = {
     isPrecision?: boolean
   ) => void;
 };
-export const PcrContext = React.createContext({} as pcrContext);
+export const PcrContextDispatch = React.createContext({} as pcrContextDispatch);
 
 export default function PcrPage({ navigation }: RootTabScreenProps<"TabPCR">) {
   const appContextState = React.useContext(AppContextState);
@@ -136,18 +140,23 @@ export default function PcrPage({ navigation }: RootTabScreenProps<"TabPCR">) {
   };
 
   return (
-    <PcrContext.Provider
+    <PcrContextState.Provider
       value={{
         focusNumber,
-        setFocusNumber,
         teethValues,
-        setTeethValues,
-        setTeethValue,
         teethValuesSimple,
-        setTeethValuesSimple,
       }}
     >
-      <PcrTemplate />
-    </PcrContext.Provider>
+      <PcrContextDispatch.Provider
+        value={{
+          setFocusNumber,
+          setTeethValues,
+          setTeethValue,
+          setTeethValuesSimple,
+        }}
+      >
+        <PcrTemplate />
+      </PcrContextDispatch.Provider>
+    </PcrContextState.Provider>
   );
 }
