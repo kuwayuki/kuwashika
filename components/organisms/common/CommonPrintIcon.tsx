@@ -4,7 +4,6 @@ import dayjs from "dayjs";
 import "dayjs/locale/ja"; // これimportしないとエラー吐かれる
 import { StyleSheet } from "react-native";
 import { Icon } from "react-native-elements";
-import { AppContext } from "../../../App";
 import {
   PRINT_TITLE,
   teethType,
@@ -12,11 +11,12 @@ import {
   TEETH_TYPE,
 } from "../../../constants/Constant";
 import { pcrCalculation } from "../../../constants/Util";
+import { AppContextState } from "../../../App";
 
 export const SIZE = 48;
 export default function CommonPrintIcon() {
   const [selectedPrinter, setSelectedPrinter] = React.useState<Print.Printer>();
-  const appContext = React.useContext(AppContext);
+  const appContext = React.useContext(AppContextState);
   const print = async () => {
     const html = createHtml();
     // On iOS/android prints the given html. On web prints the HTML from the current page.
