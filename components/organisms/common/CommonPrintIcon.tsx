@@ -5,12 +5,13 @@ import "dayjs/locale/ja"; // これimportしないとエラー吐かれる
 import { StyleSheet } from "react-native";
 import { Icon } from "react-native-elements";
 import {
+  PRINT_PPD,
   PRINT_TITLE,
   teethType,
   TEETH_ALL,
   TEETH_TYPE,
 } from "../../../constants/Constant";
-import { pcrCalculation } from "../../../constants/Util";
+import { pcrCalculation, ppdCalculation } from "../../../constants/Util";
 import { AppContextState } from "../../../App";
 
 export const SIZE = 48;
@@ -36,12 +37,13 @@ export default function CommonPrintIcon() {
     rowSpanNum?: number
   ) => {
     const rowSpan = rowSpanNum ? `rowspan="${rowSpanNum}"` : "";
+    const isTh = rowSpanNum !== 0;
     return `<tr align="center" style="border: 1px solid #595959; ${
       isNo && "background: #FFFFFF"
-    }">${createTh(thName, rowSpan)}${td}${createTh(
-      statisticsTitle ?? "",
+    }">${createTh(isTh ? thName : undefined, rowSpan)}${td}${createTh(
+      isTh ? statisticsTitle ?? "" : undefined,
       rowSpan
-    )}${createTh(statisticsValue ?? "", rowSpan)}</tr>`;
+    )}${createTh(isTh ? statisticsValue ?? "" : undefined, rowSpan)}</tr>`;
   };
 
   const createTh = (thName?: string, rowSpan?: string) => {
@@ -135,6 +137,21 @@ export default function CommonPrintIcon() {
       const td = createTd(teeth, undefined, isPrecision);
       ppdTd[teeth.teethRow] += td;
     });
+    const ppdLow = ppdCalculation(
+      ppdData,
+      currentPersonData.mtTeethNums,
+      PRINT_PPD.LOW
+    );
+    const ppdMiddle = ppdCalculation(
+      ppdData,
+      currentPersonData.mtTeethNums,
+      PRINT_PPD.MIDDLE
+    );
+    const ppdHigh = ppdCalculation(
+      ppdData,
+      currentPersonData.mtTeethNums,
+      PRINT_PPD.HIGH
+    );
 
     // 動揺度を作成
     let upsetTd: string[] = ["", ""];
@@ -148,7 +165,7 @@ export default function CommonPrintIcon() {
     // PCRを作成
     let pcrTd: string[] = ["", "", "", ""];
     const pcrData = isPrecision
-      ? currentPersonData.PCR.precision
+      ? currentPersonData.PCR.basic // TODO: 直す？
       : currentPersonData.PCR.basic;
     TEETH_ALL.forEach((teeth: teethType) => {
       const teethPcr = pcrData.filter(
@@ -191,33 +208,45 @@ export default function CommonPrintIcon() {
     )}
     ${createTr(
       ppdTd[0],
-      "PPD: B",
+      isPrecision ? "PPD: B" : "PPD",
       undefined,
       PRINT_TITLE[3],
-      (32 - currentPersonData.mtTeethNums.length).toString()
+      (32 - currentPersonData.mtTeethNums.length).toString(),
+      isPrecision ? 2 : 1
     )}
-    ${isPrecision ? createTr(ppdTd[1], "PPD: P") : "</>"}
-    ${createTr(No[0], "", true, PRINT_TITLE[4], undefined, 1)}
-    ${createTr(No[1], "", true)}
+    ${
+      isPrecision
+        ? createTr(ppdTd[1], "PPD: P", undefined, undefined, undefined, 0)
+        : "</>"
+    }
+    ${createTr(No[0], "", true, PRINT_TITLE[4], ppdLow.toString(), 2)}
+    ${createTr(No[1], "", true, undefined, undefined, 0)}
     ${createTr(
       ppdTd[isPrecision ? 2 : 1],
       isPrecision ? "PPD: L" : "PPD",
       undefined,
-      PRINT_TITLE[5]
+      PRINT_TITLE[5],
+      ppdMiddle.toString(),
+      isPrecision ? 2 : 1
     )}
-    ${isPrecision ? createTr(ppdTd[3], "PPD: B") : "</>"}
-    ${createTr(upsetTd[1], "動揺度", undefined, PRINT_TITLE[6])}
+    ${
+      isPrecision
+        ? createTr(ppdTd[3], "PPD: B", undefined, undefined, undefined, 0)
+        : "</>"
+    }
+    ${createTr(
+      upsetTd[1],
+      "動揺度",
+      undefined,
+      PRINT_TITLE[6],
+      ppdHigh.toString()
+    )}
     ${createTr(
       pcrTd[1],
       "PCR",
       undefined,
       PRINT_TITLE[7],
-      pcrCalculation(
-        isPrecision
-          ? currentPersonData.PCR.precision
-          : currentPersonData.PCR.basic,
-        currentPersonData.mtTeethNums
-      ) + "%"
+      pcrCalculation(pcrData, currentPersonData.mtTeethNums) + "%"
     )}
     </table>
   <hr width: 100% size="1" color="#cc6666" style="border-style: dashed" />
