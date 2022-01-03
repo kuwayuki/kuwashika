@@ -8,12 +8,12 @@
         }
       ]
     ],
-    "name": "ExpoExample",
-    "slug": "ExpoExample",
+    "name": "PeriodontalInspection",
+    "slug": "PeriodontalInspection",
     "version": "1.0.0",
     "orientation": "landscape",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "PeriodontalInspection",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -28,8 +28,16 @@
       "supportsTablet": true,
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-3940256099942544~1458002511"
-        // "googleMobileAdsAppId": "ca-app-pub-2103807205659646~3739470895"
-      }
+      },
+      "infoPlist": {
+        "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you.",
+        "SKAdNetworkItems": [
+          {
+            "SKAdNetworkIdentifier": "cstr6suwn9.skadnetwork"
+          }
+        ]
+      },
+      "bundleIdentifier": "com.kuwahara.ExpoExample"
     },
     "android": {
       "adaptiveIcon": {

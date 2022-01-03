@@ -63,3 +63,27 @@ at tryCatch (c:\workspace\kuwashika.git\.vscode\.react\node_modules%5Cexpo%5CApp
 at Generator.invoke [as _invoke] (c:\workspace\kuwashika.git\.vscode\.react\node_modules%5Cexpo%5CAppEntry.bundle:24844:24)
 at Generator.next (c:\workspace\kuwashika.git\.vscode\.rea...
 reactConsoleErrorHandler @ c:\workspace\kuwashika.git\node_modules\react-native\Libraries\Core\ExceptionsManager.js:184:3
+
+Expo で作成したアプリを App Store に申請するまで
+https://qiita.com/mildsummer/items/e98b1b8e4ea7f72b9899
+
+_アプリのビルド Credential の作成_
+※expo build:ios で自動的に作成される
+Certificates, Identifiers & Profiles
+https://developer.apple.com/account/resources/identifiers/list
+
+_アプリの公開_
+App Store Connect
+https://appstoreconnect.apple.com/apps
+
+SKU に命名規則はありません。ただし、App001 のように適当な名前をつけると紛らわしいので、おすすめしません。私の場合、Bundle ID が com.example.MyApp なら SKU は ComExampleMyApp のように設定しています。
+
+月額課金：
+https://docs-expo-dev.translate.goog/versions/latest/sdk/in-app-purchases/?_x_tr_sl=en&_x_tr_tl=ja&_x_tr_hl=ja&_x_tr_pto=sc
+
+アプリ説明
+プロモーション用テキスト（170 文字）：
+概要（4000 文字）：
+キーワード（100 文字）：
+サポート URL：
+マーケティング URL：
