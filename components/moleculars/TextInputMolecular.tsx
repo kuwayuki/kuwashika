@@ -56,6 +56,7 @@ export default function TextInputMolecular(props: TextInputPropsEx) {
     <TextInputTeethMolecular
       {...props}
       editable={false}
+      // editable={isIpad()} TODO: 後で対応したい
       onTouchStart={() => onFocus()}
       style={[props.style, getStatusColorStyle()]}
     />
