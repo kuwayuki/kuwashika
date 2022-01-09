@@ -79,7 +79,7 @@ function TopTabNavigator() {
       initialRouteName="TabPeriodontal"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
-        tabBarInactiveTintColor: Colors[colorScheme].background,
+        // tabBarInactiveTintColor: Colors[colorScheme].background,
       }}
       style={{
         display: "flex",

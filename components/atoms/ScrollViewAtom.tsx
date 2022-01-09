@@ -5,15 +5,6 @@ import { AppContextState } from "../../App";
 const ScrollViewAtom = React.forwardRef((props: ScrollViewProps, ref: any) => {
   const appContext = React.useContext(AppContextState);
 
-  React.useEffect(() => {
-    if (!ref) return;
-    ref.current.scrollTo({ x: 1, y: 1 });
-  }, [
-    appContext.patientNumber,
-    appContext.inspectionDataNumber,
-    appContext.isPrecision,
-  ]);
-
   return (
     <ScrollView
       {...props}

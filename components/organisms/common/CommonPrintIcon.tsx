@@ -48,7 +48,8 @@ export default function CommonPrintIcon() {
 
   const createTh = (thName?: string, rowSpan?: string) => {
     if (thName === undefined) return "";
-    return `<th ${rowSpan}>${thName}</th>`;
+    let styles = `width: ${SIZE}px;`;
+    return `<th ${rowSpan} style="${styles}">${thName}</th>`;
   };
 
   const createTd = (

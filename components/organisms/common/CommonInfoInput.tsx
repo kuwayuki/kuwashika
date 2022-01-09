@@ -3,7 +3,7 @@ import { StatusBar, StyleSheet, View } from "react-native";
 import { Icon } from "react-native-elements";
 import { AppContextDispatch, AppContextState } from "../../../App";
 import { TAB_PAGE } from "../../../constants/Constant";
-import { PersonDataType, PersonType } from "../../../constants/Util";
+import { isIpad, PersonDataType } from "../../../constants/Util";
 import DatePickerAtom from "../../atoms/DatePickerAtom";
 import DropDownPickerAtom from "../../atoms/DropDownPickerAtom";
 import SwitchAtom from "../../atoms/SwitchAtom";
@@ -76,7 +76,7 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
             items={appContextState.patients}
             value={appContextState.patientNumber}
             setValue={appContextDispatch.setPatientNumber}
-            width={88}
+            width={isIpad() ? 160 : 100}
           />
         </TitleAndAction>
         <TitleAndAction title={"検査データ"}>

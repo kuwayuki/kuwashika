@@ -2,7 +2,7 @@ import { TEETH_TYPE } from "./Constant";
 import dayjs from "dayjs";
 import "dayjs/locale/ja";
 import { TEETH_MATH } from "../components/moleculars/TextInputTeethMolecular";
-import { NativeScrollEvent } from "react-native";
+import { NativeScrollEvent, Platform, PlatformIOSStatic } from "react-native";
 
 /**
  * Settingファイルに保存されているデータ
@@ -205,4 +205,12 @@ export const ppdCalculation = (
   const calc =
     (filled.length / (teethValues.length - mtTeethNums.length)) * 100;
   return Math.round(calc * 10) / 10;
+};
+
+export const isIpad = (): boolean => {
+  if (Platform.OS === "ios") {
+    const platformIOS = Platform as PlatformIOSStatic;
+    return platformIOS.isPad;
+  }
+  return false;
 };

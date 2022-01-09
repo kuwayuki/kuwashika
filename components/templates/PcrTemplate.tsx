@@ -15,7 +15,7 @@ import { PcrContextState } from "../pages/PcrPage";
 
 export default function PcrTemplate() {
   const appContext = React.useContext(AppContextState);
-  const pcrContext = React.useContext(PcrContextState);
+  // const pcrContext = React.useContext(PcrContextState);
   const [nativeEvent, setNativeEvent] = React.useState<NativeScrollEvent>({
     zoomScale: 1.24,
     contentSize: { width: 1823, height: 232 },
@@ -28,15 +28,15 @@ export default function PcrTemplate() {
     scrollViewRef.current.scrollTo({ x: 0, y: 0 });
   }, [appContext.patientNumber, appContext.inspectionDataNumber]);
 
-  const moveScroll = (index?: number) => {
-    if (scrollViewRef.current) {
-      const position = getScrollPosition(
-        nativeEvent,
-        index ?? pcrContext.focusNumber
-      );
-      scrollViewRef.current.scrollTo({ ...position });
-    }
-  };
+  // const moveScroll = (index?: number) => {
+  //   if (scrollViewRef.current) {
+  //     const position = getScrollPosition(
+  //       nativeEvent,
+  //       index ?? pcrContext.focusNumber
+  //     );
+  //     scrollViewRef.current.scrollTo({ ...position });
+  //   }
+  // };
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     if (!event || nativeEvent.zoomScale === event.nativeEvent.zoomScale) return;
@@ -51,7 +51,7 @@ export default function PcrTemplate() {
           ref={scrollViewRef}
           onScroll={handleScroll}
           onScrollEndDrag={handleScroll}
-          zoomScale={1.25}
+          zoomScale={1.24}
         >
           <PcrAllTeeth />
         </ScrollViewAtom>

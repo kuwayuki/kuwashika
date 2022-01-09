@@ -194,9 +194,18 @@ export default function App() {
 
     // 患者番号をセット
     const patients = [{ label: "新規", value: 0 }];
+    let maxLen = 1;
+    refleshData.persons.forEach((person) => {
+      const len = person.patientNumber.toString().length;
+      if (len > maxLen) maxLen = len;
+    });
     refleshData.persons.forEach((person) =>
       patients.push({
-        label: person.patientNumber.toString(),
+        label:
+          person.patientNumber +
+          // zeroPadding(person.patientNumber, maxLen) +
+          ":" +
+          (person.patientName ?? ""),
         value: person.patientNumber,
       })
     );
@@ -204,7 +213,9 @@ export default function App() {
 
     if (isFileReload) setPatientNumber(patients[1].value);
   };
-
+  function zeroPadding(NUM, LEN) {
+    return (Array(LEN).join(" ") + NUM).slice(-LEN);
+  }
   /**
    * 患者番号変更時の処理
    * 検査データと内部データの変更

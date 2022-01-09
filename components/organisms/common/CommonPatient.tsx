@@ -27,7 +27,10 @@ export default function CommonPatient() {
 
     // 患者番号の追加
     const temp: DropdownType[] = [...appContextState.patients];
-    temp.push({ label: patientNumber.toString(), value: patientNumber });
+    temp.push({
+      label: patientNumber.toString() + ":" + (patientName ?? ""),
+      value: patientNumber,
+    });
     appContextDispatch.setPatients(temp);
     appContextDispatch.setPatientNumber(patientNumber);
 
