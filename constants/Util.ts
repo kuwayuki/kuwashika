@@ -116,10 +116,6 @@ export const INIT_SETTING_DATA: DataType = {
       patientName: "患者名A",
     },
     {
-      patientNumber: 2,
-      patientName: "患者名B",
-    },
-    {
       patientNumber: 9999,
       patientName: "サンプル",
     },

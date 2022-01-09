@@ -44,7 +44,7 @@ export default function CommonSetting() {
         ppdOrderType: isUp
           ? {
               ...appContextState.settingData.setting.ppdOrderType,
-              up: setPpd ? PPD_ORDER_UP.ko : PPD_ORDER_UP.ko,
+              up: setPpd ? PPD_ORDER_UP.ko : PPD_ORDER_UP.z,
             }
           : {
               ...appContextState.settingData.setting.ppdOrderType,
