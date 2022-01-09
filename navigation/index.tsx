@@ -52,7 +52,9 @@ function RootNavigator() {
       <Stack.Screen
         name="歯周病検査"
         component={TopTabNavigator}
-        options={{ headerShown: false }}
+        options={{
+          headerShown: false,
+        }}
       />
       <Stack.Screen
         name="NotFound"
@@ -77,8 +79,13 @@ function TopTabNavigator() {
       initialRouteName="TabPeriodontal"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
+        tabBarInactiveTintColor: Colors[colorScheme].background,
       }}
-      style={{ display: "flex", justifyContent: "flex-start" }}
+      style={{
+        display: "flex",
+        justifyContent: "flex-start",
+        backgroundColor: Colors[colorScheme].background,
+      }}
     >
       <TopTab.Screen
         name="TabPeriodontal"
