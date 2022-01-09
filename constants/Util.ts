@@ -7,14 +7,23 @@ import { NativeScrollEvent } from "react-native";
 /**
  * Settingファイルに保存されているデータ
  */
-export enum PPD_ORDER {
-  co_reco,
+export enum PPD_ORDER_UP {
+  ko, // コの字
+  z, // Zの字
 }
+
+export enum PPD_ORDER_DOWN {
+  hako, // 匚の字（右下開始）
+  ko_re, // 逆コの字（左下開始）
+}
+
 export type DataType = {
   setting: SettingType;
   persons: PersonNumberType[]; // 患者番号と患者名のみ
 };
-export type SettingType = { ppdOrderType: PPD_ORDER };
+export type SettingType = {
+  ppdOrderType: { up: PPD_ORDER_UP; down: PPD_ORDER_DOWN };
+};
 
 /**
  * 患者番号と名称
@@ -98,7 +107,7 @@ export const INIT_PERSON: PersonDataType = {
 
 export const INIT_SETTING_DATA: DataType = {
   setting: {
-    ppdOrderType: PPD_ORDER.co_reco,
+    ppdOrderType: { up: PPD_ORDER_UP.ko, down: PPD_ORDER_DOWN.hako },
   },
   // 患者ごとのデータ
   persons: [

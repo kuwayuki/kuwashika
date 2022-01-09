@@ -6,6 +6,7 @@ import {
   TEETH_STATUS,
   TEETH_TYPE,
 } from "../../../constants/Constant";
+import { PPD_ORDER_DOWN, PPD_ORDER_UP } from "../../../constants/Util";
 import ButtonAtom from "../../atoms/ButtonAtom";
 import ButtonPressedMolecular from "../../moleculars/ButtonPressedMolecular";
 
@@ -124,19 +125,44 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
   const rows = props.teethValues.filter((value) => value.teethRow === 0);
   const MAX_ROW_ITEM_COUNT = rows.length;
   type warpType = { src: number; dst: number };
+  const pUp = appContext.settingData.setting.ppdOrderType.up;
+  const pDown = appContext.settingData.setting.ppdOrderType.down;
 
-  // コの字タイプ(列順)
   const WARP_ROWS_PRECISION = [
     {
       src: MAX_ROW_ITEM_COUNT - 1,
-      dst: MAX_ROW_ITEM_COUNT * 2 - 1,
+      dst:
+        pUp === PPD_ORDER_UP.ko
+          ? MAX_ROW_ITEM_COUNT * 2 - 1
+          : MAX_ROW_ITEM_COUNT,
     } as warpType,
-    { src: MAX_ROW_ITEM_COUNT, dst: MAX_ROW_ITEM_COUNT * 4 - 1 } as warpType,
     {
-      src: MAX_ROW_ITEM_COUNT * 3 - 1,
+      src:
+        pUp === PPD_ORDER_UP.ko
+          ? MAX_ROW_ITEM_COUNT
+          : MAX_ROW_ITEM_COUNT * 2 - 1,
+      dst:
+        pDown === PPD_ORDER_DOWN.hako
+          ? MAX_ROW_ITEM_COUNT * 4 - 1
+          : MAX_ROW_ITEM_COUNT * 3,
+    } as warpType,
+    {
+      src:
+        pDown === PPD_ORDER_DOWN.hako
+          ? MAX_ROW_ITEM_COUNT * 3 - 1
+          : MAX_ROW_ITEM_COUNT * 2,
       dst: 0,
     } as warpType,
-    { src: MAX_ROW_ITEM_COUNT * 3, dst: MAX_ROW_ITEM_COUNT * 2 } as warpType,
+    {
+      src:
+        pDown === PPD_ORDER_DOWN.hako
+          ? MAX_ROW_ITEM_COUNT * 3
+          : MAX_ROW_ITEM_COUNT * 4 - 1,
+      dst:
+        pDown === PPD_ORDER_DOWN.hako
+          ? MAX_ROW_ITEM_COUNT * 2
+          : MAX_ROW_ITEM_COUNT * 3 - 1,
+    } as warpType,
   ]; // 1列目：47(⇒95), 2列目：48(⇒191), 3列目：143(⇒0), 4列目：144(⇒96)
 
   const WARP_ROWS_BASIC = [
