@@ -2,7 +2,12 @@ import { TEETH_TYPE } from "./Constant";
 import dayjs from "dayjs";
 import "dayjs/locale/ja";
 import { TEETH_MATH } from "../components/moleculars/TextInputTeethMolecular";
-import { NativeScrollEvent, Platform, PlatformIOSStatic } from "react-native";
+import {
+  Dimensions,
+  NativeScrollEvent,
+  Platform,
+  PlatformIOSStatic,
+} from "react-native";
 
 /**
  * Settingファイルに保存されているデータ
@@ -215,4 +220,9 @@ export const isIpad = (): boolean => {
     return platformIOS.isPad;
   }
   return false;
+};
+
+export const isIphoneMini = (): boolean => {
+  const windowWidth = Dimensions.get("window").width;
+  return windowWidth < 750;
 };
