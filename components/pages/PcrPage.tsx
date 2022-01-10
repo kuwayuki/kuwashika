@@ -143,7 +143,7 @@ export default function PcrPage({ navigation }: RootTabScreenProps<"TabPCR">) {
       : setTeethValuesSimple([...temp]); // TODO: 直す？
   };
   const moveNavigation = () => {
-    navigation.navigate("TabUpset");
+    appContextDispatch.setModalNumber(100);
   };
 
   return (

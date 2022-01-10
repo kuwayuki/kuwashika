@@ -15,7 +15,7 @@ import { PcrContextState } from "../pages/PcrPage";
 
 export default function PcrTemplate() {
   const appContext = React.useContext(AppContextState);
-  // const pcrContext = React.useContext(PcrContextState);
+  const pcrContextState = React.useContext(PcrContextState);
   const [nativeEvent, setNativeEvent] = React.useState<NativeScrollEvent>({
     zoomScale: 1.24,
     contentSize: { width: 1823, height: 232 },
@@ -28,15 +28,21 @@ export default function PcrTemplate() {
     scrollViewRef.current.scrollTo({ x: 0, y: 0 });
   }, [appContext.patientNumber, appContext.inspectionDataNumber]);
 
-  // const moveScroll = (index?: number) => {
-  //   if (scrollViewRef.current) {
-  //     const position = getScrollPosition(
-  //       nativeEvent,
-  //       index ?? pcrContext.focusNumber
-  //     );
-  //     scrollViewRef.current.scrollTo({ ...position });
-  //   }
-  // };
+  // 初期データ読込処理
+  React.useEffect(() => {
+    moveScroll(pcrContextState.focusNumber / 4);
+  }, [pcrContextState.focusNumber]);
+
+  const moveScroll = (index?: number) => {
+    if (scrollViewRef.current) {
+      const position = getScrollPosition(
+        nativeEvent,
+        index ?? pcrContextState.focusNumber,
+        false
+      );
+      scrollViewRef.current.scrollTo({ ...position });
+    }
+  };
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     if (!event || nativeEvent.zoomScale === event.nativeEvent.zoomScale) return;
