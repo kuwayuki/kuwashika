@@ -80,10 +80,14 @@ SKU に命名規則はありません。ただし、App001 のように適当な
 
 月額課金：
 https://docs-expo-dev.translate.goog/versions/latest/sdk/in-app-purchases/?_x_tr_sl=en&_x_tr_tl=ja&_x_tr_hl=ja&_x_tr_pto=sc
+参考:https://tech-blog.re-arc-lab.jp/posts/211015_expo-in-app-purchases/
 
 アプリ説明
 プロモーション用テキスト（170 文字）：
 概要（4000 文字）：
+
 キーワード（100 文字）：
+歯周病 歯周病検査 PPD ppd pcr 動揺度 ししゅうびょう
+
 サポート URL：
 マーケティング URL：

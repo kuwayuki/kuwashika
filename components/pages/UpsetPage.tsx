@@ -35,6 +35,7 @@ export default function UpsetPage({
    * 患者データから表示再読み込み
    */
   React.useEffect(() => {
+    // navigation.navigate("TabPeriodontal");
     setFocusNumber(0);
   }, [appContextState.patientNumber, appContextState.inspectionDataNumber]);
 

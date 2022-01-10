@@ -23,6 +23,7 @@ export type DataType = {
 };
 export type SettingType = {
   ppdOrderType: { up: PPD_ORDER_UP; down: PPD_ORDER_DOWN };
+  isAutoMove: boolean;
 };
 
 /**
@@ -108,6 +109,7 @@ export const INIT_PERSON: PersonDataType = {
 export const INIT_SETTING_DATA: DataType = {
   setting: {
     ppdOrderType: { up: PPD_ORDER_UP.ko, down: PPD_ORDER_DOWN.hako },
+    isAutoMove: false,
   },
   // 患者ごとのデータ
   persons: [

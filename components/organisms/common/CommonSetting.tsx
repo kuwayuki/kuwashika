@@ -1,7 +1,8 @@
 import * as React from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, View } from "react-native";
 import { AppContextDispatch, AppContextState } from "../../../App";
 import { PPD_ORDER_DOWN, PPD_ORDER_UP } from "../../../constants/Util";
+import AlertAtom from "../../atoms/AlertAtom";
 import ButtonAtom from "../../atoms/ButtonAtom";
 import IconAtom from "../../atoms/IconAtom";
 import ModalAtom from "../../atoms/ModalAtom";
@@ -22,6 +23,9 @@ export default function CommonSetting() {
     appContextState.settingData.setting.ppdOrderType.down ===
       PPD_ORDER_DOWN.hako
   );
+  const [isAutoMove, setAutoMove] = React.useState<boolean>(
+    appContextState.settingData.setting.isAutoMove
+  );
 
   // 初期データ読込処理
   React.useEffect(() => {
@@ -37,7 +41,7 @@ export default function CommonSetting() {
     isUp ? setPpdUpKo(setPpd) : setPpdDownHako(setPpd);
 
     // 全体データの更新
-    appContextDispatch.registSettingData({
+    appContextDispatch.setSettingData({
       ...appContextState.settingData,
       setting: {
         ...appContextState.settingData.setting,
@@ -54,7 +58,18 @@ export default function CommonSetting() {
     });
   };
 
-  // データの初期化
+  const saveAutoMove = (isAutoMove) => {
+    setAutoMove(isAutoMove);
+    // 全体データの更新
+    appContextDispatch.setSettingData({
+      ...appContextState.settingData,
+      setting: {
+        ...appContextState.settingData.setting,
+        isAutoMove: isAutoMove,
+      },
+    });
+  };
+
   const cancel = () => {
     // Modalを閉じて、前の患者番号に戻す
     appContextDispatch.setModalNumber(0);
@@ -63,25 +78,52 @@ export default function CommonSetting() {
     );
   };
 
+  // ユーザーの削除
+  const payment = async () => {};
+
   // データの初期化
   const initData = async () => {
-    // 全体データの更新
-    appContextDispatch.setModalNumber(0);
-    await appContextDispatch.deletePerson();
+    AlertAtom(
+      "初期化",
+      "全てのデータが削除されますがよろしいですか？",
+      async () => {
+        // 全体データの更新
+        appContextDispatch.setModalNumber(0);
+        await appContextDispatch.deletePerson();
+        Alert.alert("初期化しました");
+      }
+    );
   };
 
   // ユーザーの削除
   const deletePatientData = async () => {
-    appContextDispatch.setModalNumber(0);
-    await appContextDispatch.deletePerson(appContextState.patientNumber);
+    AlertAtom(
+      "ユーザー削除",
+      `[${
+        patientNumber + ":" + (patientName ?? "")
+      }]を削除しますがよろしいですか？`,
+      async () => {
+        // 全体データの更新
+        appContextDispatch.setModalNumber(0);
+        await appContextDispatch.deletePerson(appContextState.patientNumber);
+        Alert.alert("削除しました");
+      }
+    );
   };
 
   // 検査データの削除
   const deleteInspectionData = async () => {
-    appContextDispatch.setModalNumber(0);
-    await appContextDispatch.deletePerson(
-      undefined,
-      appContextState.inspectionDataNumber
+    AlertAtom(
+      "検査データ削除",
+      `検査データを削除しますがよろしいですか？`,
+      async () => {
+        appContextDispatch.setModalNumber(0);
+        await appContextDispatch.deletePerson(
+          undefined,
+          appContextState.inspectionDataNumber
+        );
+        Alert.alert("削除しました");
+      }
     );
   };
 
@@ -106,9 +148,21 @@ export default function CommonSetting() {
         style={{
           height: "100%",
           padding: 10,
+          backgroundColor: "#EFFFF0",
         }}
       >
-        <MainTitleChildren title={"PPD詳細設定"}>
+        <MainTitleChildren title={"共通設定設定"} style={{ marginBottom: 16 }}>
+          <IconTitleAction
+            title={"自動タブ移動"}
+            icon={<IconAtom name={"autorenew"} type="material-icons" />}
+          >
+            <SwitchAtom
+              onValueChange={() => saveAutoMove(!isAutoMove)}
+              value={isAutoMove}
+            />
+          </IconTitleAction>
+        </MainTitleChildren>
+        <MainTitleChildren title={"PPD詳細設定"} style={{ marginBottom: 16 }}>
           <IconTitleAction
             title={
               "上歯の順序：" + (isPpdUpKo ? "コ(左上から)" : "Ｚ(左上から)")
@@ -147,7 +201,20 @@ export default function CommonSetting() {
             />
           </IconTitleAction>
         </MainTitleChildren>
-        <MainTitleChildren title={"データ管理"}>
+        <MainTitleChildren title={"データ管理"} style={{ marginBottom: 16 }}>
+          <IconTitleAction
+            title={"月額課金"}
+            icon={<IconAtom name="payment" type="material-icon" />}
+          >
+            <ButtonAtom
+              onPress={payment}
+              style={{ backgroundColor: "pink", padding: 12 }}
+            >
+              有料
+            </ButtonAtom>
+          </IconTitleAction>
+        </MainTitleChildren>
+        <MainTitleChildren title={"データ削除"} style={{ marginBottom: 32 }}>
           <IconTitleAction
             title={"ユーザー"}
             icon={<IconAtom name="deleteuser" type="ant-design" />}
@@ -171,7 +238,7 @@ export default function CommonSetting() {
             </ButtonAtom>
           </IconTitleAction>
           <IconTitleAction
-            title={"初期化"}
+            title={"全データの初期化"}
             icon={<IconAtom name="delete-forever" type="material-icon" />}
           >
             <ButtonAtom

@@ -38,6 +38,7 @@ export default function PcrPage({ navigation }: RootTabScreenProps<"TabPCR">) {
    * 患者データから表示再読み込み
    */
   React.useEffect(() => {
+    // navigation.navigate("TabPeriodontal");
     setFocusNumber(0);
   }, [
     appContextState.patientNumber,
