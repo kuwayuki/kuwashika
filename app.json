@@ -13,7 +13,7 @@
     "version": "1.0.0",
     "orientation": "landscape",
     "icon": "./assets/images/icon.png",
-    "scheme": "PeriodontalInspection",
+    "scheme": "periodontalinspection",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
