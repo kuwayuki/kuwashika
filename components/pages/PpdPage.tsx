@@ -21,6 +21,7 @@ export type ppdContextDispatch = {
     teethValue: TEETH_TYPE,
     isPrecision?: boolean
   ) => void;
+  moveNavigation: () => void;
 };
 export const PpdContextDispatch = React.createContext({} as ppdContextDispatch);
 
@@ -140,6 +141,9 @@ export default function PpdPage({
     }
     isPrecision ? setTeethValues([...temp]) : setTeethValuesSimple([...temp]);
   };
+  const moveNavigation = () => {
+    navigation.navigate("TabUpset");
+  };
 
   return (
     <PpdContextState.Provider
@@ -155,6 +159,7 @@ export default function PpdPage({
           setTeethValues,
           setTeethValue,
           setTeethValuesSimple,
+          moveNavigation,
         }}
       >
         <PpdTemplate />

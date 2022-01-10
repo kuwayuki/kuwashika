@@ -7,6 +7,7 @@ import {
   TEETH_TYPE,
 } from "../../../constants/Constant";
 import { PPD_ORDER_DOWN, PPD_ORDER_UP } from "../../../constants/Util";
+import { RootTabScreenProps } from "../../../types";
 import ButtonAtom from "../../atoms/ButtonAtom";
 import ButtonPressedMolecular from "../../moleculars/ButtonPressedMolecular";
 
@@ -30,6 +31,7 @@ type CommonButtonPropsType = {
   moveScroll: (index?: number) => void;
   mtTeethNums: number[];
   isPrecision?: boolean;
+  moveEndAction: () => void;
 };
 
 export const PPD_BUTTON_NAMES = [
@@ -192,6 +194,9 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
       // 同じならワープ(指定列の先頭 or 最後)
       nextIndex = warptemp[teeth.teethRow].dst;
     }
+    // 次のタブに移動
+    if (appContext.settingData.setting.isAutoMove && nextIndex === 0)
+      props.moveEndAction();
 
     const nextTeeth = props.teethValues[nextIndex];
     if (props.mtTeethNums.includes(nextTeeth.teethGroupIndex)) {

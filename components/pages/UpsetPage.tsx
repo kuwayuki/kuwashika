@@ -15,6 +15,7 @@ export type upsetContextDispatch = {
   setFocusNumber: (focusNumber: number) => void;
   setTeethValuesSimple: (teethValues: TEETH_TYPE[]) => void;
   setTeethValue: (index: number, teethValue: TEETH_TYPE) => void;
+  moveNavigation: () => void;
 };
 export const UpsetContextDispatch = React.createContext(
   {} as upsetContextDispatch
@@ -122,6 +123,10 @@ export default function UpsetPage({
     setTeethValuesSimple([...temp]);
   };
 
+  const moveNavigation = () => {
+    navigation.navigate("TabPCR");
+  };
+
   return (
     <UpsetContextState.Provider
       value={{
@@ -134,6 +139,7 @@ export default function UpsetPage({
           setFocusNumber,
           setTeethValue,
           setTeethValuesSimple,
+          moveNavigation,
         }}
       >
         <UpsetTemplate />

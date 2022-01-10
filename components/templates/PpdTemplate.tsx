@@ -72,6 +72,7 @@ export default function PpdTemplate() {
           moveScroll={moveScroll}
           mtTeethNums={appContext.mtTeethNums}
           isPrecision={appContext.isPrecision}
+          moveEndAction={ppdContextDispatch.moveNavigation}
         />
       }
     </>

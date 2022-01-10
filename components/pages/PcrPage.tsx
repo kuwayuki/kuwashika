@@ -21,6 +21,7 @@ export type pcrContextDispatch = {
     teethValue: TEETH_TYPE,
     isPrecision?: boolean
   ) => void;
+  moveNavigation: () => void;
 };
 export const PcrContextDispatch = React.createContext({} as pcrContextDispatch);
 
@@ -141,6 +142,9 @@ export default function PcrPage({ navigation }: RootTabScreenProps<"TabPCR">) {
       ? setTeethValuesSimple([...temp])
       : setTeethValuesSimple([...temp]); // TODO: 直す？
   };
+  const moveNavigation = () => {
+    navigation.navigate("TabUpset");
+  };
 
   return (
     <PcrContextState.Provider
@@ -156,6 +160,7 @@ export default function PcrPage({ navigation }: RootTabScreenProps<"TabPCR">) {
           setTeethValues,
           setTeethValue,
           setTeethValuesSimple,
+          moveNavigation,
         }}
       >
         <PcrTemplate />

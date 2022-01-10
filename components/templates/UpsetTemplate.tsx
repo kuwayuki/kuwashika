@@ -66,6 +66,7 @@ export default function UpsetTemplate() {
           setTeethValue={upsetContextDispatch.setTeethValue}
           moveScroll={moveScroll}
           mtTeethNums={appContext.mtTeethNums}
+          moveEndAction={upsetContextDispatch.moveNavigation}
         />
       }
     </>
