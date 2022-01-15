@@ -66,6 +66,7 @@ export default function DropDownPickerAtom(props: DropDownPickerAtomProps) {
         // itemSeparatorStyle={styles.picker}
         // badgeSeparatorStyle={styles.picker}
         listMode="SCROLLVIEW"
+        searchable={true}
         open={open}
         setOpen={setOpen}
         {...props}

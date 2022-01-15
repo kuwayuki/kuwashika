@@ -165,7 +165,7 @@ export default function CommonSetting() {
         <MainTitleChildren title={"PPD詳細設定"} style={{ marginBottom: 16 }}>
           <IconTitleAction
             title={
-              "上歯の順序：" + (isPpdUpKo ? "コ(左上から)" : "Ｚ(左上から)")
+              "上歯の順序：" + (isPpdUpKo ? "コ(右上から)" : "Ｚ(右上から)")
             }
             icon={
               isPpdUpKo ? (
@@ -185,7 +185,7 @@ export default function CommonSetting() {
           </IconTitleAction>
           <IconTitleAction
             title={
-              "下歯の順序：" + (isPpdDownHako ? "匚(右下から)" : "コ(左下から)")
+              "下歯の順序：" + (isPpdDownHako ? "匚(左下から)" : "コ(右下から)")
             }
             icon={
               isPpdDownHako ? (

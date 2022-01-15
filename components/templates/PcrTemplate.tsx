@@ -16,6 +16,7 @@ import { PcrContextState } from "../pages/PcrPage";
 export default function PcrTemplate() {
   const appContext = React.useContext(AppContextState);
   const pcrContextState = React.useContext(PcrContextState);
+  const [isScrollFocus, setScrollFocus] = React.useState(true);
   const [nativeEvent, setNativeEvent] = React.useState<NativeScrollEvent>({
     zoomScale: 1.24,
     contentSize: { width: 1823, height: 232 },
@@ -30,6 +31,8 @@ export default function PcrTemplate() {
 
   // 初期データ読込処理
   React.useEffect(() => {
+    // スクロール中はフォーカス移動しない
+    if (!isScrollFocus || pcrContextState.focusNumber === undefined) return;
     moveScroll(pcrContextState.focusNumber / 4);
   }, [pcrContextState.focusNumber]);
 
@@ -56,7 +59,8 @@ export default function PcrTemplate() {
         <ScrollViewAtom
           ref={scrollViewRef}
           onScroll={handleScroll}
-          onScrollEndDrag={handleScroll}
+          onScrollBeginDrag={() => setScrollFocus(false)}
+          onScrollEndDrag={() => setScrollFocus(true)}
           zoomScale={1.24}
         >
           <PcrAllTeeth />
