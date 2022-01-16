@@ -26,6 +26,9 @@ export default function CommonSetting() {
   const [isAutoMove, setAutoMove] = React.useState<boolean>(
     appContextState.settingData.setting.isAutoMove
   );
+  const [isPcrAutoMove, setPcrAutoMove] = React.useState<boolean>(
+    appContextState.settingData.setting.isPcrAutoMove
+  );
 
   // 初期データ読込処理
   React.useEffect(() => {
@@ -66,6 +69,18 @@ export default function CommonSetting() {
       setting: {
         ...appContextState.settingData.setting,
         isAutoMove: isAutoMove,
+      },
+    });
+  };
+
+  const savePcrAutoMove = (isPcrAutoMove) => {
+    setPcrAutoMove(isPcrAutoMove);
+    // 全体データの更新
+    appContextDispatch.setSettingData({
+      ...appContextState.settingData,
+      setting: {
+        ...appContextState.settingData.setting,
+        isPcrAutoMove: isPcrAutoMove,
       },
     });
   };
@@ -198,6 +213,22 @@ export default function CommonSetting() {
             <SwitchAtom
               onValueChange={() => savePpd(false)}
               value={isPpdDownHako}
+            />
+          </IconTitleAction>
+        </MainTitleChildren>
+        <MainTitleChildren title={"PCR詳細設定"} style={{ marginBottom: 16 }}>
+          <IconTitleAction
+            title={"自動フォーカス"}
+            icon={
+              <IconAtom
+                name={"image-filter-center-focus"}
+                type="material-community"
+              />
+            }
+          >
+            <SwitchAtom
+              onValueChange={() => savePcrAutoMove(!isPcrAutoMove)}
+              value={isPcrAutoMove}
             />
           </IconTitleAction>
         </MainTitleChildren>

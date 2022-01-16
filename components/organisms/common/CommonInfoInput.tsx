@@ -65,13 +65,13 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
           // justifyContent: "space-between",
         }}
       >
-        <TitleAndAction title={"検査日"}>
+        <TitleAndAction title={""}>
           <DatePickerAtom
             date={appContextState.inspectionDate}
             setDate={appContextDispatch.setInspectionDate}
           />
         </TitleAndAction>
-        <TitleAndAction title={"患者番号"}>
+        <TitleAndAction title={"患者"}>
           <DropDownPickerAtom
             items={appContextState.patients}
             value={appContextState.patientNumber}
@@ -79,7 +79,7 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
             width={isIpad() ? 160 : isIphoneMini() ? 90 : 100}
           />
         </TitleAndAction>
-        <TitleAndAction title={"検査データ"}>
+        <TitleAndAction title={"データ"}>
           <DropDownPickerAtom
             items={appContextState.inspectionData}
             value={appContextState.inspectionDataNumber}

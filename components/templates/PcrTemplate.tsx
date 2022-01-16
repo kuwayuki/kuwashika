@@ -31,6 +31,9 @@ export default function PcrTemplate() {
 
   // 初期データ読込処理
   React.useEffect(() => {
+    // 自動移動しない
+    if (!appContext.settingData.setting.isPcrAutoMove) return;
+
     // スクロール中はフォーカス移動しない
     if (!isScrollFocus || pcrContextState.focusNumber === undefined) return;
     moveScroll(pcrContextState.focusNumber / 4);
