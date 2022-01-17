@@ -232,7 +232,7 @@ export default function CommonSetting() {
             />
           </IconTitleAction>
         </MainTitleChildren>
-        <MainTitleChildren title={"データ管理"} style={{ marginBottom: 16 }}>
+        {/* <MainTitleChildren title={"データ管理"} style={{ marginBottom: 16 }}>
           <IconTitleAction
             title={"月額課金"}
             icon={<IconAtom name="payment" type="material-icon" />}
@@ -244,7 +244,7 @@ export default function CommonSetting() {
               有料
             </ButtonAtom>
           </IconTitleAction>
-        </MainTitleChildren>
+        </MainTitleChildren> */}
         <MainTitleChildren title={"データ削除"} style={{ marginBottom: 32 }}>
           <IconTitleAction
             title={"ユーザー"}
