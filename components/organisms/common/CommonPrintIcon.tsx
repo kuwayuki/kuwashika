@@ -1,7 +1,7 @@
 import * as Print from "expo-print";
 import * as React from "react";
 import dayjs from "dayjs";
-import "dayjs/locale/ja"; // これimportしないとエラー吐かれる
+import "dayjs/locale/ja"; // これimportしないとエラー吐かれるa
 import { StyleSheet } from "react-native";
 import { Icon } from "react-native-elements";
 import {
@@ -13,6 +13,8 @@ import {
 } from "../../../constants/Constant";
 import { pcrCalculation, ppdCalculation } from "../../../constants/Util";
 import { AppContextState } from "../../../App";
+import { AdMobRewarded } from "expo-ads-admob";
+import * as StoreReview from 'expo-store-review';
 
 export const SIZE = 48;
 export default function CommonPrintIcon() {
@@ -26,6 +28,24 @@ export default function CommonPrintIcon() {
       printerUrl: selectedPrinter?.url, // iOS only
       orientation: "landscape",
     });
+
+    try {
+      if (await StoreReview.hasAction()) {
+        // you can call StoreReview.requestReview()
+        StoreReview.requestReview()
+      } 
+    } catch (error) {
+      console.log(error);
+    }
+
+    try {
+        AdMobRewarded.setAdUnitID('ca-app-pub-2103807205659646/7101815610') // Test ID, Replace with your-admob-unit-id
+        // AdMobRewarded.setTestDeviceID('EMULATOR')
+        await AdMobRewarded.requestAdAsync()
+        await AdMobRewarded.showAdAsync()      
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const createTr = (

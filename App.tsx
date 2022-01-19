@@ -21,7 +21,11 @@ import {
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
-import { LogBox } from "react-native"; // TODO: 後で消す
+import { Alert, LogBox } from "react-native"; // TODO: 後で消す
+import {
+  getTrackingPermissionsAsync,
+  requestTrackingPermissionsAsync,
+} from "expo-tracking-transparency";
 
 // 全ページの共通項目
 export type appContextState = {
@@ -104,6 +108,29 @@ export default function App() {
       currentData: currentData,
     } as PersonType);
   };
+
+  React.useEffect(() => {
+    (async () => {
+      const { granted, canAskAgain } = await getTrackingPermissionsAsync();
+      if (!granted && canAskAgain) {
+        Alert.alert(
+          "許可することで広告が最適化",
+          "トラッキングを許可することで、マネーフォロー内の広告が適切に最適化され、関連性の高い広告が表示されます。\n\nまた、アプリ作者に広告収入が発生するので、このアプリの改善に使用します。",
+          [
+            {
+              text: "OK",
+              onPress: async () => {
+                const { status } = await requestTrackingPermissionsAsync();
+                if (status === "granted") {
+                  console.log("Yay! I have user permission to track data");
+                }
+              },
+            },
+          ]
+        );
+      }
+    })();
+  }, []);
 
   // 初期データ読込処理
   React.useEffect(() => {

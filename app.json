@@ -1,19 +1,14 @@
 {
   "expo": {
     "plugins": [
-      [
-        "expo-ads-admob",
-        {
-          "userTrackingPermission": "This identifier will be used to deliver personalized ads to you."
-        }
-      ]
+      "expo-tracking-transparency"
     ],
-    "name": "PeriodontalInspection",
-    "slug": "PeriodontalInspection",
-    "version": "1.0.0",
+    "name": "PerioChart",
+    "slug": "PerioChart",
+    "version": "1.0.2",
     "orientation": "landscape",
     "icon": "./assets/images/icon.png",
-    "scheme": "periodontalinspection",
+    "scheme": "periochart",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
