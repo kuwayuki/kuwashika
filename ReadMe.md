@@ -17,7 +17,7 @@ https://docs.expo.dev/versions/v44.0.0/sdk/admob/
 
 Google Admob
 https://apps.admob.com/v2/home?_ga=2.71246102.782286764.1642601502-166732312.1642306416
-    
+
 AuthSession
 https://docs.expo.dev/versions/v44.0.0/sdk/auth-session/
 
@@ -41,7 +41,7 @@ Network: (null)
 ** Mediation line items **
 }
 at Object.promiseMethodWrapper [as callMethod] (c:\workspace\kuwashika.git\node_modules\react-native\Libraries\BatchedBridge\NativeModules.js:106:51)
-at Object.NativeModulesProxy.<computed>.<computed> [as requestAd] (c:\workspace\kuwashika.git\node_modules\expo-modules-core\build\NativeModulesProxy.native.js:15:36)     
+at Object.NativeModulesProxy.<computed>.<computed> [as requestAd] (c:\workspace\kuwashika.git\node_modules\expo-modules-core\build\NativeModulesProxy.native.js:15:36)  
 at \_callee3$ (c:\workspace\kuwashika.git\node_modules\expo-ads-admob\build\AdMobInterstitial.js:39:33)
 at tryCatch (c:\workspace\kuwashika.git\node_modules\regenerator-runtime\runtime.js:63:40)
 at Generator.invoke [as _invoke] (c:\workspace\kuwashika.git\node_modules\regenerator-runtime\runtime.js:294:22)
@@ -95,9 +95,6 @@ https://docs-expo-dev.translate.goog/versions/latest/sdk/in-app-purchases/?_x_tr
 サポート URL：
 マーケティング URL：
 
-
-
-
 6.5 インチ (iPhone 13 Pro Max、iPhone 12 Pro Max)
 5.5 インチ (iPhone 8 Plus)
 12.9 インチ (iPad Pro (第 4 世代、第 3 世代))
@@ -105,13 +102,47 @@ https://docs-expo-dev.translate.goog/versions/latest/sdk/in-app-purchases/?_x_tr
 
 expo build:ios
 
-
 Thanks for a lot checking.
 I ansered following.
 
 - Does your app include the login mechanism?
-No, it is not login mechanism.
+  No, it is not login mechanism.
 
 - What is the 月額課金 for, and what are the costs?
-Sorry, it is not finished publish yet.
-I deleted this function, so please chack again.
+  Sorry, it is not finished publish yet.
+  I deleted this function, so please chack again.
+
+OTA update のやりかた
+
+$ expo publish
+
+import { AdMobRewarded } from 'expo-ads-admob';
+
+class HomeScreen extends React.Component {
+
+Reward = async () => {
+if (**DEV**) {
+AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/5224354917'); // Test ID, Replace with your-admob-unit-id
+} else {
+if (Platform.OS === 'ios') {
+AdMobRewarded.setAdUnitID('広告ユニット ID'); // iOS
+} else {
+AdMobRewarded.setAdUnitID('広告ユニット ID'); // android
+}
+}
+await AdMobRewarded.requestAdAsync();
+await AdMobRewarded.showAdAsync();
+};
+
+buttonPress = () => {
+this.Reward()
+}
+
+componentDidMount = () => {
+AdMobRewarded.addEventListener('rewarded', () => {
+// 広告最後までみた人が実行できる処理
+});
+};
+componentWillUnmount() {
+AdMobRewarded.removeAllListeners();
+}

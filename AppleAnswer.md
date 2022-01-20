@@ -35,3 +35,26 @@ We noticed that the app name to be displayed on the App Store and the app name d
 
 A3.
 I Changed displayed name PeriodontalInspection to PerioChart.
+
+Thanks for a lot for checking soon.
+I changed following.
+
+> - Your app's modal alerts are written in English while the app is set to the Japanese localization. To help users understand why your app is requesting access to a specific feature, your app's modal alerts should be in the same language as your app's current localization.
+>   Next Steps
+>   To resolve this issue, please revise your app to address all instances of this type of issue.
+
+=>
+Sorry, I changed from English to Japanese.
+
+Resources
+
+For information on improving and enhancing your app:
+
+- Review the UI Design Dos and Don’ts for tips on fundamental design best practices.
+- Watch the video The Ingredients of Great Apps to understand the basics of great apps.
+- Watch the video iPhone and iPad User Interface Design for practical design tips.
+- Watch iOS Development Videos to learn about programming and design tips.
+- Visit Accessibility on iOS to learn more about delivering a superior mobile experience to every customer, including those with special needs.
+- Review the iOS Human Interface Guidelines and ensure that your app's interface and design adhere to these guidelines.
+
+Please see attached screenshot for details.

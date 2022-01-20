@@ -71,20 +71,20 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
             setDate={appContextDispatch.setInspectionDate}
           />
         </TitleAndAction>
-        <TitleAndAction title={"患者"}>
+        <TitleAndAction title={isIphoneMini() ? "" : "患者"}>
           <DropDownPickerAtom
             items={appContextState.patients}
             value={appContextState.patientNumber}
             setValue={appContextDispatch.setPatientNumber}
-            width={isIpad() ? 160 : isIphoneMini() ? 90 : 100}
+            width={isIpad() ? 160 : isIphoneMini() ? 120 : 150}
           />
         </TitleAndAction>
-        <TitleAndAction title={"データ"}>
+        <TitleAndAction title={isIphoneMini() ? "" : "データ"}>
           <DropDownPickerAtom
             items={appContextState.inspectionData}
             value={appContextState.inspectionDataNumber}
             setValue={appContextDispatch.setInspectionDataNumber}
-            width={isIphoneMini() ? 100 : 160}
+            width={isIphoneMini() ? 160 : 160}
           />
         </TitleAndAction>
         <TitleAndAction

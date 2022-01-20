@@ -14,7 +14,7 @@ import {
 import { pcrCalculation, ppdCalculation } from "../../../constants/Util";
 import { AppContextState } from "../../../App";
 import { AdMobRewarded } from "expo-ads-admob";
-import * as StoreReview from 'expo-store-review';
+import * as StoreReview from "expo-store-review";
 
 export const SIZE = 48;
 export default function CommonPrintIcon() {
@@ -25,24 +25,27 @@ export default function CommonPrintIcon() {
     // On iOS/android prints the given html. On web prints the HTML from the current page.
     await Print.printAsync({
       html,
-      printerUrl: selectedPrinter?.url, // iOS only
-      orientation: "landscape",
+      useMarkupFormatter: true,
+      // printerUrl: selectedPrinter?.url, // iOS only
+      // orientation: "portrait",
+      // orientation: "landscape",
+      orientation: Print.Orientation.landscape,
     });
 
     try {
       if (await StoreReview.hasAction()) {
         // you can call StoreReview.requestReview()
-        StoreReview.requestReview()
-      } 
+        StoreReview.requestReview();
+      }
     } catch (error) {
       console.log(error);
     }
 
     try {
-        AdMobRewarded.setAdUnitID('ca-app-pub-2103807205659646/7101815610') // Test ID, Replace with your-admob-unit-id
-        // AdMobRewarded.setTestDeviceID('EMULATOR')
-        await AdMobRewarded.requestAdAsync()
-        await AdMobRewarded.showAdAsync()      
+      AdMobRewarded.setAdUnitID("ca-app-pub-2103807205659646/7101815610"); // Test ID, Replace with your-admob-unit-id
+      // AdMobRewarded.setTestDeviceID('EMULATOR')
+      await AdMobRewarded.requestAdAsync();
+      await AdMobRewarded.showAdAsync();
     } catch (error) {
       console.log(error);
     }
