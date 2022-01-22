@@ -15,6 +15,7 @@ import { pcrCalculation, ppdCalculation } from "../../../constants/Util";
 import { AppContextState } from "../../../App";
 import { AdMobRewarded } from "expo-ads-admob";
 import * as StoreReview from "expo-store-review";
+import { admobReward } from "../../../constants/Admob";
 
 export const SIZE = 48;
 export default function CommonPrintIcon() {
@@ -40,15 +41,7 @@ export default function CommonPrintIcon() {
     } catch (error) {
       console.log(error);
     }
-
-    try {
-      AdMobRewarded.setAdUnitID("ca-app-pub-2103807205659646/7101815610"); // Test ID, Replace with your-admob-unit-id
-      // AdMobRewarded.setTestDeviceID('EMULATOR')
-      await AdMobRewarded.requestAdAsync();
-      await AdMobRewarded.showAdAsync();
-    } catch (error) {
-      console.log(error);
-    }
+    admobReward();
   };
 
   const createTr = (

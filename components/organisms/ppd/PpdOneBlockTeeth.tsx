@@ -21,7 +21,7 @@ export default function PpdOneBlockTeeth(props: teethProps) {
       />
       {appContext.isPrecision && (
         /* 「精密のみ」：上段 or 下段の２列目 */
-        <CommonTeeth {...props} teethRows={props.teethRows * 2 + 1} />
+        <CommonTeeth {...props} teethRows={props.teethRows * 2 + 1} isPpd />
       )}
     </View>
   );

@@ -210,6 +210,7 @@ export default function App() {
         );
         refleshData = JSON.parse(data) as DataType;
       } else {
+        // 初期データサンプル登録処理
         refleshData = { ...INIT_SETTING_DATA };
         registSettingData(refleshData);
       }
