@@ -20,6 +20,7 @@ export type teethProps = {
   setFocusNumber: (focusNumber: number) => void;
   isPrecision?: boolean;
   isPcr?: boolean;
+  isPpd?: boolean;
 };
 
 export const PPD_PARTS = [0, 1, 2];
@@ -51,7 +52,7 @@ export default function CommonTeeth(props: teethProps) {
       )
         return;
 
-      if (appContext.pressedValue !== 110) {
+      if (props.isPpd && appContext.pressedValue !== 110) {
         // 出血及び排膿
         props.setTeethValue(
           teethNum,
@@ -59,8 +60,14 @@ export default function CommonTeeth(props: teethProps) {
             ...props.teethValues[teethNum],
             status:
               appContext.pressedValue === 101
-                ? { ...props.teethValues[teethNum].status, isBleeding: true }
-                : { ...props.teethValues[teethNum].status, isDrainage: true },
+                ? {
+                    ...props.teethValues[teethNum].status,
+                    isBleeding: !props.teethValues[teethNum].status?.isBleeding,
+                  }
+                : {
+                    ...props.teethValues[teethNum].status,
+                    isDrainage: !props.teethValues[teethNum].status?.isDrainage,
+                  },
           } as TEETH_TYPE,
           props.isPrecision
         );

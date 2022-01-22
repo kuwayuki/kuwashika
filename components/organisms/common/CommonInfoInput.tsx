@@ -76,7 +76,7 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
             items={appContextState.patients}
             value={appContextState.patientNumber}
             setValue={appContextDispatch.setPatientNumber}
-            width={isIpad() ? 160 : isIphoneMini() ? 120 : 150}
+            width={isIpad() ? 180 : isIphoneMini() ? 120 : 150}
           />
         </TitleAndAction>
         <TitleAndAction title={isIphoneMini() ? "" : "データ"}>
@@ -84,7 +84,7 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
             items={appContextState.inspectionData}
             value={appContextState.inspectionDataNumber}
             setValue={appContextDispatch.setInspectionDataNumber}
-            width={isIphoneMini() ? 160 : 160}
+            width={isIpad() ? 180 : isIphoneMini() ? 160 : 160}
           />
         </TitleAndAction>
         <TitleAndAction

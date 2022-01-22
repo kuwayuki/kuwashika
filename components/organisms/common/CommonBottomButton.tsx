@@ -7,7 +7,6 @@ import {
   TEETH_TYPE,
 } from "../../../constants/Constant";
 import { PPD_ORDER_DOWN, PPD_ORDER_UP } from "../../../constants/Util";
-import { RootTabScreenProps } from "../../../types";
 import ButtonAtom from "../../atoms/ButtonAtom";
 import ButtonPressedMolecular from "../../moleculars/ButtonPressedMolecular";
 
