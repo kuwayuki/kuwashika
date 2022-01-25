@@ -41,6 +41,7 @@ export default function CommonPrintIcon() {
     } catch (error) {
       console.log(error);
     }
+    // 広告
     admobReward();
   };
 
