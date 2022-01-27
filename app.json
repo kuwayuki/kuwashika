@@ -1,12 +1,12 @@
 {
   "expo": {
     "plugins": ["expo-tracking-transparency"],
-    "name": "ぺリオチャート",
-    "slug": "PerioChart",
-    "version": "1.0.3",
+    "name": "ぺリオチャートLite",
+    "slug": "PerioChartLite",
+    "version": "1.0.0",
     "orientation": "landscape",
     "icon": "./assets/images/icon.png",
-    "scheme": "periochart",
+    "scheme": "periochartlite",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -30,7 +30,7 @@
           }
         ]
       },
-      "bundleIdentifier": "com.kuwahara.ExpoExample"
+      "bundleIdentifier": "com.kuwahara.PerioChartLite"
     },
     "android": {
       "adaptiveIcon": {

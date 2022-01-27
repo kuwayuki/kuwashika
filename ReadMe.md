@@ -24,6 +24,9 @@ https://docs.expo.dev/versions/v44.0.0/sdk/auth-session/
 StoreReview
 https://docs.expo.dev/versions/v44.0.0/sdk/storereview/
 
+firebase
+https://console.firebase.google.com/project/perio-c5aa7/overview?hl=JA
+
 次に、アプリ内に広告ユニットを配置します
 導入の手順は次のとおりです。
 このアプリ ID を使用して、Google Mobile Ads SDK ガイドの手順を完了してください。

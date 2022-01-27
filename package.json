@@ -32,7 +32,9 @@
     "expo-splash-screen": "~0.13.5",
     "expo-status-bar": "~1.1.0",
     "expo-store-review": "~5.0.3",
+    "expo-tracking-transparency": "~2.0.3",
     "expo-web-browser": "~10.0.3",
+    "firebase": "^9.6.4",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "^0.66.1",
@@ -44,8 +46,7 @@
     "react-native-screens": "~3.8.0",
     "react-native-tab-view": "^3.1.1",
     "react-native-web": "0.17.1",
-    "react-to-print": "^2.14.0",
-    "expo-tracking-transparency": "~2.0.3"
+    "react-to-print": "^2.14.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
