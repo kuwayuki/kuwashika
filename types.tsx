@@ -18,6 +18,7 @@ declare global {
 
 export type RootStackParamList = {
   歯周病検査: NavigatorScreenParams<RootTabParamList> | undefined;
+  RegisterScreen: undefined;
   Modal: undefined;
   NotFound: undefined;
 };

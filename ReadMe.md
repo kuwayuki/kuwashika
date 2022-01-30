@@ -12,21 +12,6 @@ Remote JS
 ブラウザのデバッグモードは切らないとだめ
 スマホからリロードすると、ブラウザのデバッグモードが起動するので、切ってから F5 デバッグする
 
-Admob
-https://docs.expo.dev/versions/v44.0.0/sdk/admob/
-
-Google Admob
-https://apps.admob.com/v2/home?_ga=2.71246102.782286764.1642601502-166732312.1642306416
-
-AuthSession
-https://docs.expo.dev/versions/v44.0.0/sdk/auth-session/
-
-StoreReview
-https://docs.expo.dev/versions/v44.0.0/sdk/storereview/
-
-firebase
-https://console.firebase.google.com/project/perio-c5aa7/overview?hl=JA
-
 次に、アプリ内に広告ユニットを配置します
 導入の手順は次のとおりです。
 このアプリ ID を使用して、Google Mobile Ads SDK ガイドの手順を完了してください。
@@ -70,24 +55,6 @@ at Generator.invoke [as _invoke] (c:\workspace\kuwashika.git\.vscode\.react\node
 at Generator.next (c:\workspace\kuwashika.git\.vscode\.rea...
 reactConsoleErrorHandler @ c:\workspace\kuwashika.git\node_modules\react-native\Libraries\Core\ExceptionsManager.js:184:3
 
-Expo で作成したアプリを App Store に申請するまで
-https://qiita.com/mildsummer/items/e98b1b8e4ea7f72b9899
-
-_アプリのビルド Credential の作成_
-※expo build:ios で自動的に作成される
-Certificates, Identifiers & Profiles
-https://developer.apple.com/account/resources/identifiers/list
-
-_アプリの公開_
-App Store Connect
-https://appstoreconnect.apple.com/apps
-
-SKU に命名規則はありません。ただし、App001 のように適当な名前をつけると紛らわしいので、おすすめしません。私の場合、Bundle ID が com.example.MyApp なら SKU は ComExampleMyApp のように設定しています。
-
-月額課金：
-https://docs-expo-dev.translate.goog/versions/latest/sdk/in-app-purchases/?_x_tr_sl=en&_x_tr_tl=ja&_x_tr_hl=ja&_x_tr_pto=sc
-参考:https://tech-blog.re-arc-lab.jp/posts/211015_expo-in-app-purchases/
-
 アプリ説明
 プロモーション用テキスト（170 文字）：
 概要（4000 文字）：
@@ -118,34 +85,3 @@ I ansered following.
 OTA update のやりかた
 
 $ expo publish
-
-import { AdMobRewarded } from 'expo-ads-admob';
-
-class HomeScreen extends React.Component {
-
-Reward = async () => {
-if (**DEV**) {
-AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/5224354917'); // Test ID, Replace with your-admob-unit-id
-} else {
-if (Platform.OS === 'ios') {
-AdMobRewarded.setAdUnitID('広告ユニット ID'); // iOS
-} else {
-AdMobRewarded.setAdUnitID('広告ユニット ID'); // android
-}
-}
-await AdMobRewarded.requestAdAsync();
-await AdMobRewarded.showAdAsync();
-};
-
-buttonPress = () => {
-this.Reward()
-}
-
-componentDidMount = () => {
-AdMobRewarded.addEventListener('rewarded', () => {
-// 広告最後までみた人が実行できる処理
-});
-};
-componentWillUnmount() {
-AdMobRewarded.removeAllListeners();
-}

@@ -4,6 +4,18 @@ import { DropdownType } from "../components/atoms/DropDownPickerAtom";
 export const SETTING_FILE = "setting.json";
 export const DATA_FILE = "_data.json";
 
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+export const firebaseConfig = {
+  apiKey: "AIzaSyDK5BZLDENQgHazvA4v_vkif2RAMRr2ygI",
+  authDomain: "perio-c5aa7.firebaseapp.com",
+  projectId: "perio-c5aa7",
+  storageBucket: "perio-c5aa7.appspot.com",
+  messagingSenderId: "922948003582",
+  appId: "1:922948003582:web:6d50ee60bf0ddcedc767af",
+  measurementId: "G-8599V06VJH",
+};
+
 export enum TAB_PAGE {
   PPD,
   UPSET,

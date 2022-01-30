@@ -1,13 +1,21 @@
 import * as FileSystem from "expo-file-system";
 import { FileInfo } from "expo-file-system";
 import { StatusBar } from "expo-status-bar";
+import {
+  getTrackingPermissionsAsync,
+  requestTrackingPermissionsAsync,
+} from "expo-tracking-transparency";
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 import React from "react";
+import { Alert, LogBox } from "react-native"; // TODO: 後で消す
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { DropdownType } from "./components/atoms/DropDownPickerAtom";
+import CommonAuth from "./components/organisms/common/CommonAuth";
 import CommonInspection from "./components/organisms/common/CommonInspection";
 import CommonPatient from "./components/organisms/common/CommonPatient";
 import CommonSetting from "./components/organisms/common/CommonSetting";
-import { DATA_FILE, SETTING_FILE } from "./constants/Constant";
+import { DATA_FILE, firebaseConfig, SETTING_FILE } from "./constants/Constant";
 import {
   DataType,
   DateFormat,
@@ -21,11 +29,6 @@ import {
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
-import { Alert, LogBox } from "react-native"; // TODO: 後で消す
-import {
-  getTrackingPermissionsAsync,
-  requestTrackingPermissionsAsync,
-} from "expo-tracking-transparency";
 
 // 全ページの共通項目
 export type appContextState = {
@@ -42,6 +45,7 @@ export type appContextState = {
   isPrecision: boolean;
   mtTeethNums: number[];
   pressedValue: number;
+  // auth: Auth;
 };
 export const AppContextState = React.createContext({} as appContextState);
 
@@ -66,6 +70,11 @@ export type appContextDispatch = {
   deletePerson: (patientNumber?: number, inspectionDataNumber?: number) => void;
 };
 export const AppContextDispatch = React.createContext({} as appContextDispatch);
+export const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+// const auth = initializeAuth(app);
+// setAuth(auth);
+// // setAuth(getAuth(app));
 
 export default function App() {
   LogBox.ignoreAllLogs();
@@ -131,6 +140,24 @@ export default function App() {
       }
     })();
   }, []);
+
+  // React.useEffect(() => {
+  //   const app = initializeApp(firebaseConfig);
+  //   const auth = initializeAuth(app);
+  //   setAuth(auth);
+  //   // setAuth(getAuth(app));
+  // }, []);
+  // React.useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       console.log(user);
+  //       // setUser(user);
+  //     } else {
+  //       // setUser("");
+  //     }
+  //   });
+  //   return () => unsubscribe();
+  // }, []);
 
   // 初期データ読込処理
   React.useEffect(() => {
@@ -418,6 +445,7 @@ export default function App() {
           isPrecision,
           mtTeethNums,
           pressedValue,
+          // auth,
         }}
       >
         <AppContextDispatch.Provider
@@ -444,6 +472,7 @@ export default function App() {
           {modalNumber === 1 && <CommonPatient />}
           {modalNumber === 2 && <CommonInspection />}
           {modalNumber === 100 && <CommonSetting />}
+          {modalNumber === 101 && <CommonAuth />}
           <SafeAreaProvider>
             <Navigation colorScheme={colorScheme} />
             <StatusBar />

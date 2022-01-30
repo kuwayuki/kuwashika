@@ -10,6 +10,12 @@ https://docs.expo.dev/versions/v44.0.0/sdk/auth-session/
 StoreReview
 https://docs.expo.dev/versions/v44.0.0/sdk/storereview/
 
+firebase
+https://console.firebase.google.com/project/perio-c5aa7/overview?hl=JA
+
+expo-Icon
+https://icons.expo.fyi/
+
 Expo で作成したアプリを App Store に申請するまで
 https://qiita.com/mildsummer/items/e98b1b8e4ea7f72b9899
 

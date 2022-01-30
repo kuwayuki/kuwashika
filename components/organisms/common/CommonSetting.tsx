@@ -166,6 +166,20 @@ export default function CommonSetting() {
           backgroundColor: "#EFFFF0",
         }}
       >
+        <MainTitleChildren title={"アカウント"} style={{ marginBottom: 16 }}>
+          <IconTitleAction
+            title={"ユーザー"}
+            icon={<IconAtom name="sign-in" type="font-awesome" />}
+            // icon={<IconAtom name="sign-iout" type="font-awesome" />}
+          >
+            <ButtonAtom
+              onPress={() => appContextDispatch.setModalNumber(101)}
+              style={{ backgroundColor: "orange", padding: 12 }}
+            >
+              サインイン
+            </ButtonAtom>
+          </IconTitleAction>
+        </MainTitleChildren>
         <MainTitleChildren title={"共通設定設定"} style={{ marginBottom: 16 }}>
           <IconTitleAction
             title={"自動タブ移動"}

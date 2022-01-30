@@ -26,7 +26,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 
 class LoginForm extends Component {
   state = { email: "", password: "", error: "", loading: false };
