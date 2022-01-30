@@ -1,20 +1,18 @@
 import {
   createUserWithEmailAndPassword,
-  getAuth,
-  onAuthStateChanged,
-  signInAnonymously,
   signInWithEmailAndPassword,
   signOut,
   UserCredential,
 } from "firebase/auth";
 import React, { useState } from "react";
 import {
+  Button,
   KeyboardAvoidingView,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { app, auth } from "../../../App";
+import { auth } from "../../../App";
 import TextInputAtom from "../../atoms/TextInputAtom";
 
 export default function CommonAuth() {
@@ -23,16 +21,12 @@ export default function CommonAuth() {
 
   const signIn = async (event: any) => {
     event.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
-      .then((user: UserCredential) => {
-        console.log("ログイン成功=", user);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    const user = await signInWithEmailAndPassword(auth, email, password);
+    console.log(user);
   };
 
-  const logOut = async () => {
+  const logOut = async (event: any) => {
+    event.preventDefault();
     await signOut(auth)
       .then(function (user) {
         console.log(user);
@@ -42,10 +36,10 @@ export default function CommonAuth() {
       });
   };
 
-  const handleRegister = async () => {
+  const handleRegister = async (event: any) => {
+    event.preventDefault();
     try {
       const user = await createUserWithEmailAndPassword(auth, email, password);
-      alert(user);
     } catch (error) {
       alert(error.message);
     }
@@ -101,6 +95,17 @@ export default function CommonAuth() {
       >
         <Text style={{ color: "white" }}>サインイン</Text>
       </TouchableOpacity>
+      {/* <TouchableOpacity
+        style={{
+          padding: 10,
+          backgroundColor: "#88cb7f",
+          borderRadius: 10,
+        }}
+        onPress={handleRegister}
+      > */}
+      <Text style={{ color: "blue" }} onPress={handleRegister}>
+        登録する
+      </Text>
       <TouchableOpacity
         style={{
           padding: 10,
@@ -111,16 +116,7 @@ export default function CommonAuth() {
       >
         <Text style={{ color: "white" }}>ログアウト</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={{
-          padding: 10,
-          backgroundColor: "#88cb7f",
-          borderRadius: 10,
-        }}
-        onPress={handleRegister}
-      >
-        <Text style={{ color: "white" }}>登録する</Text>
-      </TouchableOpacity>
+      {/* </TouchableOpacity> */}
     </KeyboardAvoidingView>
   );
 }
