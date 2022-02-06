@@ -116,33 +116,18 @@ OTA update のやりかた
 
 $ expo publish
 
-import { AdMobRewarded } from 'expo-ads-admob';
+-- Peruo Chart Lite
+Thanks for a lot.
+I answer this following.
 
-class HomeScreen extends React.Component {
+> Guideline 2.1 - Information Needed
+> Please provide detailed answers to the following questions in your reply to this message in App Store Connect:
+> > > Would you please explain the difference between this app and 1603040583?
 
-Reward = async () => {
-if (**DEV**) {
-AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/5224354917'); // Test ID, Replace with your-admob-unit-id
-} else {
-if (Platform.OS === 'ios') {
-AdMobRewarded.setAdUnitID('広告ユニット ID'); // iOS
-} else {
-AdMobRewarded.setAdUnitID('広告ユニット ID'); // android
-}
-}
-await AdMobRewarded.requestAdAsync();
-await AdMobRewarded.showAdAsync();
-};
+It's different small.
+So this app is created.
 
-buttonPress = () => {
-this.Reward()
-}
-
-componentDidMount = () => {
-AdMobRewarded.addEventListener('rewarded', () => {
-// 広告最後までみた人が実行できる処理
-});
-};
-componentWillUnmount() {
-AdMobRewarded.removeAllListeners();
-}
+> Guideline 4.3 - Design
+> To resolve this issue, please revise your app icon to ensure it is unique and does not duplicate the icon of another app.
+> OK, I changed app icon.
+Please chack it.
