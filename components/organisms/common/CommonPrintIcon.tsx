@@ -15,12 +15,14 @@ import { pcrCalculation, ppdCalculation } from "../../../constants/Util";
 import { AppContextState } from "../../../App";
 import { AdMobRewarded } from "expo-ads-admob";
 import * as StoreReview from "expo-store-review";
-import { admobReward } from "../../../constants/Admob";
+import { admobReward, createReward } from "../../../constants/Admob";
 
 export const SIZE = 48;
 export default function CommonPrintIcon() {
   const [selectedPrinter, setSelectedPrinter] = React.useState<Print.Printer>();
   const appContext = React.useContext(AppContextState);
+  const [isReadAdmob, setReadAdmob] = React.useState(false);
+
   const print = async () => {
     const html = createHtml();
     // On iOS/android prints the given html. On web prints the HTML from the current page.
@@ -41,9 +43,21 @@ export default function CommonPrintIcon() {
     } catch (error) {
       console.log(error);
     }
+
     // 広告
-    admobReward();
+    admobReward(!isReadAdmob).then(() => {
+      setReadAdmob(false);
+    });
   };
+
+  // 初期データ読込処理
+  React.useEffect(() => {
+    if (isReadAdmob) return;
+
+    createReward().then(() => {
+      setReadAdmob(true);
+    });
+  }, [isReadAdmob]);
 
   const createTr = (
     td: any,

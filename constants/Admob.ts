@@ -1,11 +1,18 @@
 import { AdMobRewarded } from "expo-ads-admob";
 
-export const admobReward = async () => {
+export const admobReward = async (isReload?: boolean) => {
   try {
-    AdMobRewarded.setAdUnitID("ca-app-pub-2103807205659646/7101815610"); // Test ID, Replace with your-admob-unit-id
-    // AdMobRewarded.setTestDeviceID('EMULATOR')
-    await AdMobRewarded.requestAdAsync();
+    if (isReload) await createReward();
     await AdMobRewarded.showAdAsync();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const createReward = async () => {
+  try {
+    AdMobRewarded.setAdUnitID("ca-app-pub-2103807205659646/7101815610");
+    await AdMobRewarded.requestAdAsync();
   } catch (error) {
     console.log(error);
   }
