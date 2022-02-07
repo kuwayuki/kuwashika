@@ -192,11 +192,13 @@ export const pcrCalculation = (
   teethValues: TEETH_TYPE[],
   mtTeethNums: number[]
 ) => {
+  // 塗りつぶした数
   const filled = teethValues.filter(
     (teeth) => teeth.value === 1 && !mtTeethNums.includes(teeth.teethGroupIndex)
   );
+  // 塗りつぶした数
   const calc =
-    (filled.length / (teethValues.length - mtTeethNums.length)) * 100;
+    (filled.length / (teethValues.length - 4 * mtTeethNums.length)) * 100;
   return Math.round(calc * 10) / 10;
 };
 
