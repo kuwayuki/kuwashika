@@ -1,8 +1,8 @@
 import { AdMobRewarded } from "expo-ads-admob";
 
-export const admobReward = async (isReload?: boolean) => {
+export const admobReward = async () => {
   try {
-    if (isReload) await createReward();
+    await createInterstitial();
     if (await AdMobRewarded.getIsReadyAsync()) {
       await AdMobRewarded.showAdAsync();
     }
@@ -18,7 +18,7 @@ export const createReward = async () => {
 
 /** インタースティシャル */
 export const createInterstitial = async () => {
-  await createAdmob("ca-app-pub-2103807205659646/7101815610");
+  await createAdmob("ca-app-pub-2103807205659646/3067799275");
 };
 
 export const createAdmob = async (unitId: string) => {

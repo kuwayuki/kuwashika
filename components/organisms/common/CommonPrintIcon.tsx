@@ -1,9 +1,12 @@
-import * as Print from "expo-print";
-import * as React from "react";
 import dayjs from "dayjs";
 import "dayjs/locale/ja"; // これimportしないとエラー吐かれるa
+import * as Print from "expo-print";
+import * as StoreReview from "expo-store-review";
+import * as React from "react";
 import { StyleSheet } from "react-native";
 import { Icon } from "react-native-elements";
+import { AppContextState } from "../../../App";
+import { admobReward, createInterstitial } from "../../../constants/Admob";
 import {
   PRINT_PPD,
   PRINT_TITLE,
@@ -12,56 +15,37 @@ import {
   TEETH_TYPE,
 } from "../../../constants/Constant";
 import { pcrCalculation, ppdCalculation } from "../../../constants/Util";
-import { AppContextState } from "../../../App";
-import { AdMobRewarded } from "expo-ads-admob";
-import * as StoreReview from "expo-store-review";
-import {
-  admobReward,
-  createInterstitial,
-  createReward,
-} from "../../../constants/Admob";
 
 export const SIZE = 48;
 export default function CommonPrintIcon() {
   const [selectedPrinter, setSelectedPrinter] = React.useState<Print.Printer>();
   const appContext = React.useContext(AppContextState);
-  const [isReadAdmob, setReadAdmob] = React.useState(false);
 
   const print = async () => {
     const html = createHtml();
     // On iOS/android prints the given html. On web prints the HTML from the current page.
-    await Print.printAsync({
-      html,
-      useMarkupFormatter: true,
-      // printerUrl: selectedPrinter?.url, // iOS only
-      // orientation: "portrait",
-      // orientation: "landscape",
-      orientation: Print.Orientation.landscape,
-    });
-
     try {
-      if (await StoreReview.hasAction()) {
-        // you can call StoreReview.requestReview()
-        StoreReview.requestReview();
-      }
+      await Print.printAsync({
+        html,
+        useMarkupFormatter: true,
+        // printerUrl: selectedPrinter?.url, // iOS only
+        // orientation: "portrait",
+        // orientation: "landscape",
+        orientation: Print.Orientation.landscape,
+      });
     } catch (error) {
-      console.log(error);
+    } finally {
+      try {
+        if (await StoreReview.hasAction()) {
+          // you can call StoreReview.requestReview()
+          StoreReview.requestReview();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+      admobReward();
     }
-
-    // 広告
-    admobReward(!isReadAdmob).then(() => {
-      setReadAdmob(false);
-    });
   };
-
-  // 初期データ読込処理
-  React.useEffect(() => {
-    if (isReadAdmob) return;
-
-    createInterstitial().then(() => {
-      setReadAdmob(true);
-    });
-  }, [isReadAdmob]);
 
   const createTr = (
     td: any,
