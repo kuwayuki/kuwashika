@@ -93,7 +93,7 @@ const INIT_DATA = (isPresion = false) => {
 export const INIT_PERSON: PersonDataType = {
   isPrecision: false,
   inspectionDataNumber: 1,
-  inspectionDataKindNumber: 1,
+  inspectionDataKindNumber: 0,
   inspectionDataName: "初診",
   date: new Date(),
   mtTeethNums: [],

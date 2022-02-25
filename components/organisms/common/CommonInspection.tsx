@@ -52,6 +52,7 @@ export default function CommonInspection() {
     // 現在データの引き継ぎ
     appContextDispatch.setCurrentPersonData({
       ...appContextState.currentPerson.currentData,
+      date: new Date(),
       inspectionDataNumber: nextDataNumber,
       inspectionDataKindNumber: inspectionDataKindNumber,
       inspectionDataName: addData.label,

@@ -45,7 +45,8 @@
     "react-native-tab-view": "^3.1.1",
     "react-native-web": "0.17.1",
     "react-to-print": "^2.14.0",
-    "expo-tracking-transparency": "~2.0.3"
+    "expo-tracking-transparency": "~2.0.3",
+    "expo-updates": "~0.10.15"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

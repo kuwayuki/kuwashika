@@ -15,7 +15,11 @@ import { pcrCalculation, ppdCalculation } from "../../../constants/Util";
 import { AppContextState } from "../../../App";
 import { AdMobRewarded } from "expo-ads-admob";
 import * as StoreReview from "expo-store-review";
-import { admobReward, createReward } from "../../../constants/Admob";
+import {
+  admobReward,
+  createInterstitial,
+  createReward,
+} from "../../../constants/Admob";
 
 export const SIZE = 48;
 export default function CommonPrintIcon() {
@@ -54,7 +58,7 @@ export default function CommonPrintIcon() {
   React.useEffect(() => {
     if (isReadAdmob) return;
 
-    createReward().then(() => {
+    createInterstitial().then(() => {
       setReadAdmob(true);
     });
   }, [isReadAdmob]);

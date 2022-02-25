@@ -104,7 +104,7 @@ export const TEETH_DOWN: teethType[] = [...TEETH_ALL].filter(
 export const INSPACTION_ITEMS: DropdownType[] = [
   { label: "Sc後", value: 1 },
   { label: "SRP後", value: 2 },
-  { label: "SRP/P重防", value: 3 },
+  { label: "SPT/P重防", value: 3 },
   { label: "任意入力", value: 10 },
 ];
 
