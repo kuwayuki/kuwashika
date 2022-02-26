@@ -1,12 +1,13 @@
 import dayjs from "dayjs";
 import "dayjs/locale/ja"; // これimportしないとエラー吐かれるa
+import { AdMobRewarded } from "expo-ads-admob";
 import * as Print from "expo-print";
 import * as StoreReview from "expo-store-review";
 import * as React from "react";
 import { StyleSheet } from "react-native";
 import { Icon } from "react-native-elements";
 import { AppContextState } from "../../../App";
-import { admobReward, createInterstitial } from "../../../constants/Admob";
+import { admobReward } from "../../../constants/Admob";
 import {
   PRINT_PPD,
   PRINT_TITLE,
@@ -20,7 +21,11 @@ export const SIZE = 48;
 export default function CommonPrintIcon() {
   const [selectedPrinter, setSelectedPrinter] = React.useState<Print.Printer>();
   const appContext = React.useContext(AppContextState);
+  const [isWatchedAdmob, setWatchedAdmob] = React.useState(true);
+  const isInterstitial = true;
+  const isManyBurner = false && !isInterstitial;
 
+  // 印刷処理（and 評価 and 広告）
   const print = async () => {
     const html = createHtml();
     // On iOS/android prints the given html. On web prints the HTML from the current page.
@@ -33,19 +38,60 @@ export default function CommonPrintIcon() {
         // orientation: "landscape",
         orientation: Print.Orientation.landscape,
       });
+      if (isManyBurner) setWatchedAdmob(false);
+      admobReward(isInterstitial);
     } catch (error) {
+      setWatchedAdmob(true);
     } finally {
       try {
         if (await StoreReview.hasAction()) {
-          // you can call StoreReview.requestReview()
           StoreReview.requestReview();
         }
       } catch (error) {
         console.log(error);
       }
-      admobReward();
     }
   };
+
+  const printButtonAction = async () => {
+    // 前回動画を見ていない人は必ず見ること
+    if (!isWatchedAdmob) {
+      admobReward(isInterstitial).then(() => {
+        // 見てない人は印刷できません
+        if (isWatchedAdmob) print();
+        else return;
+      });
+      return;
+    } else {
+      print();
+    }
+  };
+
+  // 初期データ読込処理
+  React.useEffect(() => {
+    AdMobRewarded.addEventListener("rewardedVideoUserDidEarnReward", () => {
+      // 広告最後までみた人が実行できる処理
+      setWatchedAdmob(true);
+    });
+    AdMobRewarded.addEventListener("rewardedVideoDidLoad", () => {
+      // 広告ロードが終わった後
+    });
+    AdMobRewarded.addEventListener("rewardedVideoDidFailToLoad", () => {
+      // 動画読込に失敗
+      setWatchedAdmob(true);
+    });
+    AdMobRewarded.addEventListener("rewardedVideoDidFailToPresent", () => {
+      // 動画報酬に失敗
+      setWatchedAdmob(true);
+    });
+    // AdMobRewarded.addEventListener("rewardedVideoDidPresent", () => {
+    //   // 広告を見る前の処理
+    //   alert("D");
+    // });
+    AdMobRewarded.addEventListener("rewardedVideoDidDismiss", () => {
+      // 広告が終了（中断を含む）
+    });
+  }, []);
 
   const createTr = (
     td: any,
@@ -280,7 +326,7 @@ export default function CommonPrintIcon() {
       name="print"
       type="font-awesome"
       color="#3399FF"
-      onPress={print}
+      onPress={printButtonAction}
     />
   );
 }

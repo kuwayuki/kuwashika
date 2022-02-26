@@ -1,8 +1,8 @@
 import { AdMobRewarded } from "expo-ads-admob";
 
-export const admobReward = async () => {
+export const admobReward = async (isInterstitial: boolean) => {
   try {
-    await createInterstitial();
+    isInterstitial ? await createInterstitial() : await createReward();
     if (await AdMobRewarded.getIsReadyAsync()) {
       await AdMobRewarded.showAdAsync();
     }
