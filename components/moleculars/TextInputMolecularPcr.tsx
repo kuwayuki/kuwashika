@@ -1,5 +1,6 @@
 import * as React from "react";
-import { StyleProp, StyleSheet, TextStyle, View } from "react-native";
+import { Keyboard, StyleProp, StyleSheet, TextStyle, View } from "react-native";
+import { isAndroid } from "../../constants/Util";
 import { PcrTextInputPropsEx } from "./TextInputPcrMolecular";
 import TextInputTeethMolecular, { TEETH_MATH } from "./TextInputTeethMolecular";
 
@@ -80,7 +81,8 @@ export default function TextInputMolecularPcr(props: PcrTextInputPropsEx) {
       {...props}
       // value={props.teethValue?.index.toString() ?? "0"}
       value={undefined}
-      editable={false}
+      editable={isAndroid()}
+      onTouchEndCapture={() => Keyboard.dismiss()}
       onTouchStart={() => onFocus()}
       style={[
         props.style,

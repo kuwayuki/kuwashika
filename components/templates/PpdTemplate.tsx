@@ -2,7 +2,9 @@ import * as React from "react";
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
+  ScrollView,
   StyleSheet,
+  Text,
 } from "react-native";
 import { AppContextState } from "../../App";
 import { TAB_PAGE } from "../../constants/Constant";

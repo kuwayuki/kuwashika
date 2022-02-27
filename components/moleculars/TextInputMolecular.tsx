@@ -1,7 +1,8 @@
 import * as React from "react";
-import { StyleProp, StyleSheet, TextStyle } from "react-native";
+import { Keyboard, StyleProp, StyleSheet, TextStyle } from "react-native";
 import { TextInputPropsEx } from "../../constants/Constant";
-import TextInputTeethMolecular, { TEETH_MATH } from "./TextInputTeethMolecular";
+import { isAndroid } from "../../constants/Util";
+import TextInputTeethMolecular from "./TextInputTeethMolecular";
 
 export default function TextInputMolecular(props: TextInputPropsEx) {
   const onFocus = () => {
@@ -55,7 +56,8 @@ export default function TextInputMolecular(props: TextInputPropsEx) {
   return (
     <TextInputTeethMolecular
       {...props}
-      editable={false}
+      editable={isAndroid()}
+      onTouchEndCapture={() => Keyboard.dismiss()}
       // editable={isIpad()} TODO: 後で対応したい
       onTouchStart={() => onFocus()}
       style={[props.style, getStatusColorStyle()]}

@@ -1,6 +1,18 @@
+import RNDateTimePicker from "@react-native-community/datetimepicker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as React from "react";
-import { Platform, StyleSheet } from "react-native";
+import {
+  Keyboard,
+  NativeSyntheticEvent,
+  Platform,
+  StyleSheet,
+  TextInputFocusEventData,
+} from "react-native";
+import { Button } from "react-native-elements/dist/buttons/Button";
+import { getYMD, isAndroid, parseDate } from "../../constants/Util";
+import { View } from "../organisms/common/Themed";
+import ButtonAtom from "./ButtonAtom";
+import TextInputAtom from "./TextInputAtom";
 
 export type DateProps = {
   date: Date;
@@ -10,37 +22,41 @@ export type DateProps = {
 export default function DatePickerAtom(props: DateProps) {
   const [show, setShow] = React.useState(false);
 
-  /**
-   * データが変更される度に編集データを更新
-   */
   React.useEffect(() => {
     setShow(false);
   }, [props.date]);
 
-  const onChange = (event: any, selectedDate: any) => {
-    const currentDate = selectedDate || props.date;
-    setShow(Platform.OS === "ios");
-    props.setDate(currentDate);
+  const onChange = (event: any, selectedDate: Date) => {
+    if (!selectedDate) return;
+    props.setDate(parseDate(selectedDate));
   };
 
-  function parseDate(input) {
-    try {
-      return new Date(input);
-    } catch (error) {
-      return input;
-    }
-  }
+  const showDatepicker = () => {
+    setShow(true);
+  };
 
   return (
-    <DateTimePicker
-      locale={"ja"}
-      style={styles.base}
-      removeClippedSubviews={true}
-      value={parseDate(props.date)}
-      mode={"date"}
-      display="compact"
-      onChange={onChange}
-    />
+    <View>
+      {isAndroid() && (
+        <ButtonAtom
+          style={{ backgroundColor: "silver", padding: 6 }}
+          onPress={showDatepicker}
+        >
+          {getYMD(props.date)}
+        </ButtonAtom>
+      )}
+      {(show || !isAndroid()) && (
+        <RNDateTimePicker
+          locale={"ja"}
+          style={styles.base}
+          removeClippedSubviews={true}
+          value={parseDate(props.date)}
+          mode={"date"}
+          display={isAndroid() ? "default" : "compact"}
+          onChange={onChange}
+        />
+      )}
+    </View>
   );
 }
 

@@ -1,4 +1,5 @@
 import { AdMobRewarded } from "expo-ads-admob";
+import { isAndroid } from "./Util";
 
 export const admobReward = async (isInterstitial: boolean) => {
   try {
@@ -13,12 +14,20 @@ export const admobReward = async (isInterstitial: boolean) => {
 
 /** リワード */
 export const createReward = async () => {
-  await createAdmob("ca-app-pub-2103807205659646/7101815610");
+  await createAdmob(
+    isAndroid()
+      ? "ca-app-pub-2103807205659646/8775421520"
+      : "ca-app-pub-2103807205659646/7101815610"
+  );
 };
 
 /** インタースティシャル */
 export const createInterstitial = async () => {
-  await createAdmob("ca-app-pub-2103807205659646/3067799275");
+  await createAdmob(
+    isAndroid()
+      ? "ca-app-pub-2103807205659646/8495703005"
+      : "ca-app-pub-2103807205659646/3067799275"
+  );
 };
 
 export const createAdmob = async (unitId: string) => {

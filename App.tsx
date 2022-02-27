@@ -14,6 +14,7 @@ import {
   formatDate,
   INIT_PERSON,
   INIT_SETTING_DATA,
+  isAndroid,
   PersonDataType,
   PersonNumberType,
   PersonType,
@@ -112,7 +113,7 @@ export default function App() {
   React.useEffect(() => {
     (async () => {
       const { granted, canAskAgain } = await getTrackingPermissionsAsync();
-      if (!granted && canAskAgain) {
+      if (!granted && canAskAgain && !isAndroid()) {
         Alert.alert(
           "許可することで広告が最適化",
           "トラッキングを許可することで、マネーフォロー内の広告が適切に最適化され、関連性の高い広告が表示されます。\n\nまた、アプリ作者に広告収入が発生するので、このアプリの改善に使用します。",

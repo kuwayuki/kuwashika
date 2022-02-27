@@ -162,6 +162,7 @@ export const getScrollPosition = (
   index?: number,
   isPrecision?: boolean
 ): any => {
+  const zoomScale = nativeEvent.zoomScale ?? 1;
   const partsTimesX = isPrecision ? 3 : 1;
   const partsTimesY = isPrecision ? 4 : 2;
   const maxColumns = 16 * partsTimesX;
@@ -175,12 +176,11 @@ export const getScrollPosition = (
   const indexPositionY = Math.floor(index / maxColumns);
 
   // 一マス分のサイズ
-  const timesX = (MAX_WIDTH * nativeEvent.zoomScale) / maxColumns;
-  const bornusY = nativeEvent.layoutMeasurement.height * nativeEvent.zoomScale;
+  const timesX = (MAX_WIDTH * zoomScale) / maxColumns;
+  const bornusY = nativeEvent.layoutMeasurement.height * zoomScale;
   // 端っこに行くにつれて差分を徐々に倍率を下げる（真ん中が最大）
   const positionX =
-    timesX * indexPositionX -
-    (nativeEvent.zoomScale >= 1 ? 300 : 100 * nativeEvent.zoomScale);
+    timesX * indexPositionX - (zoomScale >= 1 ? 300 : 100 * zoomScale);
   const positionY =
     (nativeEvent.contentSize.height / partsTimesY) * indexPositionY +
     (indexPositionY < partsTimesY / 2 ? -bornusY : bornusY);
@@ -229,4 +229,33 @@ export const isIpad = (): boolean => {
 export const isIphoneMini = (): boolean => {
   const windowWidth = Dimensions.get("window").width;
   return windowWidth < 750;
+};
+
+export const isAndroid = (): boolean => {
+  return Platform.OS === "android";
+};
+
+export const isIos = (): boolean => {
+  return Platform.OS === "ios";
+};
+
+export const getYMD = (date?: Date): string => {
+  try {
+    const dt = parseDate(date);
+    const y = dt.getFullYear();
+    const m = ("00" + (dt.getMonth() + 1)).slice(-2);
+    const d = ("00" + dt.getDate()).slice(-2);
+    const result = y + "/" + m + "/" + d;
+    return result;
+  } catch (error) {
+    return "";
+  }
+};
+
+export const parseDate = (input: any) => {
+  try {
+    return new Date(input);
+  } catch (error) {
+    return input;
+  }
 };

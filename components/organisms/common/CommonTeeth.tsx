@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View } from "react-native";
+import { Keyboard, View } from "react-native";
 import { AppContextState } from "../../../App";
 import { TEETH_TYPE } from "../../../constants/Constant";
 import TextInputLargeMolecular from "../../moleculars/TextInputLargeMolecular";

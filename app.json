@@ -33,12 +33,14 @@
       "bundleIdentifier": "com.kuwahara.ExpoExample"
     },
     "android": {
-      "package": "ぺリオチャート",
-      "googleMobileAdsAppId": "ca-app-pub-2103807205659646~2121866348",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-2103807205659646~2121866348"
+      },
+      "permissions": []
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

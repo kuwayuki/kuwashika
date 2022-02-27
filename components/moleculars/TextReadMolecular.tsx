@@ -1,12 +1,18 @@
 import * as React from "react";
-import { StyleSheet } from "react-native";
+import { Keyboard, StyleSheet } from "react-native";
 import { teethGroupProps } from "../../constants/Constant";
 import { TEETH_MATH } from "./TextInputTeethMolecular";
 import TextInputMolecular from "./TextInputMolecular";
+import { isAndroid } from "../../constants/Util";
 
 export default function TextReadMolecular(props: teethGroupProps) {
   return (
-    <TextInputMolecular {...props} editable={false} style={styles.input} />
+    <TextInputMolecular
+      {...props}
+      editable={isAndroid()}
+      onTouchEndCapture={() => Keyboard.dismiss()}
+      style={styles.input}
+    />
   );
 }
 
