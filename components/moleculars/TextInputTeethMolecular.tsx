@@ -1,10 +1,19 @@
 import * as React from "react";
 import { StyleSheet, TextInputProps } from "react-native";
+import { isAndroid } from "../../constants/Util";
 import TextInputAtom from "../atoms/TextInputAtom";
 
 export const TEETH_MATH = 40;
 export default function TextInputTeethMolecular(props: TextInputProps) {
-  return <TextInputAtom {...props} style={[styles.base, props.style]} />;
+  return (
+    <TextInputAtom
+      {...props}
+      style={
+        // なぜかAndroidでcenterにするとスクロールができない
+        isAndroid() ? [styles.android, props.style] : [styles.base, props.style]
+      }
+    />
+  );
 }
 
 const styles = StyleSheet.create({
@@ -15,5 +24,11 @@ const styles = StyleSheet.create({
     padding: 0,
     alignItems: "center",
     textAlign: "center",
+  },
+  android: {
+    height: TEETH_MATH,
+    width: TEETH_MATH,
+    borderWidth: 0.3,
+    alignItems: "center",
   },
 });

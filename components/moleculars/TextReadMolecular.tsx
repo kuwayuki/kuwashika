@@ -21,5 +21,6 @@ const styles = StyleSheet.create({
     width: TEETH_MATH * 2,
     height: TEETH_MATH,
     fontWeight: "bold",
+    paddingLeft: isAndroid() ? TEETH_MATH - 4 : undefined,
   },
 });
