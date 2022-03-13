@@ -1,6 +1,5 @@
 import * as React from "react";
 import { StyleSheet, TextInputProps } from "react-native";
-import { isAndroid } from "../../constants/Util";
 import TextInputAtom from "../atoms/TextInputAtom";
 
 export const TEETH_MATH = 36;

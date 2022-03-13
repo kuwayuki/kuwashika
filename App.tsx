@@ -154,6 +154,10 @@ export default function App() {
   React.useEffect(() => {
     const read = async () => {
       if (!isInitRead) return;
+      if (patientNumber == undefined) {
+        setPatientNumber(currentPerson.patientNumber);
+        return;
+      }
 
       // 検査データと内部データを全て変更
       if (patientNumber !== 0 && settingData.persons) {
@@ -174,7 +178,10 @@ export default function App() {
   // 検査データ変更処理
   React.useEffect(() => {
     if (!isInitRead || !currentPerson) return;
-
+    if (inspectionDataNumber == undefined) {
+      setInspectionDataNumber(currentPerson.currentData?.inspectionDataNumber);
+      return;
+    }
     // 検査データと内部データを全て変更
     if (inspectionDataNumber !== 0) {
       const personData = currentPerson.data.find(

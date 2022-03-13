@@ -73,6 +73,7 @@ export default function CommonPatient() {
             onChangeText={(num) =>
               setPatientNumber(num ? Number(num) : undefined)
             }
+            isTextInput={true}
           />
         </TitleAndAction>
         <TitleAndAction title={"患者名称"} style={{ marginBottom: 16 }}>
@@ -80,6 +81,7 @@ export default function CommonPatient() {
             value={patientName}
             onChangeText={setPatientName}
             style={{ fontSize: 18 }}
+            isTextInput={true}
           />
         </TitleAndAction>
       </View>

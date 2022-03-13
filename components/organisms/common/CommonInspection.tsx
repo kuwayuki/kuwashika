@@ -2,6 +2,8 @@ import * as React from "react";
 import { StyleSheet, View } from "react-native";
 import { AppContextDispatch, AppContextState } from "../../../App";
 import { INSPACTION_ITEMS } from "../../../constants/Constant";
+import { isAndroid, isIpad, isIphoneMini } from "../../../constants/Util";
+import DropDownPickerAndroidAtom from "../../atoms/DropDownPickerAndroidAtom";
 import DropDownPickerAtom, {
   DropdownType,
 } from "../../atoms/DropDownPickerAtom";
@@ -76,12 +78,30 @@ export default function CommonInspection() {
           title={"検査データ"}
           style={{ marginBottom: 16, zIndex: 1002 }}
         >
-          <DropDownPickerAtom
-            items={INSPACTION_ITEMS}
-            value={inspectionDataKindNumber}
-            setValue={setInspectionDataKindNumber}
-            width={160}
-          />
+          {isAndroid() ? (
+            <DropDownPickerAndroidAtom
+              items={INSPACTION_ITEMS}
+              value={inspectionDataKindNumber}
+              onValueChange={setInspectionDataKindNumber}
+              width={isIpad() ? 180 : isIphoneMini() ? 120 : 150}
+            >
+              <TextInputAtom
+                isTextInput={true}
+                value={
+                  INSPACTION_ITEMS.find(
+                    (item) => item.value === inspectionDataKindNumber
+                  )?.label
+                }
+              />
+            </DropDownPickerAndroidAtom>
+          ) : (
+            <DropDownPickerAtom
+              items={INSPACTION_ITEMS}
+              value={inspectionDataKindNumber}
+              setValue={setInspectionDataKindNumber}
+              width={160}
+            />
+          )}
         </TitleAndAction>
         {inspectionDataKindNumber === INSPACTION_ITEMS[3].value && (
           <TitleAndAction
@@ -92,6 +112,7 @@ export default function CommonInspection() {
               value={inspectionName}
               onChangeText={setInspectionName}
               style={{ fontSize: 18 }}
+              isTextInput={true}
             />
           </TitleAndAction>
         )}

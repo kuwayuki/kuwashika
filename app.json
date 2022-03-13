@@ -1,11 +1,9 @@
 {
   "expo": {
-    "plugins": [
-      "expo-tracking-transparency"
-    ],
+    "plugins": ["expo-tracking-transparency"],
     "name": "ぺリオチャート",
     "slug": "PerioChart",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "landscape",
     "icon": "./assets/images/icon.png",
     "scheme": "periochart",
@@ -18,9 +16,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "config": {
@@ -38,7 +34,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/icon.png",
+        "foregroundImage": "./assets/images/icon-android.png",
         "backgroundColor": "#ffffff"
       },
       "config": {

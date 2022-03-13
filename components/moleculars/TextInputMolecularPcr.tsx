@@ -35,10 +35,13 @@ export default function TextInputMolecularPcr(props: PcrTextInputPropsEx) {
     }
     let indexStyle: StyleProp<TextStyle>;
     // 偶数の場合は縦長、奇数の場合は横長
-    const topIndex =
+    let topIndex =
       index % 2 === 0 ? 0 : index % 4 === 1 ? -len * 0.5 : len * 0.5;
-    const leftIndex =
-      index % 2 === 0 ? -(Math.pow(-1, index / 2) * len) / 2 : 0;
+    let leftIndex = index % 2 === 0 ? -(Math.pow(-1, index / 2) * len) / 2 : 0;
+    if (isAndroid()) {
+      topIndex += 0.4;
+      leftIndex += 0.4;
+    }
     const color = "transparent";
     // const color =
     //   index % 4 === 0

@@ -1,9 +1,9 @@
 import * as React from "react";
-import { Keyboard, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { teethGroupProps } from "../../constants/Constant";
-import { TEETH_MATH } from "./TextInputTeethMolecular";
-import TextInputMolecular from "./TextInputMolecular";
 import { isAndroid } from "../../constants/Util";
+import TextInputMolecular from "./TextInputMolecular";
+import { TEETH_MATH } from "./TextInputTeethMolecular";
 
 export default function TextReadMolecular(props: teethGroupProps) {
   return (
@@ -16,5 +16,6 @@ const styles = StyleSheet.create({
     width: TEETH_MATH * 2,
     height: TEETH_MATH,
     fontWeight: "bold",
+    marginLeft: isAndroid() ? 0.1 : undefined, // Androidはなぜか設定しないとずれる
   },
 });

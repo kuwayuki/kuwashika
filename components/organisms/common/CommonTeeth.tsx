@@ -1,7 +1,8 @@
 import * as React from "react";
-import { Keyboard, View } from "react-native";
+import { View } from "react-native";
 import { AppContextState } from "../../../App";
 import { TEETH_TYPE } from "../../../constants/Constant";
+import { isAndroid } from "../../../constants/Util";
 import TextInputLargeMolecular from "../../moleculars/TextInputLargeMolecular";
 import TextInputMolecularPcr from "../../moleculars/TextInputMolecularPcr";
 import TextInputSmallMolecular from "../../moleculars/TextInputSmallMolecular";
@@ -100,6 +101,7 @@ export default function CommonTeeth(props: teethProps) {
           maxHeight: len,
           minWidth: len,
           minHeight: len,
+          marginBottom: isAndroid() ? -0.4 : undefined,
           // borderColor: "#696969",
           // backgroundColor: "#696969",
           // borderWidth: focusIndex === 0 ? 2 : 0.5,
