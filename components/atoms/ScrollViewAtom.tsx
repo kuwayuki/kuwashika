@@ -23,7 +23,6 @@ const ScrollViewAtom = React.forwardRef((props: ScrollViewProps, ref: any) => {
 const styles = StyleSheet.create({
   scrollView: {
     maxHeight: "70%",
-    marginHorizontal: 10,
     backgroundColor: "#FFFFEE",
   },
 });

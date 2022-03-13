@@ -1,9 +1,11 @@
 {
   "expo": {
-    "plugins": ["expo-tracking-transparency"],
+    "plugins": [
+      "expo-tracking-transparency"
+    ],
     "name": "ぺリオチャート",
     "slug": "PerioChart",
-    "version": "1.0.4",
+    "version": "1.0.0",
     "orientation": "landscape",
     "icon": "./assets/images/icon.png",
     "scheme": "periochart",
@@ -16,7 +18,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "config": {
@@ -40,7 +44,9 @@
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-2103807205659646~2121866348"
       },
-      "permissions": []
+      "permissions": [],
+      "package": "com.kuwahara.ExpoExample",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

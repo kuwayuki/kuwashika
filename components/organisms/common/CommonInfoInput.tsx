@@ -86,13 +86,14 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
               onValueChange={appContextDispatch.setPatientNumber}
               width={isIpad() ? 180 : isIphoneMini() ? 120 : 150}
             >
-              <TextInputAtom>
-                {
+              <TextInputAtom
+                isTextInput={true}
+                value={
                   appContextState.patients.find(
                     (patient) => patient.value === appContextState.patientNumber
                   )?.label
                 }
-              </TextInputAtom>
+              />
             </DropDownPickerAndroidAtom>
           ) : (
             <DropDownPickerAtom
@@ -111,15 +112,16 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
               onValueChange={appContextDispatch.setInspectionDataNumber}
               width={isIpad() ? 180 : isIphoneMini() ? 120 : 150}
             >
-              <TextInputAtom>
-                {
+              <TextInputAtom
+                isTextInput={true}
+                value={
                   appContextState.inspectionData.find(
                     (inspectionData) =>
                       inspectionData.value ===
                       appContextState.inspectionDataNumber
                   )?.label
                 }
-              </TextInputAtom>
+              />
             </DropDownPickerAndroidAtom>
           ) : (
             <DropDownPickerAtom

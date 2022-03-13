@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Keyboard, StyleProp, StyleSheet, TextStyle } from "react-native";
+import { StyleProp, StyleSheet, TextStyle } from "react-native";
 import { TextInputPropsEx } from "../../constants/Constant";
 import { isAndroid } from "../../constants/Util";
 import TextInputTeethMolecular from "./TextInputTeethMolecular";
@@ -23,7 +23,7 @@ export default function TextInputMolecular(props: TextInputPropsEx) {
       return !props.isHideNum
         ? {
             backgroundColor: "#696969",
-            borderWidth: 0.3,
+            borderWidth: 0.4,
             color: "#696969",
           }
         : { backgroundColor: "#696969" };
@@ -57,7 +57,7 @@ export default function TextInputMolecular(props: TextInputPropsEx) {
     <TextInputTeethMolecular
       {...props}
       editable={isAndroid()}
-      onTouchEndCapture={() => Keyboard.dismiss()}
+      // onTouchEnd={() => Keyboard.dismiss()}
       // editable={isIpad()} TODO: 後で対応したい
       onTouchStart={() => onFocus()}
       style={[props.style, getStatusColorStyle()]}

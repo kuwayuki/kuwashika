@@ -7,12 +7,7 @@ import { isAndroid } from "../../constants/Util";
 
 export default function TextReadMolecular(props: teethGroupProps) {
   return (
-    <TextInputMolecular
-      {...props}
-      editable={isAndroid()}
-      onTouchEndCapture={() => Keyboard.dismiss()}
-      style={styles.input}
-    />
+    <TextInputMolecular {...props} editable={false} style={styles.input} />
   );
 }
 
@@ -21,6 +16,5 @@ const styles = StyleSheet.create({
     width: TEETH_MATH * 2,
     height: TEETH_MATH,
     fontWeight: "bold",
-    paddingLeft: isAndroid() ? TEETH_MATH - 4 : undefined,
   },
 });

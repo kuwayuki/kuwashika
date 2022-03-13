@@ -1,8 +1,16 @@
 import * as React from "react";
-import { StyleSheet, TextInput, TextInputProps } from "react-native";
+import { StyleSheet, Text, TextInput, TextInputProps } from "react-native";
+import { isAndroid } from "../../constants/Util";
 
-export default function TextInputAtom(props: TextInputProps) {
-  return <TextInput {...props} style={[styles.base, props.style]} />;
+type TextInputAtomType = TextInputProps & { isTextInput?: boolean };
+export default function TextInputAtom(props: TextInputAtomType) {
+  return isAndroid() && !props.isTextInput ? (
+    <Text {...props} style={[styles.base, props.style]}>
+      {props.value}
+    </Text>
+  ) : (
+    <TextInput {...props} style={[styles.base, props.style]} />
+  );
 }
 
 const styles = StyleSheet.create({

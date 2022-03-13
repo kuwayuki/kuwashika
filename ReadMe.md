@@ -102,32 +102,12 @@ https://docs-expo-dev.translate.goog/versions/latest/sdk/in-app-purchases/?_x_tr
 
 expo build:ios
 
-Thanks for a lot checking.
-I ansered following.
-
-- Does your app include the login mechanism?
-  No, it is not login mechanism.
-
-- What is the 月額課金 for, and what are the costs?
-  Sorry, it is not finished publish yet.
-  I deleted this function, so please chack again.
-
 OTA update のやりかた
 
 $ expo publish
 
--- Peruo Chart Lite
-Thanks for a lot.
-I answer this following.
+Android:(app-bundle)
+expo start -c // Android はこれをしないとすぐ落ちる？
+expo build:android
 
-> Guideline 2.1 - Information Needed
-> Please provide detailed answers to the following questions in your reply to this message in App Store Connect:
-> > > Would you please explain the difference between this app and 1603040583?
-
-It's different small.
-So this app is created.
-
-> Guideline 4.3 - Design
-> To resolve this issue, please revise your app icon to ensure it is unique and does not duplicate the icon of another app.
-> OK, I changed app icon.
-Please chack it.
+https://play.google.com/console/u/0/developers/6406455804502107775/app/4976193608901960226/tracks/4698928962969272075?tab=testers
