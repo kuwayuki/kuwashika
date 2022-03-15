@@ -109,5 +109,6 @@ $ expo publish
 Android:(app-bundle)
 expo start -c // Android はこれをしないとすぐ落ちる？
 expo build:android
+※versionCode は必ずずらすこと
 
 https://play.google.com/console/u/0/developers/6406455804502107775/app/4976193608901960226/tracks/4698928962969272075?tab=testers

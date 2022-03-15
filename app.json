@@ -42,7 +42,7 @@
       },
       "permissions": [],
       "package": "com.kuwahara.ExpoExample",
-      "versionCode": 1
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
