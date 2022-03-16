@@ -1,9 +1,20 @@
+// import Voice, {
+//   SpeechRecognizedEvent,
+//   SpeechResultsEvent,
+//   SpeechErrorEvent,
+// } from "@react-native-voice/voice";
 import * as FileSystem from "expo-file-system";
 import { FileInfo } from "expo-file-system";
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import {
+  getTrackingPermissionsAsync,
+  requestTrackingPermissionsAsync,
+} from "expo-tracking-transparency";
+import React, { useState } from "react";
+import { Alert, LogBox } from "react-native"; // TODO: 後で消す
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { DropdownType } from "./components/atoms/DropDownPickerAtom";
+import PressableAtom from "./components/atoms/PressableAtom";
 import CommonInspection from "./components/organisms/common/CommonInspection";
 import CommonPatient from "./components/organisms/common/CommonPatient";
 import CommonSetting from "./components/organisms/common/CommonSetting";
@@ -22,11 +33,6 @@ import {
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
-import { Alert, LogBox } from "react-native"; // TODO: 後で消す
-import {
-  getTrackingPermissionsAsync,
-  requestTrackingPermissionsAsync,
-} from "expo-tracking-transparency";
 
 // 全ページの共通項目
 export type appContextState = {
@@ -137,6 +143,52 @@ export default function App() {
   React.useEffect(() => {
     reloadData(true);
   }, []);
+
+  // const [isRecord, setIsRecord] = useState<boolean>(false);
+  // const [text, setText] = useState<string>("");
+  // const _onSpeechStart = () => {
+  //   console.log("onSpeechStart");
+  //   setText("");
+  // };
+  // const _onSpeechEnd = () => {
+  //   console.log("onSpeechEnd");
+  // };
+  // const _onSpeechResults = (event) => {
+  //   console.log("onSpeechResults");
+  //   setText(event.value[0]);
+  // };
+  // const _onSpeechError = (event) => {
+  //   console.log("_onSpeechError");
+  //   console.log(event.error);
+  // };
+
+  // const _onRecordVoice = () => {
+  //   if (isRecord) {
+  //     Voice.stop();
+  //   } else {
+  //     Voice.start("ja-JP");
+  //   }
+  //   setIsRecord(!isRecord);
+  // };
+  // const _onSpeechRecognized = (e: SpeechRecognizedEvent) => {
+  //   console.log("onSpeechRecognized: ", e);
+  //   this.setState({
+  //     recognized: "√",
+  //   });
+  // };
+
+  // React.useEffect(() => {
+  //   // if (Voice.isAvailable) {
+  //   //   Voice.start("ja-JP");
+  //   //   Voice.onSpeechStart = _onSpeechStart;
+  //   //   Voice.onSpeechEnd = _onSpeechEnd;
+  //   //   Voice.onSpeechResults = _onSpeechResults;
+  //   //   Voice.onSpeechError = _onSpeechError;
+  //   //   return () => {
+  //   //     Voice.destroy().then(Voice.removeAllListeners);
+  //   //   };
+  //   // }
+  // }, []);
 
   // データ自動保存
   React.useEffect(() => {
@@ -453,6 +505,8 @@ export default function App() {
           {modalNumber === 2 && <CommonInspection />}
           {modalNumber === 100 && <CommonSetting />}
           <SafeAreaProvider>
+            {/* <PressableAtom onPress={_startRecognizing} value={"キャンセル"} />
+            <PressableAtom onPress={_onRecordVoice} value={"キャンセル"} /> */}
             <Navigation colorScheme={colorScheme} />
             <StatusBar />
           </SafeAreaProvider>

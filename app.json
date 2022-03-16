@@ -1,6 +1,15 @@
 {
   "expo": {
-    "plugins": ["expo-tracking-transparency"],
+    "plugins": [
+      "expo-tracking-transparency",
+      [
+        "@react-native-voice/voice",
+        {
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
+          "speechRecogntionPermission": "Allow $(PRODUCT_NAME) to securely recognize user speech"
+        }
+      ]
+    ],
     "name": "ぺリオチャート",
     "slug": "PerioChart",
     "version": "1.0.1",
@@ -24,6 +33,7 @@
       },
       "infoPlist": {
         "NSUserTrackingUsageDescription": "「許可」を押すと、他社のデータも活用し、よりお客様に適した広告が表示されます。",
+        "NSMicrophoneUsageDescription": "This app uses the microphone to allow users to send orders via voice message.",
         "SKAdNetworkItems": [
           {
             "SKAdNetworkIdentifier": "cstr6suwn9.skadnetwork"

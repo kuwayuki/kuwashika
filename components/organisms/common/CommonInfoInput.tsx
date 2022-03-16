@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StatusBar, StyleSheet, Text, View } from "react-native";
+import { StatusBar, StyleSheet, View } from "react-native";
 import { Icon } from "react-native-elements";
 import { AppContextDispatch, AppContextState } from "../../../App";
 import { TAB_PAGE } from "../../../constants/Constant";

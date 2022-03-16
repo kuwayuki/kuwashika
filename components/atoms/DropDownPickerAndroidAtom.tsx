@@ -1,8 +1,5 @@
 import * as React from "react";
 import { StyleSheet, View } from "react-native";
-import DropDownPicker, {
-  DropDownPickerProps,
-} from "react-native-dropdown-picker";
 import RNPickerSelect, { PickerSelectProps } from "react-native-picker-select";
 import { AppContextState } from "../../App";
 
