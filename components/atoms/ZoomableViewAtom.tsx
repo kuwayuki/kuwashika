@@ -1,4 +1,4 @@
-import ReactNativeZoomableView from "@dudigital/react-native-zoomable-view/src/ReactNativeZoomableView";
+// import ReactNativeZoomableView from "@dudigital/react-native-zoomable-view/src/ReactNativeZoomableView";
 import * as React from "react";
 import { ScrollView, ScrollViewProps, StyleSheet, View } from "react-native";
 
@@ -13,7 +13,8 @@ const ZoomableViewAtom = React.forwardRef(
         showsVerticalScrollIndicator={true}
         decelerationRate={"normal"}
       >
-        <ReactNativeZoomableView
+        {props.children}
+        {/* <ReactNativeZoomableView
           zoomEnabled={true}
           ref={scrollViewRef}
           maxZoom={1.5}
@@ -24,7 +25,7 @@ const ZoomableViewAtom = React.forwardRef(
           style={styles.scrollView}
         >
           {props.children}
-        </ReactNativeZoomableView>
+        </ReactNativeZoomableView> */}
       </ScrollView>
     );
   }
