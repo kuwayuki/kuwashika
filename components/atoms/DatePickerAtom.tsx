@@ -18,6 +18,7 @@ export default function DatePickerAtom(props: DateProps) {
   }, [props.date]);
 
   const onChange = (event: any, selectedDate: Date) => {
+    setShow(false);
     if (!selectedDate) return;
     props.setDate(parseDate(selectedDate));
   };
