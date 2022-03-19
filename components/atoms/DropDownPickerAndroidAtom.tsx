@@ -29,8 +29,9 @@ export default function DropDownPickerAndroidAtom(
         display: "flex",
         // flexDirection: "row",
         alignItems: "center",
-        paddingRight: 16,
-        minWidth: 200,
+        paddingRight: 8,
+        paddingLeft: 4,
+        // minWidth: 200,
       }}
     >
       <RNPickerSelect {...props} onValueChange={onValueChange} />

@@ -49,6 +49,7 @@ export default function TextInputMolecular(props: TextInputPropsEx) {
       });
     if (isDrainage) Object.assign(style, { backgroundColor: "#FFCC00" });
     if (isBleeding) Object.assign(style, { color: "#FF3366" });
+    else Object.assign(style, { color: "#000" });
 
     return style;
   };
