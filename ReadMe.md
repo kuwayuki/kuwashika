@@ -108,12 +108,14 @@ $ expo publish
 
 Android:(app-bundle)
 expo start -c // Android はこれをしないとすぐ落ちる？
-expo build:android --no-publish
+(expo build:android --no-publis)
+expo build:android --type app-bundle
 ※(app-bundle)versionCode は必ずずらすこと
 公開
 https://play.google.com/console/u/0/developers/6406455804502107775/app/4976193608901960226/tracks/production
 
 eas build
+eas build --platform android
 eas submit -p android
 C:\Users\y.kuwahara\Downloads\pc-api-6406455804502107775-480-3b8e8d4ee440.json
 // C:\Users\y.kuwahara\Downloads\dark-pipe-344408-7e22c3e38b51.json

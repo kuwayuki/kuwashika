@@ -6,8 +6,9 @@ import {
 } from "react-native";
 import { AppContextState } from "../../App";
 import { TAB_PAGE } from "../../constants/Constant";
-import { getScrollPosition } from "../../constants/Util";
+import { getScrollPosition, isAndroid } from "../../constants/Util";
 import ScrollViewAtom from "../atoms/ScrollViewAtom";
+import ScrollViewAndroid from "../moleculars/ScrollViewAndroid";
 import CommonInfoInput from "../organisms/common/CommonInfoInput";
 import { View } from "../organisms/common/Themed";
 import PcrAllTeeth from "../organisms/pcr/PcrAllTeeth";
@@ -23,10 +24,12 @@ export default function PcrTemplate() {
     layoutMeasurement: { width: 799, height: 185 },
   } as NativeScrollEvent);
   const scrollViewRef = React.useRef(null);
+  const scrollViewAndroidRef = isAndroid() ? React.useRef(null) : undefined;
 
   // 初期データ読込処理
   React.useEffect(() => {
     scrollViewRef.current.scrollTo({ x: 0, y: 0 });
+    scrollViewAndroidRef?.current?.scrollTo({ x: 0, y: 0 });
   }, [appContext.patientNumber, appContext.inspectionDataNumber]);
 
   // 初期データ読込処理
@@ -47,6 +50,7 @@ export default function PcrTemplate() {
         false
       );
       scrollViewRef.current.scrollTo({ ...position });
+      scrollViewAndroidRef?.current?.scrollTo({ ...position });
     }
   };
 
@@ -66,7 +70,17 @@ export default function PcrTemplate() {
           onScrollEndDrag={() => setScrollFocus(true)}
           zoomScale={1.24}
         >
-          <PcrAllTeeth />
+          {isAndroid() ? (
+            <ScrollViewAndroid
+              ref={scrollViewAndroidRef}
+              onScroll={handleScroll}
+              onScrollEndDrag={handleScroll}
+            >
+              <PcrAllTeeth />
+            </ScrollViewAndroid>
+          ) : (
+            <PcrAllTeeth />
+          )}
         </ScrollViewAtom>
       </View>
       {/* <CommonBottomButton

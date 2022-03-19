@@ -6,8 +6,9 @@ import {
 } from "react-native";
 import { AppContextState } from "../../App";
 import { TAB_PAGE } from "../../constants/Constant";
-import { getScrollPosition } from "../../constants/Util";
+import { getScrollPosition, isAndroid } from "../../constants/Util";
 import ScrollViewAtom from "../atoms/ScrollViewAtom";
+import ScrollViewAndroid from "../moleculars/ScrollViewAndroid";
 import CommonBottomButton from "../organisms/common/CommonBottomButton";
 import CommonInfoInput from "../organisms/common/CommonInfoInput";
 import { View } from "../organisms/common/Themed";
@@ -24,10 +25,12 @@ export default function UpsetTemplate() {
     layoutMeasurement: { width: 799, height: 185 },
   } as NativeScrollEvent);
   const scrollViewRef = React.useRef(null);
+  const scrollViewAndroidRef = isAndroid() ? React.useRef(null) : undefined;
 
   // 初期データ読込処理
   React.useEffect(() => {
     scrollViewRef.current.scrollTo({ x: 0, y: 0 });
+    scrollViewAndroidRef?.current?.scrollTo({ x: 0, y: 0 });
   }, [appContext.patientNumber, appContext.inspectionDataNumber]);
 
   const moveScroll = (index?: number) => {
@@ -37,6 +40,7 @@ export default function UpsetTemplate() {
         index ?? upsetContextState.focusNumber
       );
       scrollViewRef.current.scrollTo({ ...position });
+      scrollViewAndroidRef?.current?.scrollTo({ ...position });
     }
   };
 
@@ -54,7 +58,17 @@ export default function UpsetTemplate() {
           onScroll={handleScroll}
           onScrollEndDrag={handleScroll}
         >
-          <UpsetAllTeeth />
+          {isAndroid() ? (
+            <ScrollViewAndroid
+              ref={scrollViewAndroidRef}
+              onScroll={handleScroll}
+              onScrollEndDrag={handleScroll}
+            >
+              <UpsetAllTeeth />
+            </ScrollViewAndroid>
+          ) : (
+            <UpsetAllTeeth />
+          )}
         </ScrollViewAtom>
       </View>
       {

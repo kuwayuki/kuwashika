@@ -20,7 +20,7 @@ const ScrollViewAtom = React.forwardRef((props: ScrollViewProps, ref: any) => {
       horizontal={false}
       ref={ref}
       persistentScrollbar={true}
-      showsHorizontalScrollIndicator={true}
+      showsVerticalScrollIndicator={true}
       decelerationRate={"normal"}
       maximumZoomScale={3}
       minimumZoomScale={0.5}
@@ -41,7 +41,8 @@ const ScrollViewAtom = React.forwardRef((props: ScrollViewProps, ref: any) => {
       maximumZoomScale={3}
       minimumZoomScale={0.5}
     >
-      {isAndroid() ? androidScroll(props.children) : props.children}
+      {props.children}
+      {/* {isAndroid() ? androidScroll(props.children) : props.children} */}
     </ScrollView>
   );
 });

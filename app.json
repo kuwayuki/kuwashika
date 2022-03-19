@@ -12,7 +12,7 @@
     ],
     "name": "ぺリオチャート",
     "slug": "PerioChart",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "landscape",
     "icon": "./assets/images/icon.png",
     "scheme": "periochart",
@@ -52,7 +52,7 @@
       },
       "permissions": [],
       "package": "com.kuwahara.ExpoExample",
-      "versionCode": 7
+      "versionCode": 8
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
