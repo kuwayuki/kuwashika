@@ -1,13 +1,10 @@
 import dayjs from "dayjs";
 import "dayjs/locale/ja"; // これimportしないとエラー吐かれるa
-import { AdMobRewarded } from "expo-ads-admob";
+// import { AdMobRewarded } from "expo-ads-admob";
 import * as Print from "expo-print";
-import * as StoreReview from "expo-store-review";
 import * as React from "react";
 import { StyleSheet } from "react-native";
 import { Icon } from "react-native-elements";
-import { AppContextState } from "../../../App";
-import { admobReward } from "../../../constants/Admob";
 import {
   PRINT_PPD,
   PRINT_TITLE,
@@ -16,6 +13,8 @@ import {
   TEETH_TYPE,
 } from "../../../constants/Constant";
 import { pcrCalculation, ppdCalculation } from "../../../constants/Util";
+import { AppContextState } from "../../../App";
+import * as StoreReview from "expo-store-review";
 
 export const SIZE = 48;
 export default function CommonPrintIcon() {
@@ -39,7 +38,7 @@ export default function CommonPrintIcon() {
         orientation: Print.Orientation.landscape,
       });
       if (isManyBurner) setWatchedAdmob(false);
-      admobReward(isInterstitial);
+      // admobReward(isInterstitial, true);
     } catch (error) {
       setWatchedAdmob(true);
     } finally {
@@ -54,44 +53,44 @@ export default function CommonPrintIcon() {
   };
 
   const printButtonAction = async () => {
-    // 前回動画を見ていない人は必ず見ること
-    if (!isWatchedAdmob) {
-      admobReward(isInterstitial).then(() => {
-        // 見てない人は印刷できません
-        if (isWatchedAdmob) print();
-        else return;
-      });
-      return;
-    } else {
-      print();
-    }
+    // // 前回動画を見ていない人は必ず見ること
+    // if (!isWatchedAdmob) {
+    //   admobReward(isInterstitial).then(() => {
+    //     // 見てない人は印刷できません
+    //     if (isWatchedAdmob) print();
+    //     else return;
+    //   });
+    //   return;
+    // } else {
+    //   print();
+    // }
   };
 
-  // 初期データ読込処理
-  React.useEffect(() => {
-    AdMobRewarded.addEventListener("rewardedVideoUserDidEarnReward", () => {
-      // 広告最後までみた人が実行できる処理
-      setWatchedAdmob(true);
-    });
-    AdMobRewarded.addEventListener("rewardedVideoDidLoad", () => {
-      // 広告ロードが終わった後
-    });
-    AdMobRewarded.addEventListener("rewardedVideoDidFailToLoad", () => {
-      // 動画読込に失敗
-      setWatchedAdmob(true);
-    });
-    AdMobRewarded.addEventListener("rewardedVideoDidFailToPresent", () => {
-      // 動画報酬に失敗
-      setWatchedAdmob(true);
-    });
-    // AdMobRewarded.addEventListener("rewardedVideoDidPresent", () => {
-    //   // 広告を見る前の処理
-    //   alert("D");
-    // });
-    AdMobRewarded.addEventListener("rewardedVideoDidDismiss", () => {
-      // 広告が終了（中断を含む）
-    });
-  }, []);
+  // // 初期データ読込処理
+  // React.useEffect(() => {
+  //   // AdMobRewarded.addEventListener("rewardedVideoUserDidEarnReward", () => {
+  //   //   // 広告最後までみた人が実行できる処理
+  //   //   setWatchedAdmob(true);
+  //   // });
+  //   // AdMobRewarded.addEventListener("rewardedVideoDidLoad", () => {
+  //   //   // 広告ロードが終わった後
+  //   // });
+  //   // AdMobRewarded.addEventListener("rewardedVideoDidFailToLoad", () => {
+  //   //   // 動画読込に失敗
+  //   //   setWatchedAdmob(true);
+  //   // });
+  //   // AdMobRewarded.addEventListener("rewardedVideoDidFailToPresent", () => {
+  //   //   // 動画報酬に失敗
+  //   //   setWatchedAdmob(true);
+  //   // });
+  //   // // AdMobRewarded.addEventListener("rewardedVideoDidPresent", () => {
+  //   // //   // 広告を見る前の処理
+  //   // //   alert("D");
+  //   // // });
+  //   // AdMobRewarded.addEventListener("rewardedVideoDidDismiss", () => {
+  //   //   // 広告が終了（中断を含む）
+  //   });
+  // }, []);
 
   const createTr = (
     td: any,
@@ -126,7 +125,9 @@ export default function CommonPrintIcon() {
     let styles = `border: 1px solid #595959; font-size: 8pt; width: ${SIZE}px; height: ${heightSize}px;`;
     const value = typeof teeth !== "string" ? teeth.value ?? "" : teeth;
     if (typeof teeth !== "string") {
-      const isMT = appContext.mtTeethNums?.includes(teeth.teethGroupIndex);
+      const isMT = appContext?.mtTeethNums
+        ? appContext.mtTeethNums?.includes(teeth.teethGroupIndex)
+        : true;
 
       if (isMT) {
         styles = `color:#696969; background-color:#696969; border:0px; width: ${SIZE}px; height: ${heightSize}px;`;
@@ -147,7 +148,9 @@ export default function CommonPrintIcon() {
   };
 
   const createTdPcr = (teeths: TEETH_TYPE[], isPrecision = false) => {
-    const isMT = appContext.mtTeethNums?.includes(teeths[0].teethGroupIndex);
+    const isMT = appContext?.mtTeethNums
+      ? appContext.mtTeethNums?.includes(teeths[0].teethGroupIndex)
+      : true;
     let styles = `border: 1px solid #595959; width: ${SIZE}px; height: ${SIZE}px; `;
     let divRhombusAll = "";
     if (isMT) {
@@ -326,7 +329,8 @@ export default function CommonPrintIcon() {
       name="print"
       type="font-awesome"
       color="#3399FF"
-      onPress={printButtonAction}
+      onPress={print}
+      containerStyle={{ margin: 0, padding: 0 }}
     />
   );
 }

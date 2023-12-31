@@ -252,41 +252,31 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
         justifyContent: "space-between",
       }}
     >
-      {buttonName.map((button) =>
-        button.value < 100 ? (
-          // 通常ボタン
-          <ButtonAtom
-            style={
-              button.color !== undefined
-                ? { backgroundColor: button.color }
-                : undefined
-            }
-            disabled={button.isDisabled}
-            onPress={() => buttonAction(button)}
-          >
-            {button.display ?? button.value}
-          </ButtonAtom>
-        ) : (
-          // 押しっぱなしボタン
-          <ButtonPressedMolecular
-            style={[
-              button.color !== undefined
-                ? { backgroundColor: button.color }
-                : undefined,
-              appContext.pressedValue === button.value
-                ? {
-                    backgroundColor: button.color,
-                    borderWidth: 2,
-                  }
-                : undefined,
-            ]}
-            disabled={button.isDisabled}
-            onPress={() => buttonAction(button)}
-          >
-            {button.display ?? button.value}
-          </ButtonPressedMolecular>
-        )
-      )}
+      {buttonName.map((button) => (
+        // 通常ボタン
+        <ButtonAtom
+          style={[
+            {
+              backgroundColor:
+                button.color !== undefined ? button.color : "white",
+              height: 46, // 固定の高さ
+              width: "auto", // 幅は内容に合わせる
+              padding: 15, // 通常のパディング
+            },
+            appContext.pressedValue === button.value
+              ? {
+                  borderWidth: 3,
+                  borderColor: "black",
+                  padding: 13, // borderWidthの分だけパディングを減らす
+                }
+              : null,
+          ]}
+          disabled={button.isDisabled}
+          onPress={() => buttonAction(button)}
+        >
+          {button.display ?? button.value}
+        </ButtonAtom>
+      ))}
     </View>
   );
 }

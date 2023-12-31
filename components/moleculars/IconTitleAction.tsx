@@ -4,7 +4,7 @@ import TextAtom from "../atoms/TextAtom";
 
 type TitleAndActionProps = TextProps & {
   title?: string;
-  icon?: React.ReactFragment;
+  icon?: React.ReactElement;
 };
 
 export default function IconTitleAction(props: TitleAndActionProps) {

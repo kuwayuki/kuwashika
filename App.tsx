@@ -1,8 +1,3 @@
-// import Voice, {
-//   SpeechRecognizedEvent,
-//   SpeechResultsEvent,
-//   SpeechErrorEvent,
-// } from "@react-native-voice/voice";
 import * as FileSystem from "expo-file-system";
 import { FileInfo } from "expo-file-system";
 import { StatusBar } from "expo-status-bar";
@@ -10,11 +5,10 @@ import {
   getTrackingPermissionsAsync,
   requestTrackingPermissionsAsync,
 } from "expo-tracking-transparency";
-import React, { useState } from "react";
 import { Alert, LogBox } from "react-native"; // TODO: 後で消す
+import React, { useCallback, useMemo } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { DropdownType } from "./components/atoms/DropDownPickerAtom";
-import PressableAtom from "./components/atoms/PressableAtom";
 import CommonInspection from "./components/organisms/common/CommonInspection";
 import CommonPatient from "./components/organisms/common/CommonPatient";
 import CommonSetting from "./components/organisms/common/CommonSetting";
@@ -459,27 +453,51 @@ export default function App() {
     );
   };
 
+  const appContextStateValue = useMemo(
+    () => ({
+      isReload,
+      isInitRead,
+      settingData,
+      currentPerson,
+      modalNumber,
+      inspectionDate,
+      patients,
+      patientNumber,
+      inspectionDataNumber,
+      inspectionData,
+      isPrecision,
+      mtTeethNums,
+      pressedValue,
+    }),
+    [
+      isReload,
+      isInitRead,
+      settingData,
+      currentPerson,
+      modalNumber,
+      inspectionDate,
+      patients,
+      patientNumber,
+      inspectionDataNumber,
+      inspectionData,
+      isPrecision,
+      mtTeethNums,
+      pressedValue,
+    ]
+  );
+
+  const setMtTeethNumsMemoized = useCallback(
+    (newValue: number[]) => {
+      setMtTeethNums(newValue);
+    },
+    [setMtTeethNums]
+  );
+
   if (!isLoadingComplete) {
     return null;
   } else {
     return (
-      <AppContextState.Provider
-        value={{
-          isReload,
-          isInitRead,
-          settingData,
-          currentPerson,
-          modalNumber,
-          inspectionDate,
-          patients,
-          patientNumber,
-          inspectionDataNumber,
-          inspectionData,
-          isPrecision,
-          mtTeethNums,
-          pressedValue,
-        }}
-      >
+      <AppContextState.Provider value={appContextStateValue}>
         <AppContextDispatch.Provider
           value={{
             setReload,
@@ -496,7 +514,7 @@ export default function App() {
             setPrecision,
             registSettingData,
             registPatientData,
-            setMtTeethNums,
+            setMtTeethNums: setMtTeethNumsMemoized,
             setPressedValue,
             deletePerson,
           }}

@@ -145,14 +145,17 @@ export default function PpdPage({
     navigation.navigate("TabUpset");
   };
 
+  const ppdContextStateValue = React.useMemo(
+    () => ({
+      focusNumber,
+      teethValues,
+      teethValuesSimple,
+    }),
+    [focusNumber, teethValues, teethValuesSimple]
+  );
+
   return (
-    <PpdContextState.Provider
-      value={{
-        focusNumber,
-        teethValues,
-        teethValuesSimple,
-      }}
-    >
+    <PpdContextState.Provider value={ppdContextStateValue}>
       <PpdContextDispatch.Provider
         value={{
           setFocusNumber,

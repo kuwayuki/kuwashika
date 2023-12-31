@@ -1,24 +1,15 @@
 {
   "expo": {
-    "plugins": [
-      "expo-tracking-transparency",
-      [
-        "@react-native-voice/voice",
-        {
-          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
-          "speechRecogntionPermission": "Allow $(PRODUCT_NAME) to securely recognize user speech"
-        }
-      ]
-    ],
+    "plugins": ["expo-tracking-transparency"],
     "name": "ぺリオチャート",
     "slug": "PerioChart",
-    "version": "1.0.3",
+    "version": "1.0.5",
     "orientation": "landscape",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/file-000.png",
     "scheme": "periochart",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/file-width.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -27,6 +18,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
+      "buildNumber": "2",
       "supportsTablet": true,
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-2103807205659646~3739470895"
@@ -55,8 +47,19 @@
       "versionCode": 8
     },
     "web": {
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/file-000.png"
     },
-    "description": ""
+    "description": "",
+    "extra": {
+      "eas": {
+        "projectId": "8b7207bb-0b5f-47d3-b77f-4241135e1365"
+      }
+    }
+  },
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-xxxxxxxx~xxxxxxxx",
+    "ios_app_id": "ca-app-pub-2103807205659646~3739470895",
+    "delay_app_measurement_init": true,
+    "user_tracking_usage_description": "「許可」を押すと、他社のデータも活用し、よりお客様に適した広告が表示されます。"
   }
 }

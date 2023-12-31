@@ -1,6 +1,5 @@
 import * as React from "react";
-import { Keyboard, StyleProp, StyleSheet, TextStyle, View } from "react-native";
-import { isAndroid } from "../../constants/Util";
+import { StyleProp, StyleSheet, TextStyle, View } from "react-native";
 import { PcrTextInputPropsEx } from "./TextInputPcrMolecular";
 import TextInputTeethMolecular, { TEETH_MATH } from "./TextInputTeethMolecular";
 
@@ -14,13 +13,12 @@ export default function TextInputMolecularPcr(props: PcrTextInputPropsEx) {
     props.onTouchStart;
     if (props.setFocusNumber) props.setFocusNumber(props.teethValue?.index);
   };
-  const isFocus = props.pcrIndex === props.focusNumber;
-  const isInputed = Number(props.value) > 0;
-  const isMT = props.mtTeethNums?.includes(props.teethGroupIndex);
 
   const getStatusColorStyle = (index: number): StyleProp<TextStyle> => {
     const len = TEETH_MATH * 2;
 
+    const isInputed = Number(props.value) > 0;
+    const isMT = props.mtTeethNums?.includes(props.teethGroupIndex);
     // 欠損時の色
     if (isMT) {
       return !props.isHideNum
@@ -38,19 +36,7 @@ export default function TextInputMolecularPcr(props: PcrTextInputPropsEx) {
     let topIndex =
       index % 2 === 0 ? 0 : index % 4 === 1 ? -len * 0.5 : len * 0.5;
     let leftIndex = index % 2 === 0 ? -(Math.pow(-1, index / 2) * len) / 2 : 0;
-    if (isAndroid()) {
-      topIndex += 0.4;
-      leftIndex += 0.4;
-    }
     const color = "transparent";
-    // const color =
-    //   index % 4 === 0
-    //     ? "red"
-    //     : index % 4 === 1
-    //     ? "green"
-    //     : index % 4 === 2
-    //     ? "blue"
-    //     : "pink";
     indexStyle = {
       position: "absolute",
       transform: [{ rotate: "-45deg" }, { scale: 0.70710678118 }],
@@ -71,21 +57,14 @@ export default function TextInputMolecularPcr(props: PcrTextInputPropsEx) {
       // backgroundColor: color,
       // TODO: 後で治す,
     } as StyleProp<TextStyle>;
-    if (isFocus) {
-      Object.assign(style, {
-        borderWidth: 2,
-      });
-    }
     return style;
   };
 
   return (
     <TextInputTeethMolecular
       {...props}
-      // value={props.teethValue?.index.toString() ?? "0"}
       value={undefined}
-      editable={isAndroid()}
-      onTouchEndCapture={() => Keyboard.dismiss()}
+      editable={false}
       onTouchStart={() => onFocus()}
       style={[
         props.style,

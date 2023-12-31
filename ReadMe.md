@@ -100,31 +100,27 @@ https://docs-expo-dev.translate.goog/versions/latest/sdk/in-app-purchases/?_x_tr
 12.9 インチ (iPad Pro (第 4 世代、第 3 世代))
 12.9 インチ (iPad Pro (第 2 世代))
 
-expo build:ios --no-publish
+expo build:ios
+
+Thanks for a lot checking.
+I ansered following.
+
+- Does your app include the login mechanism?
+  No, it is not login mechanism.
+
+- What is the 月額課金 for, and what are the costs?
+  Sorry, it is not finished publish yet.
+  I deleted this function, so please chack again.
 
 OTA update のやりかた
 
 $ expo publish
 
-Android:(app-bundle)
-expo start -c // Android はこれをしないとすぐ落ちる？
-(expo build:android --no-publis)
-expo build:android --type app-bundle
-※(app-bundle)versionCode は必ずずらすこと
-公開
-https://play.google.com/console/u/0/developers/6406455804502107775/app/4976193608901960226/tracks/production
+eas build --profile development-simulator --platform ios
 
-eas build
-eas build --platform android
-eas submit -p android
-C:\Users\y.kuwahara\Downloads\pc-api-6406455804502107775-480-3b8e8d4ee440.json
-// C:\Users\y.kuwahara\Downloads\dark-pipe-344408-7e22c3e38b51.json
+% 勇樹の iphone にだけ適用。
+eas build --profile development --platform ios
+npx expo start --dev-client
 
-https://play.google.com/console/u/0/developers/6406455804502107775/app/4976193608901960226/tracks/4698928962969272075?tab=testers
-
-!!!!eas!!!!
-https://docs-expo-dev.translate.goog/development/getting-started/?_x_tr_sl=en&_x_tr_tl=ja&_x_tr_hl=ja&_x_tr_pto=sc
-
-https://romannurik.github.io/AndroidAssetStudio/icons-launcher.html#foreground.type=image&foreground.space.trim=1&foreground.space.pad=0.1&foreColor=rgba(96%2C%20125%2C%20139%2C%200)&backColor=rgb(255%2C%20255%2C%20255)&crop=0&backgroundShape=circle&effects=none&name=ic_launcher
-
-eas
+% "ios"."buildNumber": "2"はずれるようにする必要がある。
+eas build -p ios

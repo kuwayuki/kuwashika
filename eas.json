@@ -1,6 +1,6 @@
 {
   "cli": {
-    "version": ">= 0.48.0"
+    "version": ">= 5.9.3"
   },
   "build": {
     "development": {
@@ -10,14 +10,16 @@
     "preview": {
       "distribution": "internal"
     },
-    "production": {}
-  },
-  "submit": {
-    "production": {
-      "android": {
-        "serviceAccountKeyPath": "./assets/api/pc-api-6406455804502107775-480-3b8e8d4ee440.json",
-        "track": "internal"
+    "production": {},
+    "development-simulator": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {
+        "simulator": true
       }
     }
+  },
+  "submit": {
+    "production": {}
   }
 }

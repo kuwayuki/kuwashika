@@ -1,39 +1,39 @@
-import { AdMobRewarded } from "expo-ads-admob";
-import { isAndroid } from "./Util";
+import { useEffect, useState } from "react";
+import {
+  AdEventType,
+  InterstitialAd,
+  TestIds,
+} from "react-native-google-mobile-ads";
 
-export const admobReward = async (isInterstitial: boolean) => {
-  try {
-    isInterstitial ? await createInterstitial() : await createReward();
-    if (await AdMobRewarded.getIsReadyAsync()) {
-      await AdMobRewarded.showAdAsync();
-    }
-  } catch (error) {
-    console.log(error);
+const adUnitId = __DEV__
+  ? TestIds.INTERSTITIAL
+  : "ca-app-pub-2103807205659646~3739470895";
+
+const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
+  keywords: ["fashion", "clothing"],
+});
+
+export const admobReward = async () => {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = interstitial.addAdEventListener(
+      AdEventType.LOADED,
+      () => {
+        setLoaded(true);
+      }
+    );
+
+    interstitial.load();
+    return unsubscribe;
+  }, []);
+
+  if (!loaded) {
+    return null;
   }
-};
 
-/** リワード */
-export const createReward = async () => {
-  await createAdmob(
-    isAndroid()
-      ? "ca-app-pub-2103807205659646/8775421520"
-      : "ca-app-pub-2103807205659646/7101815610"
-  );
-};
-
-/** インタースティシャル */
-export const createInterstitial = async () => {
-  await createAdmob(
-    isAndroid()
-      ? "ca-app-pub-2103807205659646/8495703005"
-      : "ca-app-pub-2103807205659646/3067799275"
-  );
-};
-
-export const createAdmob = async (unitId: string) => {
   try {
-    await AdMobRewarded.setAdUnitID(unitId);
-    await AdMobRewarded.requestAdAsync();
+    if (interstitial.loaded) await interstitial.show();
   } catch (error) {
     console.log(error);
   }

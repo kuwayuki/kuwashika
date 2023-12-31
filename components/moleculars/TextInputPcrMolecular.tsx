@@ -22,9 +22,6 @@ export default function TextInputPcrMolecular(props: PcrTextInputPropsEx) {
         maxHeight: len,
         minWidth: len,
         minHeight: len,
-        // borderColor: "#696969",
-        // backgroundColor: "#696969",
-        borderWidth: isFocus ? 2 : 0.5,
       }}
     >
       {MATH_4.map((math) => (

@@ -93,6 +93,7 @@ export default function CommonTeeth(props: teethProps) {
       props.teethValues[indexInit + 2]?.index,
       props.teethValues[indexInit + 3]?.index,
     ].includes(props.focusNumber);
+    const borderWidth = isFocus ? 1.5 : 0.5;
     return (
       <View
         style={{
@@ -106,11 +107,7 @@ export default function CommonTeeth(props: teethProps) {
           // backgroundColor: "#696969",
           // borderWidth: focusIndex === 0 ? 2 : 0.5,
           borderStyle: "solid",
-          borderWidth: isFocus ? 2 : 0.5,
-          // borderLeftWidth: focusIndex === 0 ? 2 : 0.5,
-          // borderTopWidth: focusIndex === 0 ? 2 : 0.5,
-          // borderRightWidth: focusIndex === 0 ? 2 : 0.5,
-          // borderBottomWidth: focusIndex === 0 ? 2 : 0.5,
+          borderWidth: borderWidth,
         }}
       >
         {PCR_MATH_4.map((math) => teeth(math))}

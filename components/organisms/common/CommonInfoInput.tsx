@@ -10,7 +10,6 @@ import {
   PersonDataType,
 } from "../../../constants/Util";
 import DatePickerAtom from "../../atoms/DatePickerAtom";
-import DropDownPickerAndroidAtom from "../../atoms/DropDownPickerAndroidAtom";
 import DropDownPickerAtom from "../../atoms/DropDownPickerAtom";
 import SwitchAtom from "../../atoms/SwitchAtom";
 import TextInputAtom from "../../atoms/TextInputAtom";
@@ -79,58 +78,20 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
           />
         </TitleAndAction>
         <TitleAndAction title={isIphoneMini() ? "" : "患者"}>
-          {isAndroid() ? (
-            <DropDownPickerAndroidAtom
-              items={appContextState.patients}
-              value={appContextState.patientNumber}
-              onValueChange={appContextDispatch.setPatientNumber}
-              width={isIpad() ? 180 : isIphoneMini() ? 120 : 150}
-            >
-              <TextInputAtom
-                isTextInput={true}
-                value={
-                  appContextState.patients.find(
-                    (patient) => patient.value === appContextState.patientNumber
-                  )?.label
-                }
-              />
-            </DropDownPickerAndroidAtom>
-          ) : (
-            <DropDownPickerAtom
-              items={appContextState.patients}
-              value={appContextState.patientNumber}
-              setValue={appContextDispatch.setPatientNumber}
-              width={isIpad() ? 180 : isIphoneMini() ? 120 : 150}
-            />
-          )}
+          <DropDownPickerAtom
+            items={appContextState.patients}
+            value={appContextState.patientNumber}
+            setValue={appContextDispatch.setPatientNumber}
+            width={isIpad() ? 180 : isIphoneMini() ? 120 : 150}
+          />
         </TitleAndAction>
         <TitleAndAction title={isIphoneMini() ? "" : "データ"}>
-          {isAndroid() ? (
-            <DropDownPickerAndroidAtom
-              items={appContextState.inspectionData}
-              value={appContextState.inspectionDataNumber}
-              onValueChange={appContextDispatch.setInspectionDataNumber}
-              width={isIpad() ? 180 : isIphoneMini() ? 120 : 150}
-            >
-              <TextInputAtom
-                isTextInput={true}
-                value={
-                  appContextState.inspectionData.find(
-                    (inspectionData) =>
-                      inspectionData.value ===
-                      appContextState.inspectionDataNumber
-                  )?.label
-                }
-              />
-            </DropDownPickerAndroidAtom>
-          ) : (
-            <DropDownPickerAtom
-              items={appContextState.inspectionData}
-              value={appContextState.inspectionDataNumber}
-              setValue={appContextDispatch.setInspectionDataNumber}
-              width={isIpad() ? 180 : isIphoneMini() ? 160 : 160}
-            />
-          )}
+          <DropDownPickerAtom
+            items={appContextState.inspectionData}
+            value={appContextState.inspectionDataNumber}
+            setValue={appContextDispatch.setInspectionDataNumber}
+            width={isIpad() ? 180 : isIphoneMini() ? 160 : 160}
+          />
         </TitleAndAction>
         <TitleAndAction
           title={appContextState.isPrecision ? "精密" : "基本"}
@@ -158,6 +119,7 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
           type="font-awesome"
           color="#999999"
           onPress={() => appContextDispatch.setModalNumber(100)}
+          containerStyle={{ margin: 0, padding: 0 }}
           // onPress={() => appContext.setRegistDatabase(undefined)}
           // onPress={() => appContext.setRegistDatabase(appContext.currentPerson)}
         />
@@ -165,10 +127,3 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
     </View>
   );
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: StatusBar.currentHeight,
-    marginHorizontal: 16,
-  },
-});
