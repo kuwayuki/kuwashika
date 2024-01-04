@@ -13,13 +13,15 @@ import {
   TEETH_TYPE,
 } from "../../../constants/Constant";
 import { pcrCalculation, ppdCalculation } from "../../../constants/Util";
-import { AppContextState } from "../../../App";
+import { AppContextDispatch, AppContextState } from "../../../App";
 import * as StoreReview from "expo-store-review";
 
 export const SIZE = 48;
+
 export default function CommonPrintIcon() {
   const [selectedPrinter, setSelectedPrinter] = React.useState<Print.Printer>();
   const appContext = React.useContext(AppContextState);
+  const appContextDispatch = React.useContext(AppContextDispatch);
   const [isWatchedAdmob, setWatchedAdmob] = React.useState(true);
   const isInterstitial = true;
   const isManyBurner = false && !isInterstitial;
@@ -38,7 +40,6 @@ export default function CommonPrintIcon() {
         orientation: Print.Orientation.landscape,
       });
       if (isManyBurner) setWatchedAdmob(false);
-      // admobReward(isInterstitial, true);
     } catch (error) {
       setWatchedAdmob(true);
     } finally {
@@ -49,48 +50,9 @@ export default function CommonPrintIcon() {
       } catch (error) {
         console.log(error);
       }
+      appContextDispatch.setAdmobShow(true);
     }
   };
-
-  const printButtonAction = async () => {
-    // // 前回動画を見ていない人は必ず見ること
-    // if (!isWatchedAdmob) {
-    //   admobReward(isInterstitial).then(() => {
-    //     // 見てない人は印刷できません
-    //     if (isWatchedAdmob) print();
-    //     else return;
-    //   });
-    //   return;
-    // } else {
-    //   print();
-    // }
-  };
-
-  // // 初期データ読込処理
-  // React.useEffect(() => {
-  //   // AdMobRewarded.addEventListener("rewardedVideoUserDidEarnReward", () => {
-  //   //   // 広告最後までみた人が実行できる処理
-  //   //   setWatchedAdmob(true);
-  //   // });
-  //   // AdMobRewarded.addEventListener("rewardedVideoDidLoad", () => {
-  //   //   // 広告ロードが終わった後
-  //   // });
-  //   // AdMobRewarded.addEventListener("rewardedVideoDidFailToLoad", () => {
-  //   //   // 動画読込に失敗
-  //   //   setWatchedAdmob(true);
-  //   // });
-  //   // AdMobRewarded.addEventListener("rewardedVideoDidFailToPresent", () => {
-  //   //   // 動画報酬に失敗
-  //   //   setWatchedAdmob(true);
-  //   // });
-  //   // // AdMobRewarded.addEventListener("rewardedVideoDidPresent", () => {
-  //   // //   // 広告を見る前の処理
-  //   // //   alert("D");
-  //   // // });
-  //   // AdMobRewarded.addEventListener("rewardedVideoDidDismiss", () => {
-  //   //   // 広告が終了（中断を含む）
-  //   });
-  // }, []);
 
   const createTr = (
     td: any,

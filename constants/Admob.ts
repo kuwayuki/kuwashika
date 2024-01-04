@@ -1,15 +1,9 @@
 import { useEffect, useState } from "react";
-import {
-  AdEventType,
-  InterstitialAd,
-  TestIds,
-} from "react-native-google-mobile-ads";
+import { AdEventType, RewardedAd } from "react-native-google-mobile-ads";
 
-const adUnitId = __DEV__
-  ? TestIds.INTERSTITIAL
-  : "ca-app-pub-2103807205659646~3739470895";
+const adUnitId = "ca-app-pub-2103807205659646/7101815610";
 
-const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
+const admob = RewardedAd.createForAdRequest(adUnitId, {
   keywords: ["fashion", "clothing"],
 });
 
@@ -17,14 +11,11 @@ export const admobReward = async () => {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = interstitial.addAdEventListener(
-      AdEventType.LOADED,
-      () => {
-        setLoaded(true);
-      }
-    );
+    const unsubscribe = admob.addAdEventListener(AdEventType.LOADED, () => {
+      setLoaded(true);
+    });
 
-    interstitial.load();
+    admob.load();
     return unsubscribe;
   }, []);
 
@@ -33,8 +24,8 @@ export const admobReward = async () => {
   }
 
   try {
-    if (interstitial.loaded) await interstitial.show();
+    if (admob.loaded) await admob.show();
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };

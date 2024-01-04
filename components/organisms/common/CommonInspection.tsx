@@ -2,7 +2,6 @@ import * as React from "react";
 import { StyleSheet, View } from "react-native";
 import { AppContextDispatch, AppContextState } from "../../../App";
 import { INSPACTION_ITEMS } from "../../../constants/Constant";
-import { isAndroid, isIpad, isIphoneMini } from "../../../constants/Util";
 import DropDownPickerAtom, {
   DropdownType,
 } from "../../atoms/DropDownPickerAtom";

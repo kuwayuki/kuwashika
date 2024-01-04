@@ -219,7 +219,7 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
         props.focusNumber,
         {
           ...props.teethValues[props.focusNumber],
-          status: undefined,
+          status: null,
           value: button.value,
         } as TEETH_TYPE,
         appContext.isPrecision

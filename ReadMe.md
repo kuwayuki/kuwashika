@@ -118,9 +118,16 @@ $ expo publish
 
 eas build --profile development-simulator --platform ios
 
-% 勇樹の iphone にだけ適用。
+% ビルドした状態でのみテストしたいとき(Purchase や Google-Admob)
+npm install --dev-client
 eas build --profile development --platform ios
+% QR コードを読み取る
 npx expo start --dev-client
+% Expo で起動すると、上でインストールしたペリオチャートが起動する。
+
+% npx expo start --dev-client 以外は起動できなくなるので、アンインストール時は下記を行う
+npm uninstall --dev-client
+npm run start
 
 % "ios"."buildNumber": "2"はずれるようにする必要がある。
 eas build -p ios

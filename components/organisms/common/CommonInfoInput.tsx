@@ -12,9 +12,10 @@ import {
 import DatePickerAtom from "../../atoms/DatePickerAtom";
 import DropDownPickerAtom from "../../atoms/DropDownPickerAtom";
 import SwitchAtom from "../../atoms/SwitchAtom";
-import TextInputAtom from "../../atoms/TextInputAtom";
 import TitleAndAction from "../../moleculars/TitleAndAction";
 import CommonPrintIcon from "./CommonPrintIcon";
+import { AdmobInter } from "../../../constants/AdmobInter";
+import { AdmobRewarded } from "../../../constants/AdmobRewardedAd";
 
 type CommonInfoInputPropsType = {
   tabPage: TAB_PAGE;
@@ -112,6 +113,13 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
           justifyContent: "flex-end",
         }}
       >
+        {/* TODO: 後で治す */}
+        {appContextState.isPremium && (
+          <AdmobInter
+            isShow={appContextState.isAdmobShow}
+            setShow={appContextDispatch.setAdmobShow}
+          />
+        )}
         <CommonPrintIcon />
         <Icon
           raised
@@ -120,9 +128,11 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
           color="#999999"
           onPress={() => appContextDispatch.setModalNumber(100)}
           containerStyle={{ margin: 0, padding: 0 }}
-          // onPress={() => appContext.setRegistDatabase(undefined)}
-          // onPress={() => appContext.setRegistDatabase(appContext.currentPerson)}
         />
+        {/* <BannerAd
+          unitId={"ca-app-pub-2103807205659646/6311766057"}
+          size={BannerAdSize.BANNER}
+        /> */}
       </View>
     </View>
   );

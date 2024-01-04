@@ -1,9 +1,7 @@
 import * as React from "react";
 import { StyleSheet, View } from "react-native";
 import { AppContextDispatch, AppContextState } from "../../../App";
-import { admobReward } from "../../../constants/Admob";
 import { INIT_PERSON, PersonType } from "../../../constants/Util";
-import { DropdownType } from "../../atoms/DropDownPickerAtom";
 import ModalAtom from "../../atoms/ModalAtom";
 import PressableAtom from "../../atoms/PressableAtom";
 import TextInputAtom from "../../atoms/TextInputAtom";
@@ -26,13 +24,13 @@ export default function CommonPatient() {
       return;
     }
 
-    // 患者番号の追加
-    const temp: DropdownType[] = [...appContextState.patients];
-    temp.push({
-      label: patientNumber.toString() + ":" + (patientName ?? ""),
-      value: patientNumber,
-    });
-    appContextDispatch.setPatients(temp);
+    // // 患者番号の追加
+    // const temp: DropdownType[] = [...appContextState.patients];
+    // temp.push({
+    //   label: patientNumber.toString() + ":" + (patientName ?? ""),
+    //   value: patientNumber,
+    // });
+    // appContextDispatch.setPatients(temp);
     appContextDispatch.setPatientNumber(patientNumber);
 
     // 全体データの更新

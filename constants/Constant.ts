@@ -4,6 +4,15 @@ import { DropdownType } from "../components/atoms/DropDownPickerAtom";
 export const SETTING_FILE = "setting.json";
 export const DATA_FILE = "_data.json";
 
+export const firebaseConfig = {
+  apiKey: "AIzaSyDOZ-bkbFqUfwsPVCGaCqIlnObTRdt5wgM",
+  authDomain: "peruo-131ec.firebaseapp.com",
+  projectId: "peruo-131ec",
+  storageBucket: "peruo-131ec.appspot.com",
+  messagingSenderId: "647021308669",
+  appId: "1:647021308669:web:592e5439864ef273ef6c94",
+};
+
 export enum TAB_PAGE {
   PPD,
   UPSET,

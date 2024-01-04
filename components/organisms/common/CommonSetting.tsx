@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Alert, ScrollView, StyleSheet, View } from "react-native";
+import { Alert, Platform, ScrollView, StyleSheet, View } from "react-native";
 import { AppContextDispatch, AppContextState } from "../../../App";
 import { PPD_ORDER_DOWN, PPD_ORDER_UP } from "../../../constants/Util";
 import AlertAtom from "../../atoms/AlertAtom";
@@ -9,6 +9,14 @@ import ModalAtom from "../../atoms/ModalAtom";
 import SwitchAtom from "../../atoms/SwitchAtom";
 import IconTitleAction from "../../moleculars/IconTitleAction";
 import MainTitleChildren from "../../moleculars/MainTitleChildren";
+import Purchases, {
+  CustomerInfo,
+  LOG_LEVEL,
+  PurchasesOffering,
+  PurchasesPackage,
+} from "react-native-purchases";
+import TextAtom from "../../atoms/TextAtom";
+import { getAuth, signOut } from "firebase/auth";
 
 export default function CommonSetting() {
   const appContextState = React.useContext(AppContextState);
@@ -29,6 +37,9 @@ export default function CommonSetting() {
   const [isPcrAutoMove, setPcrAutoMove] = React.useState<boolean>(
     appContextState.settingData.setting.isPcrAutoMove
   );
+  const [currentOffering, setCurrentOffering] =
+    React.useState<PurchasesOffering | null>(null);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   // 初期データ読込処理
   React.useEffect(() => {
@@ -93,8 +104,62 @@ export default function CommonSetting() {
     );
   };
 
-  // ユーザーの削除
-  const payment = async () => {};
+  React.useEffect(() => {
+    const f = async () => {
+      Purchases.configure({
+        apiKey: "appl_NkrQYcmcIAPLFiwlYVyYtEBegvJ",
+      });
+      const customerInfo = await Purchases.getCustomerInfo();
+      if (checkPremium(customerInfo)) {
+        appContextDispatch.setPremium(true);
+        return;
+      }
+
+      const offerings = await Purchases.getOfferings();
+      if (
+        offerings.current !== null &&
+        offerings.current.availablePackages.length !== 0
+      ) {
+        setCurrentOffering(offerings.current);
+      }
+    };
+    f();
+  }, []);
+
+  const checkPremium = (customerInfo: CustomerInfo) => {
+    if (typeof customerInfo.entitlements.active.Premium !== "undefined") {
+      return true;
+    }
+  };
+
+  const payment = async () => {
+    AlertAtom(
+      "月額有料登録：¥500/月",
+      `有料会員になると広告が表示されなくなり、別デバイスのデータ共有が可能になります。月額課金しますか？`,
+      async () => {
+        if (!currentOffering || isLoading) return;
+        const localpurchasesPackage = currentOffering.availablePackages[0];
+        if (!localpurchasesPackage) return;
+        console.log(localpurchasesPackage);
+        setIsLoading(true);
+        try {
+          const { customerInfo } = await Purchases.purchasePackage(
+            localpurchasesPackage
+          );
+          if (checkPremium(customerInfo)) {
+            appContextDispatch.setPremium(true);
+            Alert.alert("登録しました。");
+          }
+        } catch (e: any) {
+          if (!e.userCancelled) {
+            console.log(e);
+          }
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    );
+  };
 
   // データの初期化
   const initData = async () => {
@@ -104,7 +169,7 @@ export default function CommonSetting() {
       async () => {
         // 全体データの更新
         appContextDispatch.setModalNumber(0);
-        await appContextDispatch.deletePerson();
+        appContextDispatch.deletePerson();
         Alert.alert("初期化しました");
       }
     );
@@ -120,7 +185,7 @@ export default function CommonSetting() {
       async () => {
         // 全体データの更新
         appContextDispatch.setModalNumber(0);
-        await appContextDispatch.deletePerson(appContextState.patientNumber);
+        appContextDispatch.deletePerson(appContextState.patientNumber);
         Alert.alert("削除しました");
       }
     );
@@ -133,7 +198,7 @@ export default function CommonSetting() {
       `検査データを削除しますがよろしいですか？`,
       async () => {
         appContextDispatch.setModalNumber(0);
-        await appContextDispatch.deletePerson(
+        appContextDispatch.deletePerson(
           undefined,
           appContextState.inspectionDataNumber
         );
@@ -166,6 +231,48 @@ export default function CommonSetting() {
           backgroundColor: "#EFFFF0",
         }}
       >
+        <MainTitleChildren title={"データ管理"} style={{ marginBottom: 16 }}>
+          <IconTitleAction
+            title={"月額課金"}
+            icon={<IconAtom name="payment" type="material-icon" />}
+          >
+            {appContextState.isPremium ? (
+              <TextAtom
+                style={{
+                  paddingRight: 4,
+                  textAlignVertical: "center",
+                  fontSize: 18,
+                }}
+              >
+                {"登録済"}
+              </TextAtom>
+            ) : (
+              <ButtonAtom
+                onPress={payment}
+                style={{ backgroundColor: "pink", padding: 12 }}
+              >
+                有料
+              </ButtonAtom>
+            )}
+          </IconTitleAction>
+          <IconTitleAction
+            title={"ユーザー"}
+            icon={<IconAtom name="deleteuser" type="ant-design" />}
+          >
+            <ButtonAtom
+              onPress={() => {
+                !appContextState.user
+                  ? appContextDispatch.setModalNumber(101)
+                  : signOut(getAuth()).then(() => {
+                      appContextDispatch.setUser(null);
+                    });
+              }}
+              style={{ backgroundColor: "skyblue", padding: 12 }}
+            >
+              {!appContextState.user ? "サインイン" : "サインアウト"}
+            </ButtonAtom>
+          </IconTitleAction>
+        </MainTitleChildren>
         <MainTitleChildren title={"共通設定設定"} style={{ marginBottom: 16 }}>
           <IconTitleAction
             title={"自動タブ移動"}
@@ -232,19 +339,6 @@ export default function CommonSetting() {
             />
           </IconTitleAction>
         </MainTitleChildren>
-        {/* <MainTitleChildren title={"データ管理"} style={{ marginBottom: 16 }}>
-          <IconTitleAction
-            title={"月額課金"}
-            icon={<IconAtom name="payment" type="material-icon" />}
-          >
-            <ButtonAtom
-              onPress={payment}
-              style={{ backgroundColor: "pink", padding: 12 }}
-            >
-              有料
-            </ButtonAtom>
-          </IconTitleAction>
-        </MainTitleChildren> */}
         <MainTitleChildren title={"データ削除"} style={{ marginBottom: 32 }}>
           <IconTitleAction
             title={"ユーザー"}

@@ -254,8 +254,28 @@ export const getYMD = (date?: Date): string => {
 
 export const parseDate = (input: any) => {
   try {
+    if (input.seconds) {
+      return parseFirestoreTimestampToDate(input);
+    }
     return new Date(input);
   } catch (error) {
     return input;
+  }
+};
+
+export const parseFirestoreTimestampToDate = (input: {
+  seconds: number;
+  nanoseconds: number;
+}) => {
+  if (
+    input &&
+    typeof input.seconds === "number" &&
+    typeof input.nanoseconds === "number"
+  ) {
+    // FirestoreのタイムスタンプをDateオブジェクトに変換
+    return new Date(input.seconds * 1000 + input.nanoseconds / 1000000);
+  } else {
+    // 入力が期待する形式でない場合は変換せずにnullを返す
+    return null;
   }
 };

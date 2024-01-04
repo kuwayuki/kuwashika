@@ -23,20 +23,8 @@ export default function DatePickerAtom(props: DateProps) {
     props.setDate(parseDate(selectedDate));
   };
 
-  const showDatepicker = () => {
-    setShow(true);
-  };
-
   return (
     <View>
-      {isAndroid() && (
-        <ButtonAtom
-          style={{ backgroundColor: "silver", padding: 6 }}
-          onPress={showDatepicker}
-        >
-          {getYMD(props.date)}
-        </ButtonAtom>
-      )}
       {(show || !isAndroid()) && (
         <RNDateTimePicker
           locale={"ja"}
