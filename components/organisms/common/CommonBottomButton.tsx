@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import { AppContextDispatch, AppContextState } from "../../../App";
 import {
@@ -8,7 +8,6 @@ import {
 } from "../../../constants/Constant";
 import { PPD_ORDER_DOWN, PPD_ORDER_UP } from "../../../constants/Util";
 import ButtonAtom from "../../atoms/ButtonAtom";
-import ButtonPressedMolecular from "../../moleculars/ButtonPressedMolecular";
 
 type buttonType = {
   status: TEETH_STATUS;
@@ -119,8 +118,8 @@ export const PCR_BUTTON_NAMES = [
 ];
 
 export default function CommonBottomButton(props: CommonButtonPropsType) {
-  const appContext = React.useContext(AppContextState);
-  const appContextDispatch = React.useContext(AppContextDispatch);
+  const appContext = useContext(AppContextState);
+  const appContextDispatch = useContext(AppContextDispatch);
 
   // １列の最大値
   const rows = props.teethValues.filter((value) => value.teethRow === 0);

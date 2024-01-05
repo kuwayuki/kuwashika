@@ -1,4 +1,4 @@
-import * as React from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { AppContextDispatch, AppContextState } from "../../App";
 import { TEETH_TYPE } from "../../constants/Constant";
 import { PersonDataType } from "../../constants/Util";
@@ -10,7 +10,7 @@ export type ppdContextState = {
   teethValues: TEETH_TYPE[]; // 192の歯
   teethValuesSimple: TEETH_TYPE[]; // 32の歯
 };
-export const PpdContextState = React.createContext({} as ppdContextState);
+export const PpdContextState = createContext({} as ppdContextState);
 
 export type ppdContextDispatch = {
   setFocusNumber: (focusNumber: number) => void;
@@ -23,24 +23,22 @@ export type ppdContextDispatch = {
   ) => void;
   moveNavigation: () => void;
 };
-export const PpdContextDispatch = React.createContext({} as ppdContextDispatch);
+export const PpdContextDispatch = createContext({} as ppdContextDispatch);
 
 export default function PpdPage({
   navigation,
 }: RootTabScreenProps<"TabPeriodontal">) {
-  const appContextState = React.useContext(AppContextState);
-  const appContextDispatch = React.useContext(AppContextDispatch);
+  const appContextState = useContext(AppContextState);
+  const appContextDispatch = useContext(AppContextDispatch);
 
-  const [focusNumber, setFocusNumber] = React.useState(0);
-  const [teethValues, setTeethValues] = React.useState<TEETH_TYPE[]>([]);
-  const [teethValuesSimple, setTeethValuesSimple] = React.useState<
-    TEETH_TYPE[]
-  >([]);
+  const [focusNumber, setFocusNumber] = useState(0);
+  const [teethValues, setTeethValues] = useState<TEETH_TYPE[]>([]);
+  const [teethValuesSimple, setTeethValuesSimple] = useState<TEETH_TYPE[]>([]);
 
   /**
    * 患者データから表示再読み込み
    */
-  React.useEffect(() => {
+  useEffect(() => {
     setFocusNumber(0);
   }, [
     appContextState.patientNumber,
@@ -51,7 +49,7 @@ export default function PpdPage({
   /**
    * 患者データから表示再読み込み
    */
-  React.useEffect(() => {
+  useEffect(() => {
     if (!appContextState.currentPerson || !appContextState.isReload) return;
 
     const temp: TEETH_TYPE[] = [
@@ -87,7 +85,7 @@ export default function PpdPage({
   }, [appContextState.isReload]);
 
   /** データが変更される度に編集データを更新 */
-  React.useEffect(() => {
+  useEffect(() => {
     if (!appContextState.currentPerson) return;
     const data: PersonDataType = {
       ...appContextState.currentPerson.currentData,
@@ -145,7 +143,7 @@ export default function PpdPage({
     navigation.navigate("TabUpset");
   };
 
-  const ppdContextStateValue = React.useMemo(
+  const ppdContextStateValue = useMemo(
     () => ({
       focusNumber,
       teethValues,

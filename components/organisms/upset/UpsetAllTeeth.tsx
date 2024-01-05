@@ -1,17 +1,17 @@
-import * as React from "react";
+import { useContext } from "react";
 import { View } from "react-native";
 import { AppContextDispatch, AppContextState } from "../../../App";
-import { teethType, TEETH_DOWN, TEETH_UP } from "../../../constants/Constant";
+import { TEETH_DOWN, TEETH_UP, teethType } from "../../../constants/Constant";
 import TextReadMolecular from "../../moleculars/TextReadMolecular";
 import { UpsetContextDispatch, UpsetContextState } from "../../pages/UpsetPage";
 import UpsetOneBlockTeeth from "./UpsetOneBlockTeeth";
 
 export default function UpsetAllTeeth() {
-  const appContextState = React.useContext(AppContextState);
-  const appContextDispatch = React.useContext(AppContextDispatch);
+  const appContextState = useContext(AppContextState);
+  const appContextDispatch = useContext(AppContextDispatch);
 
-  const upsetContextState = React.useContext(UpsetContextState);
-  const upsetContextDispatch = React.useContext(UpsetContextDispatch);
+  const upsetContextState = useContext(UpsetContextState);
+  const upsetContextDispatch = useContext(UpsetContextDispatch);
 
   const onTouchMtAction = (teethNum: number) => {
     if (appContextState.pressedValue !== 100) return;

@@ -1,5 +1,4 @@
-import * as React from "react";
-import { StyleProp, StyleSheet, TextStyle, View } from "react-native";
+import { StyleProp, StyleSheet, TextStyle } from "react-native";
 import { PcrTextInputPropsEx } from "./TextInputPcrMolecular";
 import TextInputTeethMolecular, { TEETH_MATH } from "./TextInputTeethMolecular";
 

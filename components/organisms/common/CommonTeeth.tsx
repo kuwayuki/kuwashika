@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useContext } from "react";
 import { View } from "react-native";
 import { AppContextState } from "../../../App";
 import { TEETH_TYPE } from "../../../constants/Constant";
@@ -32,7 +32,7 @@ export const PCR_MATH_4 = [0, 1, 2, 3];
  * @returns
  */
 export default function CommonTeeth(props: teethProps) {
-  const appContext = React.useContext(AppContextState);
+  const appContext = useContext(AppContextState);
 
   const onTouchBlDrAction = (teethNum: number) => {
     if (props.isPcr) {

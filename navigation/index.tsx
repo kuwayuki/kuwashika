@@ -6,7 +6,7 @@ import {
   NavigationContainer,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import * as React from "react";
+import { useContext, useEffect, useState } from "react";
 import { ColorSchemeName, Pressable } from "react-native";
 import ModalScreen from "../components/pages/ModalScreen";
 import NotFoundScreen from "../components/pages/NotFoundScreen";

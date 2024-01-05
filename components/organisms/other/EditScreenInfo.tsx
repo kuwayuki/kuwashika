@@ -1,12 +1,12 @@
 import * as WebBrowser from "expo-web-browser";
-import React from "react";
 import { StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import Colors from "../../../constants/Colors";
 import { MonoText } from "../../moleculars/StyledText";
 import { Text, View } from "../common/Themed";
+import { useState } from "react";
 
 export default function EditScreenInfo({ path }: { path: string }) {
-  const [text, onChangeText] = React.useState("Useless Text");
+  const [text, onChangeText] = useState("Useless Text");
   const inputAccessoryViewID = "uniqueID";
   return (
     <View>

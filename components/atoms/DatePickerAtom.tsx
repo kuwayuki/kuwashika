@@ -1,5 +1,5 @@
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import * as React from "react";
+import { useContext, useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { getYMD, isAndroid, parseDate } from "../../constants/Util";
 import { View } from "../organisms/common/Themed";
@@ -11,9 +11,9 @@ export type DateProps = {
 };
 
 export default function DatePickerAtom(props: DateProps) {
-  const [show, setShow] = React.useState(false);
+  const [show, setShow] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setShow(false);
   }, [props.date]);
 

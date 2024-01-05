@@ -1,7 +1,7 @@
-import * as React from "react";
+import { forwardRef } from "react";
 import { ScrollView, ScrollViewProps, StyleSheet } from "react-native";
 
-const ScrollViewAtom = React.forwardRef((props: ScrollViewProps, ref: any) => {
+const ScrollViewAtom = forwardRef((props: ScrollViewProps, ref: any) => {
   return (
     <ScrollView
       {...props}

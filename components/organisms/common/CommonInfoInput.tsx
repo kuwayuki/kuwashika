@@ -1,34 +1,28 @@
-import * as React from "react";
-import { StatusBar, StyleSheet, View } from "react-native";
+import { useContext, useEffect } from "react";
+import { View } from "react-native";
 import { Icon } from "react-native-elements";
 import { AppContextDispatch, AppContextState } from "../../../App";
+import { AdmobInter } from "../../../constants/AdmobInter";
 import { TAB_PAGE } from "../../../constants/Constant";
-import {
-  isAndroid,
-  isIpad,
-  isIphoneMini,
-  PersonDataType,
-} from "../../../constants/Util";
+import { PersonDataType, isIpad, isIphoneMini } from "../../../constants/Util";
 import DatePickerAtom from "../../atoms/DatePickerAtom";
 import DropDownPickerAtom from "../../atoms/DropDownPickerAtom";
 import SwitchAtom from "../../atoms/SwitchAtom";
 import TitleAndAction from "../../moleculars/TitleAndAction";
 import CommonPrintIcon from "./CommonPrintIcon";
-import { AdmobInter } from "../../../constants/AdmobInter";
-import { AdmobRewarded } from "../../../constants/AdmobRewardedAd";
 
 type CommonInfoInputPropsType = {
   tabPage: TAB_PAGE;
 };
 
 export default function CommonInfoInput(props: CommonInfoInputPropsType) {
-  const appContextState = React.useContext(AppContextState);
-  const appContextDispatch = React.useContext(AppContextDispatch);
+  const appContextState = useContext(AppContextState);
+  const appContextDispatch = useContext(AppContextDispatch);
 
   /**
    * データが変更される度に編集データを更新
    */
-  React.useEffect(() => {
+  useEffect(() => {
     if (!appContextState.currentPerson) return;
     const currentData = appContextState.currentPerson.currentData;
     if (
@@ -113,8 +107,7 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
           justifyContent: "flex-end",
         }}
       >
-        {/* TODO: 後で治す */}
-        {appContextState.isPremium && (
+        {!appContextState.isPremium && (
           <AdmobInter
             isShow={appContextState.isAdmobShow}
             setShow={appContextDispatch.setAdmobShow}
@@ -129,10 +122,6 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
           onPress={() => appContextDispatch.setModalNumber(100)}
           containerStyle={{ margin: 0, padding: 0 }}
         />
-        {/* <BannerAd
-          unitId={"ca-app-pub-2103807205659646/6311766057"}
-          size={BannerAdSize.BANNER}
-        /> */}
       </View>
     </View>
   );

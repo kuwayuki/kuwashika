@@ -1,4 +1,3 @@
-import * as React from "react";
 import { StyleSheet } from "react-native";
 import { teethGroupProps } from "../../constants/Constant";
 import { isAndroid } from "../../constants/Util";

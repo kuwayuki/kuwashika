@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/ja"; // これimportしないとエラー吐かれるa
 // import { AdMobRewarded } from "expo-ads-admob";
 import * as Print from "expo-print";
-import * as React from "react";
+import { useContext, useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { Icon } from "react-native-elements";
 import {
@@ -19,12 +19,9 @@ import * as StoreReview from "expo-store-review";
 export const SIZE = 48;
 
 export default function CommonPrintIcon() {
-  const [selectedPrinter, setSelectedPrinter] = React.useState<Print.Printer>();
-  const appContext = React.useContext(AppContextState);
-  const appContextDispatch = React.useContext(AppContextDispatch);
-  const [isWatchedAdmob, setWatchedAdmob] = React.useState(true);
-  const isInterstitial = true;
-  const isManyBurner = false && !isInterstitial;
+  const [selectedPrinter, setSelectedPrinter] = useState<Print.Printer>();
+  const appContext = useContext(AppContextState);
+  const appContextDispatch = useContext(AppContextDispatch);
 
   // 印刷処理（and 評価 and 広告）
   const print = async () => {
@@ -39,9 +36,7 @@ export default function CommonPrintIcon() {
         // orientation: "landscape",
         orientation: Print.Orientation.landscape,
       });
-      if (isManyBurner) setWatchedAdmob(false);
     } catch (error) {
-      setWatchedAdmob(true);
     } finally {
       try {
         if (await StoreReview.hasAction()) {

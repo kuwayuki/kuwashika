@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import { Text, TextThmedProps } from "../organisms/common/Themed";
 
 export function MonoText(props: TextThmedProps) {

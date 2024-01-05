@@ -1,37 +1,12 @@
-import * as FileSystem from "expo-file-system";
 import deepEqual from "deep-equal";
+import * as FileSystem from "expo-file-system";
 import { FileInfo } from "expo-file-system";
-import { initializeApp } from "firebase/app";
 import { StatusBar } from "expo-status-bar";
-import Purchases, { CustomerInfo, LOG_LEVEL } from "react-native-purchases";
 import {
   getTrackingPermissionsAsync,
   requestTrackingPermissionsAsync,
 } from "expo-tracking-transparency";
-import { Alert, LogBox, Platform } from "react-native"; // TODO: 後で消す
-import React, { useCallback, useEffect, useMemo } from "react";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { DropdownType } from "./components/atoms/DropDownPickerAtom";
-import CommonInspection from "./components/organisms/common/CommonInspection";
-import CommonPatient from "./components/organisms/common/CommonPatient";
-import CommonSetting from "./components/organisms/common/CommonSetting";
-import { DATA_FILE, SETTING_FILE, firebaseConfig } from "./constants/Constant";
-import {
-  DataType,
-  DateFormat,
-  formatDate,
-  INIT_PERSON,
-  INIT_SETTING_DATA,
-  isAndroid,
-  parseDate,
-  PersonDataType,
-  PersonNumberType,
-  PersonType,
-} from "./constants/Util";
-import useCachedResources from "./hooks/useCachedResources";
-import useColorScheme from "./hooks/useColorScheme";
-import Navigation from "./navigation";
-import CommonAuth from "./components/organisms/common/CommonAuth";
+import { initializeApp } from "firebase/app";
 import {
   User,
   getAuth,
@@ -39,16 +14,44 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import {
-  addDoc,
   collection,
   deleteDoc,
   doc,
   getDoc,
   getDocs,
   getFirestore,
-  query,
   setDoc,
 } from "firebase/firestore";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Alert, LogBox } from "react-native";
+import Purchases, { CustomerInfo, LOG_LEVEL } from "react-native-purchases";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { DropdownType } from "./components/atoms/DropDownPickerAtom";
+import CommonAuth from "./components/organisms/common/CommonAuth";
+import CommonInspection from "./components/organisms/common/CommonInspection";
+import CommonPatient from "./components/organisms/common/CommonPatient";
+import CommonSetting from "./components/organisms/common/CommonSetting";
+import {
+  AUTH_FILE,
+  DATA_FILE,
+  SETTING_FILE,
+  firebaseConfig,
+} from "./constants/Constant";
+import {
+  DataType,
+  DateFormat,
+  INIT_PERSON,
+  INIT_SETTING_DATA,
+  PersonDataType,
+  PersonNumberType,
+  PersonType,
+  formatDate,
+  isAndroid,
+  parseDate,
+} from "./constants/Util";
+import useCachedResources from "./hooks/useCachedResources";
+import useColorScheme from "./hooks/useColorScheme";
+import Navigation from "./navigation";
 
 // 全ページの共通項目
 export type appContextState = {
@@ -99,24 +102,22 @@ export const app = initializeApp(firebaseConfig);
 
 export default function App() {
   LogBox.ignoreAllLogs();
-  const [currentPerson, setCurrentPerson] = React.useState<PersonType>();
-  const [settingData, setSettingData] = React.useState<DataType>(undefined);
-  const [inspectionDate, setInspectionDate] = React.useState(new Date());
-  const [modalNumber, setModalNumber] = React.useState(0);
-  const [patientNumber, setPatientNumber] = React.useState(-1);
-  const [patients, setPatients] = React.useState<DropdownType[]>([]);
-  const [inspectionDataNumber, setInspectionDataNumber] = React.useState(0);
-  const [inspectionData, setInspectionData] = React.useState<DropdownType[]>(
-    []
-  );
-  const [isPrecision, setPrecision] = React.useState(false);
-  const [isInitRead, setInitRead] = React.useState(false);
-  const [isReload, setReload] = React.useState(false);
-  const [mtTeethNums, setMtTeethNums] = React.useState<number[]>([]);
-  const [pressedValue, setPressedValue] = React.useState(-1);
-  const [isPremium, setPremium] = React.useState(false);
-  const [isAdmobShow, setAdmobShow] = React.useState(false);
-  const [user, setUser] = React.useState(null);
+  const [currentPerson, setCurrentPerson] = useState<PersonType>();
+  const [settingData, setSettingData] = useState<DataType>(undefined);
+  const [inspectionDate, setInspectionDate] = useState(new Date());
+  const [modalNumber, setModalNumber] = useState(0);
+  const [patientNumber, setPatientNumber] = useState(-1);
+  const [patients, setPatients] = useState<DropdownType[]>([]);
+  const [inspectionDataNumber, setInspectionDataNumber] = useState(0);
+  const [inspectionData, setInspectionData] = useState<DropdownType[]>([]);
+  const [isPrecision, setPrecision] = useState(false);
+  const [isInitRead, setInitRead] = useState(false);
+  const [isReload, setReload] = useState(false);
+  const [mtTeethNums, setMtTeethNums] = useState<number[]>([]);
+  const [pressedValue, setPressedValue] = useState(-1);
+  const [isPremium, setPremium] = useState(false);
+  const [isAdmobShow, setAdmobShow] = useState(false);
+  const [user, setUser] = useState(null);
 
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
@@ -170,6 +171,7 @@ export default function App() {
     if (!isInitRead) reloadData(true, false);
   }, [isInitRead]);
 
+  // プレミアム時はDB（ないなら元ファイル）を読み込む
   useEffect(() => {
     if (user && isPremium && isInitRead) {
       reloadData(false);
@@ -178,7 +180,7 @@ export default function App() {
 
   useEffect(() => {
     if (user && isPremium && isInitRead) {
-      console.log("reload DB");
+      console.log("reload DB Only");
       reloadData(false, undefined, true);
     }
   }, [settingData?.persons?.length, currentPerson?.data?.length]);
@@ -211,8 +213,7 @@ export default function App() {
     if (typeof customerInfo.entitlements.active.Premium !== "undefined") {
       return true;
     }
-    // TODO: 後で消す
-    return true;
+    return false;
   };
 
   const initPurchases = useCallback(async () => {
@@ -225,7 +226,14 @@ export default function App() {
     }
   }, []);
 
+  type auth = {
+    email: string;
+    password: string;
+  };
+
   useEffect(() => {
+    if (!isPremium) return;
+
     const auth = getAuth();
     onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -235,24 +243,32 @@ export default function App() {
           console.log("ログイン中");
         } else {
           // メールアドレスが未確認
-          console.log("メールアドレスは未認証です。");
+          alert("メールアドレスは未認証です。");
         }
-        // TODO: 後で戻す
         setUser(user);
       } else {
         console.log("ログアウト");
-        const credential = await signInWithEmailAndPassword(
-          auth,
-          "ee68028@yahoo.co.jp",
-          "kuwa1003"
-        );
-        setUser(credential.user);
-
-        // TODO: 後で戻す
-        // setUser(null);
+        try {
+          const data = (await getFileData(undefined, true)) as auth;
+          let email: string, password: string;
+          if (data) {
+            email = data.email;
+            password = data.password;
+            const credential = await signInWithEmailAndPassword(
+              auth,
+              email,
+              password
+            );
+            if (credential?.user) {
+              setUser(credential.user);
+              return;
+            }
+          }
+        } catch (error) {}
+        setUser(null);
       }
     });
-  }, []);
+  }, [isPremium]);
 
   useEffect(() => {
     initPurchases();
@@ -264,13 +280,15 @@ export default function App() {
     registPatientData(currentPerson);
   }, [currentPerson?.data]);
 
-  // 設定データ自動保存
+  // 設定データ更新時自動保存
   useEffect(() => {
     if (!isInitRead || !settingData) return;
+    console.log("書き込むy");
+    console.log(settingData);
     registSettingData(settingData, true);
   }, [settingData]);
 
-  // データ自動保存
+  // 患者変更時の患者リストの更新
   useEffect(() => {
     if (!settingData?.persons) return;
 
@@ -359,7 +377,7 @@ export default function App() {
   useEffect(() => {
     if (!isInitRead || !currentPerson) return;
     saveDB(currentPerson.data, currentPerson.patientNumber);
-  }, [inspectionDataNumber]);
+  }, [inspectionDataNumber, patientNumber]);
   /**
    * 全データリロード処理
    * @param isFileReload
@@ -386,7 +404,13 @@ export default function App() {
         refleshData = { ...settingData };
       }
     }
-    if (refleshData) setSettingData(refleshData);
+    if (refleshData && !deepEqual(refleshData, settingData)) {
+      console.log("DBデータを保存します。");
+      console.log(refleshData);
+      console.log(settingData);
+      setSettingData(refleshData);
+    }
+    if (isDBOnly) console.log(refleshData);
   };
 
   /**
@@ -496,13 +520,13 @@ export default function App() {
   const db = getFirestore(app);
 
   /**
-   * Jsonデータをデータベースに保存
+   * Jsonデータを関係各位に保存
    * @param settingData
    */
   const registSettingData = async (settingData: DataType, isSaveDB = false) => {
-    setSettingData(settingData);
+    if (isSaveDB) await saveDB(settingData);
     writeFileData(settingData);
-    if (isSaveDB) saveDB(settingData);
+    setSettingData(settingData);
   };
 
   /**
@@ -541,11 +565,13 @@ export default function App() {
    * 全データリロード処理
    * @param isFileReload
    */
-  const getFileData = async (patientNumber?: number) => {
+  const getFileData = async (patientNumber?: number, isAuthData = false) => {
     const fileUri =
       patientNumber !== undefined
         ? FileSystem.documentDirectory + patientNumber + DATA_FILE
-        : FileSystem.documentDirectory + SETTING_FILE;
+        : !isAuthData
+        ? FileSystem.documentDirectory + SETTING_FILE
+        : FileSystem.documentDirectory + AUTH_FILE;
 
     const result: FileInfo = await FileSystem.getInfoAsync(fileUri);
     if (result.exists) {
@@ -626,11 +652,11 @@ export default function App() {
           "users",
           patientNumber ? `${user.uid}_${patientNumber}` : user.uid
         );
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists() && deepEqual(docSnap.data().data, data)) {
-          console.log("データが同じため、書き込みません。");
-          return;
-        }
+        // const docSnap = await getDoc(docRef);
+        // if (docSnap.exists() && deepEqual(docSnap.data().data, data)) {
+        //   console.log("データが同じため、書き込みません。");
+        //   return;
+        // }
         await setDoc(docRef, { data: data });
         console.log(
           (patientNumber ? `患者番号${patientNumber}：` : "全般設定：") +

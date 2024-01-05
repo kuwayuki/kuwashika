@@ -1,4 +1,3 @@
-import * as React from "react";
 import { StyleProp, StyleSheet, TextStyle } from "react-native";
 import { TextInputPropsEx } from "../../constants/Constant";
 import { isAndroid } from "../../constants/Util";

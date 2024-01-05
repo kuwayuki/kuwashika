@@ -1,4 +1,3 @@
-import * as React from "react";
 import { StyleSheet, Text, TextProps } from "react-native";
 
 export default function TextAtom(props: TextProps) {

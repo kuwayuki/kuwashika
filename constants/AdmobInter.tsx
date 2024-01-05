@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { InterstitialAd, AdEventType } from "react-native-google-mobile-ads";
+import { BANNER_UNIT_IAD } from "./Constant";
 
-const adUnitId = "ca-app-pub-2103807205659646/3067799275";
-
-const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
-  keywords: ["fashion", "clothing"],
-});
+const interstitial = InterstitialAd.createForAdRequest(
+  BANNER_UNIT_IAD.INTERSTIAL,
+  {
+    keywords: ["medical"],
+  }
+);
 
 export type AdmobInterType = {
   isShow: boolean;
@@ -19,7 +21,6 @@ export function AdmobInter(props: AdmobInterType) {
     const unsubscribe = interstitial.addAdEventListener(
       AdEventType.LOADED,
       () => {
-        console.log("読み込んだ？");
         setLoaded(true);
       }
     );

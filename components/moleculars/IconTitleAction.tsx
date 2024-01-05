@@ -1,4 +1,3 @@
-import * as React from "react";
 import { StyleSheet, TextProps, View } from "react-native";
 import TextAtom from "../atoms/TextAtom";
 

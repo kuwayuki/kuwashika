@@ -1,17 +1,17 @@
-import * as React from "react";
+import { useContext } from "react";
 import { View } from "react-native";
 import { AppContextDispatch, AppContextState } from "../../../App";
-import { teethType, TEETH_DOWN, TEETH_UP } from "../../../constants/Constant";
+import { TEETH_DOWN, TEETH_UP, teethType } from "../../../constants/Constant";
 import TextReadMolecular from "../../moleculars/TextReadMolecular";
 import { PpdContextDispatch, PpdContextState } from "../../pages/PpdPage";
 import PpdOneBlockTeeth from "./PpdOneBlockTeeth";
 
 export default function PpdAllTeeth() {
-  const appContextState = React.useContext(AppContextState);
-  const appContextDispatch = React.useContext(AppContextDispatch);
+  const appContextState = useContext(AppContextState);
+  const appContextDispatch = useContext(AppContextDispatch);
 
-  const ppdContextState = React.useContext(PpdContextState);
-  const ppdContextDispatch = React.useContext(PpdContextDispatch);
+  const ppdContextState = useContext(PpdContextState);
+  const ppdContextDispatch = useContext(PpdContextDispatch);
 
   const onTouchMtAction = (teethNum: number) => {
     if (appContextState.pressedValue !== 100) return;

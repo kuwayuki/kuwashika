@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useContext, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import DropDownPicker, {
   DropDownPickerProps,
@@ -11,10 +11,10 @@ type DropDownPickerAtomProps = Omit<DropDownPickerProps, "open" | "setOpen"> & {
   width?: number;
 };
 export default function DropDownPickerAtom(props: DropDownPickerAtomProps) {
-  const [open, setOpen] = React.useState(false);
-  const appContext = React.useContext(AppContextState);
+  const [open, setOpen] = useState(false);
+  const appContext = useContext(AppContextState);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setOpen(false);
   }, [appContext.currentPerson]);
 

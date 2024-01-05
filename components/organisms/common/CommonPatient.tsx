@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useContext, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { AppContextDispatch, AppContextState } from "../../../App";
 import { INIT_PERSON, PersonType } from "../../../constants/Util";
@@ -6,13 +6,14 @@ import ModalAtom from "../../atoms/ModalAtom";
 import PressableAtom from "../../atoms/PressableAtom";
 import TextInputAtom from "../../atoms/TextInputAtom";
 import TitleAndAction from "../../moleculars/TitleAndAction";
+import { LIMIT_COUNT } from "../../../constants/Constant";
 
 export default function CommonPatient() {
-  const appContextState = React.useContext(AppContextState);
-  const appContextDispatch = React.useContext(AppContextDispatch);
+  const appContextState = useContext(AppContextState);
+  const appContextDispatch = useContext(AppContextDispatch);
 
-  const [patientNumber, setPatientNumber] = React.useState<number>(undefined);
-  const [patientName, setPatientName] = React.useState<string>(undefined);
+  const [patientNumber, setPatientNumber] = useState<number>(undefined);
+  const [patientName, setPatientName] = useState<string>(undefined);
 
   const savePatient = () => {
     if (
@@ -22,6 +23,11 @@ export default function CommonPatient() {
     ) {
       alert("この患者番号は既に存在します");
       return;
+    }
+
+    // 患者追加時は広告を表示
+    if (appContextState.patients.length > LIMIT_COUNT.ADMOB_MAX_PATIENTS) {
+      appContextDispatch.setAdmobShow(true);
     }
 
     // // 患者番号の追加
@@ -40,7 +46,7 @@ export default function CommonPatient() {
     } as PersonType);
 
     // 全体データの更新
-    appContextDispatch.registSettingData({
+    appContextDispatch.setSettingData({
       ...appContextState.settingData,
       persons: [
         ...appContextState.settingData.persons,

@@ -1,20 +1,20 @@
-import * as React from "react";
+import { useContext } from "react";
 import { View } from "react-native";
 import { AppContextState } from "../../../App";
 import {
-  teethType,
   TEETH_DOWN,
   TEETH_TYPE,
   TEETH_UP,
+  teethType,
 } from "../../../constants/Constant";
 import TextReadMolecular from "../../moleculars/TextReadMolecular";
 import { PcrContextDispatch, PcrContextState } from "../../pages/PcrPage";
 import PcrOneBlockTeeth from "./PcrOneBlockTeeth";
 
 export default function PcrAllTeeth() {
-  const appContext = React.useContext(AppContextState);
-  const pcrContextState = React.useContext(PcrContextState);
-  const pcrContextDispatch = React.useContext(PcrContextDispatch);
+  const appContext = useContext(AppContextState);
+  const pcrContextState = useContext(PcrContextState);
+  const pcrContextDispatch = useContext(PcrContextDispatch);
 
   const onTouchMtAction = (teethGroupIndex: number) => {
     if (pcrContextState.focusNumber !== teethGroupIndex * 4) {

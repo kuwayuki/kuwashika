@@ -1,4 +1,3 @@
-import * as React from "react";
 import { StyleSheet, TextInputProps } from "react-native";
 import TextInputAtom from "../atoms/TextInputAtom";
 

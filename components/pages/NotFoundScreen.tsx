@@ -1,4 +1,3 @@
-import * as React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { Text, View } from "../organisms/common/Themed";
 

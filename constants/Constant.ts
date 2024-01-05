@@ -1,6 +1,7 @@
 import { TextInputProps } from "react-native";
 import { DropdownType } from "../components/atoms/DropDownPickerAtom";
 
+export const AUTH_FILE = "auth.json";
 export const SETTING_FILE = "setting.json";
 export const DATA_FILE = "_data.json";
 
@@ -131,4 +132,15 @@ export const PRINT_PPD = {
   LOW: [1, 2, 3],
   MIDDLE: [4, 5],
   HIGH: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
+};
+
+export const LIMIT_COUNT = {
+  ADMOB_MAX_PATIENTS: 10,
+};
+
+export const BANNER_UNIT_IAD = {
+  INTERSTIAL: "ca-app-pub-2103807205659646/3067799275",
+  BANNER: "ca-app-pub-2103807205659646/6311766057",
+  BANNER_2: "ca-app-pub-2103807205659646/4806827282",
+  BANNER_3: "ca-app-pub-2103807205659646/5506515491",
 };

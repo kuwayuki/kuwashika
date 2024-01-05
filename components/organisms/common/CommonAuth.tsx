@@ -1,35 +1,38 @@
 import {
   createUserWithEmailAndPassword,
   getAuth,
-  GoogleAuthProvider,
-  onAuthStateChanged,
   sendEmailVerification,
   sendPasswordResetEmail,
-  signInAnonymously,
-  signInWithCredential,
   signInWithEmailAndPassword,
-  signOut,
 } from "firebase/auth";
-import React, { useState } from "react";
-import { Modal, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import TextInputAtom from "../../atoms/TextInputAtom";
+import { useContext, useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 import { AppContextDispatch, AppContextState } from "../../../App";
-import ModalAtom from "../../atoms/ModalAtom";
-import IconAtom from "../../atoms/IconAtom";
+import TextInputAtom from "../../atoms/TextInputAtom";
+import * as FileSystem from "expo-file-system";
+import { AUTH_FILE } from "../../../constants/Constant";
+
 export default function CommonAuth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const appContextDispatch = React.useContext(AppContextDispatch);
-  const appContextState = React.useContext(AppContextState);
+  const appContextDispatch = useContext(AppContextDispatch);
+  const appContextState = useContext(AppContextState);
 
   const auth = getAuth();
   const signIn = async (event: any) => {
-    const credential = await signInWithEmailAndPassword(auth, email, password);
-    appContextDispatch.setUser(credential.user);
-    appContextDispatch.setModalNumber(0);
-    appContextDispatch.setPatientNumber(
-      appContextState.currentPerson.patientNumber
-    );
+    await signInWithEmailAndPassword(auth, email, password)
+      .then((credential) => {
+        appContextDispatch.setUser(credential.user);
+        appContextDispatch.setModalNumber(0);
+        appContextDispatch.setPatientNumber(
+          appContextState.currentPerson.patientNumber
+        );
+        writeFileData({ email, password });
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        alert(errorMessage);
+      });
   };
 
   const cancel = () => {
@@ -49,6 +52,12 @@ export default function CommonAuth() {
           .then(() => {
             // 認証メール送信成功
             alert("メールを承認してください。");
+            writeFileData({ email, password });
+            appContextDispatch.setUser(user);
+            appContextDispatch.setModalNumber(0);
+            appContextDispatch.setPatientNumber(
+              appContextState.currentPerson.patientNumber
+            );
           })
           .catch((error) => {
             // 認証メール送信エラー
@@ -71,6 +80,11 @@ export default function CommonAuth() {
         // エラー処理
         console.error("パスワードリセットメール送信エラー", error);
       });
+  };
+
+  const writeFileData = async (data: any) => {
+    const fileUri = FileSystem.documentDirectory + AUTH_FILE;
+    await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(data));
   };
 
   return (
