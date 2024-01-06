@@ -1,6 +1,8 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import deepEqual from "deep-equal";
 import * as FileSystem from "expo-file-system";
 import { FileInfo } from "expo-file-system";
+import * as ScreenOrientation from "expo-screen-orientation";
 import { StatusBar } from "expo-status-bar";
 import {
   getTrackingPermissionsAsync,
@@ -26,6 +28,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Alert, LogBox } from "react-native";
 import Purchases, { CustomerInfo, LOG_LEVEL } from "react-native-purchases";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import AlertAtom from "./components/atoms/AlertAtom";
 import { DropdownType } from "./components/atoms/DropDownPickerAtom";
 import CommonAuth from "./components/organisms/common/CommonAuth";
 import CommonInspection from "./components/organisms/common/CommonInspection";
@@ -34,6 +37,7 @@ import CommonSetting from "./components/organisms/common/CommonSetting";
 import {
   AUTH_FILE,
   DATA_FILE,
+  LOCAL_STORAGE,
   SETTING_FILE,
   firebaseConfig,
 } from "./constants/Constant";
@@ -96,6 +100,11 @@ export type appContextDispatch = {
   setPremium: (isPremium: boolean) => void;
   setAdmobShow: (isAdmobShow: boolean) => void;
   setUser: (user: User) => void;
+  reloadData: (
+    isFileReload: boolean,
+    isDBRead: boolean,
+    isDBOnly: boolean
+  ) => void;
 };
 export const AppContextDispatch = React.createContext({} as appContextDispatch);
 export const app = initializeApp(firebaseConfig);
@@ -115,6 +124,7 @@ export default function App() {
   const [isReload, setReload] = useState(false);
   const [mtTeethNums, setMtTeethNums] = useState<number[]>([]);
   const [pressedValue, setPressedValue] = useState(-1);
+  const [isQuestionPremium, setQuestionPremium] = useState(false);
   const [isPremium, setPremium] = useState(false);
   const [isAdmobShow, setAdmobShow] = useState(false);
   const [user, setUser] = useState(null);
@@ -145,6 +155,9 @@ export default function App() {
 
   useEffect(() => {
     (async () => {
+      await ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.LANDSCAPE_LEFT
+      );
       const { granted, canAskAgain } = await getTrackingPermissionsAsync();
       if (!granted && canAskAgain && !isAndroid()) {
         Alert.alert(
@@ -180,7 +193,6 @@ export default function App() {
 
   useEffect(() => {
     if (user && isPremium && isInitRead) {
-      console.log("reload DB Only");
       reloadData(false, undefined, true);
     }
   }, [settingData?.persons?.length, currentPerson?.data?.length]);
@@ -223,6 +235,30 @@ export default function App() {
     if (checkPremium(customerInfo)) {
       setPremium(true);
       return;
+    } else {
+      const isDialogStr = await getLocalStorage(
+        LOCAL_STORAGE.IS_DISPLAY_PREMIUM_QUESTION
+      );
+      // TODO: 後で戻す
+      if (isDialogStr !== "false" && false) {
+        AlertAtom(
+          "★プレミアム機能追加★",
+          `広告が表示されなくなり、サインインで別デバイスとのデータ共有が可能になります。右上の設定画面から登録可能です。`,
+          () => {
+            setQuestionPremium(false);
+            saveLocalStorage(
+              LOCAL_STORAGE.IS_DISPLAY_PREMIUM_QUESTION,
+              String(false)
+            );
+          },
+          () => {
+            setQuestionPremium(false);
+          },
+          "今後は表示しない",
+          "閉じる"
+        );
+        // setQuestionPremium(isDialog !== "false");
+      }
     }
   }, []);
 
@@ -283,7 +319,7 @@ export default function App() {
   // 設定データ更新時自動保存
   useEffect(() => {
     if (!isInitRead || !settingData) return;
-    console.log("書き込むy");
+    console.log("書き込む");
     console.log(settingData);
     registSettingData(settingData, true);
   }, [settingData]);
@@ -389,6 +425,7 @@ export default function App() {
   ) => {
     let refleshData: DataType;
     if (isDBRead) {
+      if (isDBOnly) console.log("reload DB Only");
       refleshData = await getDB();
     }
     if (!isDBOnly && !refleshData) {
@@ -705,6 +742,22 @@ export default function App() {
     }
   };
 
+  const getLocalStorage = async (key: string): Promise<string | undefined> => {
+    try {
+      const value = await AsyncStorage.getItem(key);
+      return value;
+    } catch (err) {}
+    return undefined;
+  };
+
+  const saveLocalStorage = async (key: string, value: string) => {
+    try {
+      await AsyncStorage.setItem(key, value);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const appContextStateValue = useMemo(
     () => ({
       isReload,
@@ -778,6 +831,7 @@ export default function App() {
             setPremium,
             setAdmobShow,
             setUser,
+            reloadData,
           }}
         >
           {modalNumber === 1 && <CommonPatient />}

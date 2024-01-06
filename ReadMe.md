@@ -131,3 +131,9 @@ npm run start
 
 % "ios"."buildNumber": "2"はずれるようにする必要がある。
 eas build -p ios
+eas submit --latest -p ios
+eas update --branch production --message "Bug Fixed"
+
+% pacakge を追加した場合には必ず再インストールすること！
+eas build --profile development --platform ios
+npx expo start --dev-client

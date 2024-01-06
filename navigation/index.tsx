@@ -21,6 +21,7 @@ import {
   RootTabScreenProps,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
+import { isIpad } from "../constants/Util";
 
 export default function Navigation({
   colorScheme,
@@ -85,6 +86,7 @@ function TopTabNavigator() {
         display: "flex",
         justifyContent: "flex-start",
         backgroundColor: Colors[colorScheme].background,
+        marginTop: isIpad() ? 10 : 0,
       }}
     >
       <TopTab.Screen

@@ -3,7 +3,10 @@ import { Alert } from "react-native";
 export default function AlertAtom(
   title: string,
   message?: string,
-  onClickOK?: () => void
+  onClickOK?: () => void,
+  onClickCancel?: () => void,
+  OKName?: string,
+  CancelName?: string
   // buttons?: AlertButton[],
   // options?: AlertOptions
 ) {
@@ -12,11 +15,12 @@ export default function AlertAtom(
     message,
     [
       {
-        text: "Cancel",
+        text: CancelName ?? "Cancel",
         style: "cancel",
+        onPress: onClickCancel,
       },
       {
-        text: "OK",
+        text: OKName ?? "OK",
         onPress: onClickOK,
         style: "default",
       },

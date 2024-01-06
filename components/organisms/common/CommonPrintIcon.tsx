@@ -38,6 +38,7 @@ export default function CommonPrintIcon() {
       });
     } catch (error) {
     } finally {
+      appContextDispatch.setAdmobShow(true);
       try {
         if (await StoreReview.hasAction()) {
           StoreReview.requestReview();
@@ -45,7 +46,6 @@ export default function CommonPrintIcon() {
       } catch (error) {
         console.log(error);
       }
-      appContextDispatch.setAdmobShow(true);
     }
   };
 

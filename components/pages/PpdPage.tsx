@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { AppContextDispatch, AppContextState } from "../../App";
 import { TEETH_TYPE } from "../../constants/Constant";
 import { PersonDataType } from "../../constants/Util";
@@ -102,43 +109,43 @@ export default function PpdPage({
    * @param index
    * @param teethValue
    */
-  const setTeethValue = (
-    index: number,
-    teethValue: TEETH_TYPE,
-    isPrecision = false
-  ) => {
-    const temp = isPrecision ? [...teethValues] : [...teethValuesSimple];
-    if (teethValue.value < 10) {
-      temp[index] = {
-        ...teethValue,
-        value: teethValue.value,
-      } as TEETH_TYPE;
-    } else if (teethValue.value === 10) {
-      const plus =
-        temp[index] && temp[index].value
-          ? temp[index].value + 1
-          : teethValue.value;
-      temp[index] = {
-        ...teethValue,
-        value: plus,
-      } as TEETH_TYPE;
-    } else if (teethValue.value === 11) {
-      const plus =
-        temp[index] && temp[index].value
-          ? temp[index].value - 1
-          : teethValue.value;
-      temp[index] = {
-        ...teethValue,
-        value: plus,
-      } as TEETH_TYPE;
-    } else {
-      temp[index] = {
-        ...teethValue,
-        value: teethValue.value,
-      } as TEETH_TYPE;
-    }
-    isPrecision ? setTeethValues([...temp]) : setTeethValuesSimple([...temp]);
-  };
+  const setTeethValue = useCallback(
+    (index: number, teethValue: TEETH_TYPE, isPrecision = false) => {
+      const temp = isPrecision ? [...teethValues] : [...teethValuesSimple];
+      if (teethValue.value < 10) {
+        temp[index] = {
+          ...teethValue,
+          value: teethValue.value,
+        } as TEETH_TYPE;
+      } else if (teethValue.value === 10) {
+        const plus =
+          temp[index] && temp[index].value
+            ? temp[index].value + 1
+            : teethValue.value;
+        temp[index] = {
+          ...teethValue,
+          value: plus,
+        } as TEETH_TYPE;
+      } else if (teethValue.value === 11) {
+        const plus =
+          temp[index] && temp[index].value
+            ? temp[index].value - 1
+            : teethValue.value;
+        temp[index] = {
+          ...teethValue,
+          value: plus,
+        } as TEETH_TYPE;
+      } else {
+        temp[index] = {
+          ...teethValue,
+          value: teethValue.value,
+        } as TEETH_TYPE;
+      }
+      isPrecision ? setTeethValues([...temp]) : setTeethValuesSimple([...temp]);
+    },
+    [teethValues, teethValuesSimple]
+  );
+
   const moveNavigation = () => {
     navigation.navigate("TabUpset");
   };

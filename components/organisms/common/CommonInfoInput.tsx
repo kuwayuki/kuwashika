@@ -78,6 +78,10 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
             value={appContextState.patientNumber}
             setValue={appContextDispatch.setPatientNumber}
             width={isIpad() ? 180 : isIphoneMini() ? 120 : 150}
+            onOpen={() => {
+              // 患者を開くたびにDBを確認する。
+              appContextDispatch.reloadData(false, undefined, true);
+            }}
           />
         </TitleAndAction>
         <TitleAndAction title={isIphoneMini() ? "" : "データ"}>

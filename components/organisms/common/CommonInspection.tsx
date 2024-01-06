@@ -32,9 +32,9 @@ export default function CommonInspection() {
     const numbers = currentPerson.data.map((data) => data.inspectionDataNumber);
     const nextDataNumber = Math.max(...numbers) + 1;
 
-    // 患者追加時は広告を表示
+    // データ追加時は広告を表示
     if (appContextState.patients.length > LIMIT_COUNT.ADMOB_MAX_PATIENTS) {
-      appContextDispatch.setAdmobShow(true);
+      // appContextDispatch.setAdmobShow(true);
     }
 
     // 検査データの追加

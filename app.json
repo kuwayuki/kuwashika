@@ -1,11 +1,17 @@
 {
   "expo": {
     "plugins": [
-      "expo-tracking-transparency"
+      "expo-tracking-transparency",
+      [
+        "expo-screen-orientation",
+        {
+          "initialOrientation": "DEFAULT"
+        }
+      ]
     ],
     "name": "ぺリオチャート",
     "slug": "PerioChart",
-    "version": "1.0.6",
+    "version": "1.0.8",
     "orientation": "landscape",
     "icon": "./assets/images/file-000.png",
     "scheme": "periochart",
@@ -19,12 +25,11 @@
       "fallbackToCacheTimeout": 0,
       "url": "https://u.expo.dev/8b7207bb-0b5f-47d3-b77f-4241135e1365"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "buildNumber": "3",
+      "buildNumber": "5",
       "supportsTablet": true,
+      "requireFullScreen": true,
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-2103807205659646~3739470895"
       },
