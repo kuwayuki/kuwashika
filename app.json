@@ -25,6 +25,9 @@
     "ios": {
       "buildNumber": "3",
       "supportsTablet": true,
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-2103807205659646~3739470895"
+      },
       "infoPlist": {
         "NSUserTrackingUsageDescription": "「許可」を押すと、他社のデータも活用し、よりお客様に適した広告が表示されます。",
         "NSMicrophoneUsageDescription": "This app uses the microphone to allow users to send orders via voice message.",
@@ -41,6 +44,9 @@
         "foregroundImage": "./assets/images/icon-android.png",
         "backgroundColor": "#ffffff"
       },
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-2103807205659646~2121866348"
+      },
       "permissions": [],
       "package": "com.kuwahara.ExpoExample",
       "versionCode": 8
@@ -56,19 +62,6 @@
     },
     "runtimeVersion": {
       "policy": "appVersion"
-    }
-  },
-  "build": {
-    "development": {
-      "developmentClient": true,
-      "distribution": "internal"
-    },
-    "preview": {
-      "distribution": "internal",
-      "channel": "preview"
-    },
-    "production": {
-      "channel": "production"
     }
   },
   "react-native-google-mobile-ads": {

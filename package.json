@@ -36,7 +36,7 @@
     "expo-status-bar": "~1.6.0",
     "expo-store-review": "~6.4.0",
     "expo-tracking-transparency": "~3.1.0",
-    "expo-updates": "~0.18.18",
+    "expo-updates": "~0.18.19",
     "expo-web-browser": "~12.3.2",
     "firebase": "^10.7.1",
     "react": "18.2.0",

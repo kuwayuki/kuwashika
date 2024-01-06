@@ -139,6 +139,7 @@ export default function CommonSetting() {
       "月額有料登録：¥500/月",
       `有料会員になると広告が表示されなくなり、サインインで別デバイスとのデータ共有が可能になります。月額課金しますか？`,
       async () => {
+        alert("test");
         if (!currentOffering || isLoading) return;
         const localpurchasesPackage = currentOffering.availablePackages[0];
         if (!localpurchasesPackage) return;
