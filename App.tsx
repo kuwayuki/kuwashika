@@ -500,9 +500,11 @@ export default function App() {
       .forEach((data) =>
         inspectionData.push({
           label:
-            formatDate(parseDate(data.date), DateFormat.MM_DD) +
-            ":" +
-            data.inspectionDataName,
+            isDBOnly && data.inspectionDataNumber === inspectionDataNumber
+              ? data.inspectionDataName
+              : formatDate(parseDate(data.date), DateFormat.MM_DD) +
+                ":" +
+                data.inspectionDataName,
           value: data.inspectionDataNumber,
         })
       );

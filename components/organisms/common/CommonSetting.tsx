@@ -173,6 +173,24 @@ export default function CommonSetting() {
     );
   };
 
+  const restorePurchases = async () => {
+    try {
+      setIsLoading(true);
+      const customerInfo = await Purchases.restorePurchases();
+      if (checkPremium(customerInfo)) {
+        appContextDispatch.setPremium(true);
+        Alert.alert("購入が復元されました。");
+      } else {
+        Alert.alert("復元する購入はありません。");
+      }
+    } catch (e) {
+      console.error("購入の復元に失敗しました：", e);
+      Alert.alert("購入の復元に失敗しました。");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // データの初期化
   const initData = async () => {
     AlertAtom(
@@ -228,6 +246,7 @@ export default function CommonSetting() {
     return (
       <CommonSubscription
         onPress={payment}
+        onPressRestore={restorePurchases}
         onClose={() => setIsOpenSubscription(false)}
       ></CommonSubscription>
     );

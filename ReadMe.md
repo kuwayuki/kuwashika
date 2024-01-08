@@ -129,7 +129,9 @@ npx expo start --dev-client
 npm uninstall --dev-client
 npm run start
 
-% "ios"."buildNumber": "2"はずれるようにする必要がある。
+% app.json-"version": "2"はずれるようにする必要がある。
+% app.json-"ios"."buildNumber": "2"はずれるようにする必要がある。
+eas login
 eas build -p ios
 eas submit --latest -p ios
 eas update --branch production --message "Bug Fixed"

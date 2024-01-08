@@ -4,6 +4,7 @@ import { openURL } from "expo-linking";
 
 type CommonSubscriptionType = {
   onPress: () => void;
+  onPressRestore: () => void;
   onClose: () => void;
 };
 
@@ -11,11 +12,9 @@ export const subscriptionDetails = {
   title: "ペリオチャートプレミアムプラン",
   price: "¥500/月",
   benefits:
-    "アプリを広告なしで利用できます。\r\nまた、サインインで別アプリとのデータ共有を行うことができます。\r\n(共通のApple IDで利用する必要があります。)",
-  termsUrl:
-    "https://kuwank.hatenablog.com/entry/2024/01/07/230214?_gl=1*1vkukbq*_gcl_au*MTkxNjUyNDQ0LjE3MDM5NDI4OTk.", // 利用規約のURL
-  privacyPolicyUrl:
-    "https://kuwank.hatenablog.com/entry/2024/01/07/230533?_gl=1*1rru2iy*_gcl_au*MTkxNjUyNDQ0LjE3MDM5NDI4OTk.", // プライバシーポリシーのURL
+    "プレミアムプランの加入で、アプリを広告なしで利用できます。\r\nまた、サインインで別アプリとのデータ共有を行うことができます。\r\n(共通のApple IDで利用する必要があります。)",
+  termsUrl: "https://kuwank.hatenablog.com/entry/2024/01/07/230214", // 利用規約のURL
+  privacyPolicyUrl: "https://kuwank.hatenablog.com/entry/2024/01/07/230533", // プライバシーポリシーのURL
 };
 
 export default function CommonSubscription(props: CommonSubscriptionType) {
@@ -32,6 +31,8 @@ export default function CommonSubscription(props: CommonSubscriptionType) {
       <View
         style={{
           padding: 10,
+          alignItems: "center",
+          width: 600,
         }}
       >
         <Text style={{ marginBottom: 20, fontSize: 24, color: "white" }}>
@@ -42,16 +43,36 @@ export default function CommonSubscription(props: CommonSubscriptionType) {
         </Text>
         <ButtonAtom
           onPress={props.onPress}
-          style={{ marginBottom: 10, backgroundColor: "aqua" }}
+          style={{ marginBottom: 10, backgroundColor: "aqua", width: 400 }}
         >
           プレミアムプランに登録{`[${subscriptionDetails.price}]`}
         </ButtonAtom>
-        <ButtonAtom
-          onPress={props.onClose}
-          style={{ marginBottom: 10, backgroundColor: "white" }}
+        <View
+          style={{
+            marginBottom: 30,
+            flexDirection: "row",
+          }}
         >
-          キャンセル
-        </ButtonAtom>
+          <ButtonAtom
+            onPress={props.onClose}
+            style={{
+              backgroundColor: "white",
+              width: 150,
+              marginRight: 30,
+            }}
+          >
+            キャンセル
+          </ButtonAtom>
+          <ButtonAtom
+            onPress={props.onPressRestore}
+            style={{
+              backgroundColor: "lightgray",
+              width: 150,
+            }}
+          >
+            購入の復元
+          </ButtonAtom>
+        </View>
         <View
           style={{
             flexDirection: "row",
@@ -72,11 +93,9 @@ export default function CommonSubscription(props: CommonSubscriptionType) {
           <Text style={{ color: "white" }}>に同意いただいたとみなします。</Text>
         </View>
         <Text style={{ color: "white" }}>
-          契約期間は、期限が切れる24時間以内に自動更新の解除をされない場合、自動更新されます。
-        </Text>
-        <Text style={{ color: "white" }}>
-          解約方法はApp
-          Storeのアカウントの設定から、いつでも解約することができます。
+          本サブスクリプションは自動的に更新されます。
+          更新は、契約期間の終了24時間前までにApp
+          Storeのアカウント設定からいつでもキャンセル可能です。
         </Text>
       </View>
     </View>
