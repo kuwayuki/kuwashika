@@ -1,7 +1,11 @@
 import { useContext, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { AppContextDispatch, AppContextState } from "../../../App";
-import { INIT_PERSON, PersonType } from "../../../constants/Util";
+import {
+  INIT_PERSON,
+  PersonNumberType,
+  PersonType,
+} from "../../../constants/Util";
 import ModalAtom from "../../atoms/ModalAtom";
 import PressableAtom from "../../atoms/PressableAtom";
 import TextInputAtom from "../../atoms/TextInputAtom";
@@ -16,6 +20,9 @@ export default function CommonPatient() {
   const [patientName, setPatientName] = useState<string>(undefined);
 
   const savePatient = () => {
+    if (!patientNumber || !patientName)
+      return alert("患者番号と患者名は必須です。");
+
     if (
       appContextState.patients
         .map((patient) => patient.value)
@@ -29,14 +36,6 @@ export default function CommonPatient() {
     if (appContextState.patients.length > LIMIT_COUNT.ADMOB_MAX_PATIENTS) {
       appContextDispatch.setAdmobShow(true);
     }
-
-    // // 患者番号の追加
-    // const temp: DropdownType[] = [...appContextState.patients];
-    // temp.push({
-    //   label: patientNumber.toString() + ":" + (patientName ?? ""),
-    //   value: patientNumber,
-    // });
-    // appContextDispatch.setPatients(temp);
     appContextDispatch.setPatientNumber(patientNumber);
 
     // 全体データの更新
@@ -45,13 +44,24 @@ export default function CommonPatient() {
       data: [INIT_PERSON],
     } as PersonType);
 
+    const persons = [...appContextState.settingData.persons];
+    let isInclude = false;
+    const addPerson: PersonNumberType = {
+      patientNumber: patientNumber,
+      patientName: patientName,
+    };
+    persons.forEach((person) => {
+      if (person.patientNumber === patientNumber) {
+        person.patientName = addPerson.patientName;
+        person.isDeleted = false;
+        isInclude = true;
+      }
+    });
+    if (!isInclude) persons.push(addPerson);
     // 全体データの更新
     appContextDispatch.setSettingData({
       ...appContextState.settingData,
-      persons: [
-        ...appContextState.settingData.persons,
-        { patientNumber: patientNumber, patientName: patientName },
-      ],
+      persons: persons,
     });
 
     // モーダルを閉じる

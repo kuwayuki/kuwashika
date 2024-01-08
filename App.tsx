@@ -49,9 +49,15 @@ import {
   PersonDataType,
   PersonNumberType,
   PersonType,
+  deleteFileData,
   formatDate,
+  getFileData,
+  getLocalStorage,
   isAndroid,
+  margeSettingData,
   parseDate,
+  saveLocalStorage,
+  writeFileData,
 } from "./constants/Util";
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
@@ -105,6 +111,7 @@ export type appContextDispatch = {
     isDBRead: boolean,
     isDBOnly: boolean
   ) => void;
+  reloadPersonData: (personNumber: PersonNumberType, isDBOnly: boolean) => void;
 };
 export const AppContextDispatch = React.createContext({} as appContextDispatch);
 export const app = initializeApp(firebaseConfig);
@@ -191,6 +198,7 @@ export default function App() {
     }
   }, [user, isPremium, isInitRead]);
 
+  // 患者数やデータ数が変わった場合はDBを読み込む
   useEffect(() => {
     if (user && isPremium && isInitRead) {
       reloadData(false, undefined, true);
@@ -201,7 +209,7 @@ export default function App() {
     const f = async () => {
       if (user && isPremium && isInitRead) {
         console.log("初回データ書き込み");
-        const initDB = await getDB();
+        const initDB = await getDB(undefined, false);
         // 初回ログイン時はDBのデータを書き込む
         if (!initDB) {
           await saveDB(settingData);
@@ -319,8 +327,7 @@ export default function App() {
   // 設定データ更新時自動保存
   useEffect(() => {
     if (!isInitRead || !settingData) return;
-    console.log("書き込む");
-    console.log(settingData);
+    console.log("全てを書き込む");
     registSettingData(settingData, true);
   }, [settingData]);
 
@@ -329,33 +336,38 @@ export default function App() {
     if (!settingData?.persons) return;
 
     // 患者番号をセット
-    const patients = [{ label: "新規", value: 0 }];
-    let maxLen = 1;
+    const newPatients = [{ label: "新規", value: 0 }];
+    // let maxLen = 1;
+    // settingData.persons.forEach((person) => {
+    //   if (person.isDeleted) return;
+    //   const len = person.patientNumber.toString().length;
+    //   if (len > maxLen) maxLen = len;
+    // });
     settingData.persons.forEach((person) => {
-      const len = person.patientNumber.toString().length;
-      if (len > maxLen) maxLen = len;
-    });
-    settingData.persons.forEach((person) =>
-      patients.push({
+      if (person.isDeleted) return;
+      newPatients.push({
         label:
           person.patientNumber +
           // zeroPadding(person.patientNumber, maxLen) +
           ":" +
           (person.patientName ?? ""),
         value: person.patientNumber,
-      })
-    );
-    setPatients(patients.sort((a, b) => a.value - b.value));
+      });
+    });
+    console.log("患者リストの更新");
+    console.log(newPatients);
+    if (deepEqual(patients, newPatients)) return;
 
+    setPatients(newPatients.sort((a, b) => a.value - b.value));
     if (
       !patientNumber ||
       patientNumber === -1 ||
       !settingData.persons.find(
-        (person) => person.patientNumber === patientNumber
+        (person) => !person.isDeleted && person.patientNumber === patientNumber
       )
     )
-      setPatientNumber(patients[1].value);
-  }, [settingData?.persons]);
+      setPatientNumber(newPatients[1].value);
+  }, [settingData]);
 
   // 患者番号変更処理
   useEffect(() => {
@@ -447,7 +459,6 @@ export default function App() {
       console.log(settingData);
       setSettingData(refleshData);
     }
-    if (isDBOnly) console.log(refleshData);
   };
 
   /**
@@ -455,21 +466,29 @@ export default function App() {
    * 検査データと内部データの変更
    * @param personNumber
    */
-  const reloadPersonData = async (personNumber: PersonNumberType) => {
+  const reloadPersonData = async (
+    personNumber: PersonNumberType,
+    isDBOnly = false
+  ) => {
     let refleshData: PersonDataType[];
     refleshData = await getDB(personNumber.patientNumber);
-    if (!refleshData) {
-      refleshData = await getFileData(personNumber.patientNumber);
-      if (refleshData) {
-        setInitRead(true);
-      } else {
-        // 存在しない場合は初期データを書き込み
-        refleshData = [INIT_PERSON];
-        registPatientData({
-          patientNumber: personNumber.patientNumber,
-          data: refleshData,
-        } as PersonType);
+    if (!isDBOnly) {
+      if (!refleshData) {
+        refleshData = await getFileData(personNumber.patientNumber);
+        if (refleshData) {
+          setInitRead(true);
+        } else {
+          // 存在しない場合は初期データを書き込み
+          refleshData = [INIT_PERSON];
+          registPatientData({
+            patientNumber: personNumber.patientNumber,
+            data: refleshData,
+          } as PersonType);
+        }
       }
+    } else {
+      console.log("検査データ再読み込み");
+      console.log(refleshData);
     }
 
     // 検査データ
@@ -489,6 +508,7 @@ export default function App() {
       );
     setInspectionData(inspectionData);
 
+    if (isDBOnly) return;
     // 検査データの最後のをセット
     reloadPersonInspectionData(refleshData, personNumber);
   };
@@ -541,17 +561,17 @@ export default function App() {
       );
       const index = data.length > 1 ? data.length : 0;
       setInspectionData(inspectionTemp);
-      setInspectionDataNumber(index ?? 1);
+      setInspectionDataNumber(data[index - 1].inspectionDataNumber);
       setCurrentPerson({
         ...currentPerson,
         data: data,
         currentData: index ? data[index - 1] : INIT_PERSON,
       });
+      await reloadData(true);
     } else {
       // データ削除(新規以外)
       await deleteDataAllOrPatientRelations(patientNumber);
     }
-    await reloadData(true);
   };
 
   const db = getFirestore(app);
@@ -561,7 +581,10 @@ export default function App() {
    * @param settingData
    */
   const registSettingData = async (settingData: DataType, isSaveDB = false) => {
-    if (isSaveDB) await saveDB(settingData);
+    const margeData = isSaveDB ? await saveDB(settingData) : undefined;
+    if (margeData) return;
+    console.log("下記を書き込む。");
+    console.log(settingData);
     writeFileData(settingData);
     setSettingData(settingData);
   };
@@ -571,12 +594,16 @@ export default function App() {
    */
   const deleteDataAllOrPatientRelations = async (tmpPatientNumber?: number) => {
     if (tmpPatientNumber !== undefined) {
-      const tmpSettingData = (await getDB()) ?? settingData;
-      const patient = [...tmpSettingData.persons].filter(
-        (person) => person.patientNumber !== tmpPatientNumber
-      );
-      setSettingData({ ...tmpSettingData, persons: patient });
+      const tmpSettingData: DataType = { ...settingData };
+      tmpSettingData.persons.forEach((person) => {
+        if (person.patientNumber === tmpPatientNumber) person.isDeleted = true;
+      });
+      console.log("下記を再保存します。");
+      console.log(tmpSettingData);
+      await registSettingData(tmpSettingData);
+      console.log("ファイルの削除します。");
       await deleteFileData(tmpPatientNumber);
+      console.log("DBの削除します。");
       await deleteDB(tmpPatientNumber);
     } else {
       await deleteDB();
@@ -598,47 +625,7 @@ export default function App() {
     writeFileData(writeData, currentPerson.patientNumber);
   };
 
-  /**
-   * 全データリロード処理
-   * @param isFileReload
-   */
-  const getFileData = async (patientNumber?: number, isAuthData = false) => {
-    const fileUri =
-      patientNumber !== undefined
-        ? FileSystem.documentDirectory + patientNumber + DATA_FILE
-        : !isAuthData
-        ? FileSystem.documentDirectory + SETTING_FILE
-        : FileSystem.documentDirectory + AUTH_FILE;
-
-    const result: FileInfo = await FileSystem.getInfoAsync(fileUri);
-    if (result.exists) {
-      const data = await FileSystem.readAsStringAsync(fileUri);
-      return JSON.parse(data);
-    }
-  };
-
-  const writeFileData = async (data: any, patientNumber?: number) => {
-    const fileUri =
-      patientNumber !== undefined
-        ? FileSystem.documentDirectory + patientNumber + DATA_FILE
-        : FileSystem.documentDirectory + SETTING_FILE;
-
-    await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(data));
-  };
-
-  const deleteFileData = async (patientNumber?: number) => {
-    const fileUri =
-      patientNumber !== undefined
-        ? FileSystem.documentDirectory + patientNumber + DATA_FILE
-        : FileSystem.documentDirectory + SETTING_FILE;
-    try {
-      await FileSystem.deleteAsync(fileUri);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getDB = async (patientNumber?: number) => {
+  const getDB = async (patientNumber?: number, isMarge = true) => {
     if (user && isPremium) {
       try {
         console.log(
@@ -652,6 +639,11 @@ export default function App() {
         );
         const docSnap = await getDoc(docRef);
         if (!docSnap.exists()) return undefined;
+        if (!patientNumber && isMarge) {
+          const mergeData = margeSettingData(settingData, docSnap.data().data);
+          console.log(mergeData);
+          return mergeData;
+        }
         return docSnap.data().data;
       } catch (error) {
         console.error("Error reading user data: ", error);
@@ -672,10 +664,10 @@ export default function App() {
   const saveDB = async (data: any, patientNumber?: number) => {
     if (user && isPremium && isInitRead && data) {
       try {
-        // console.log(
-        //   (patientNumber ? `患者番号${patientNumber}：` : "全般設定：") +
-        //     "書き込む"
-        // );
+        console.log(
+          (patientNumber ? `患者番号${patientNumber}：` : "全般設定：") +
+            "書き込む"
+        );
         if (
           patientNumber &&
           !settingData.persons.find(
@@ -689,11 +681,34 @@ export default function App() {
           "users",
           patientNumber ? `${user.uid}_${patientNumber}` : user.uid
         );
-        // const docSnap = await getDoc(docRef);
-        // if (docSnap.exists() && deepEqual(docSnap.data().data, data)) {
-        //   console.log("データが同じため、書き込みません。");
-        //   return;
-        // }
+        // 設定データ更新時は両方の削除追加が怖いので厳密にチェック
+        if (patientNumber === undefined) {
+          const docSnap = await getDoc(docRef);
+          console.log(docSnap.exists());
+          if (docSnap.exists() && deepEqual(docSnap.data().data, data)) {
+            console.log("データが同じため、書き込みません。");
+            return;
+          }
+          if (docSnap.exists()) console.log(docSnap.data().data);
+
+          const margedData = margeSettingData(
+            { ...data },
+            docSnap.exists() ? docSnap.data()?.data : undefined
+          );
+          console.log(margedData);
+          if (docSnap.exists() && deepEqual(docSnap.data().data, margedData)) {
+            console.log("マージデータが同じため、書き込みません。");
+            return margedData;
+          } else if (deepEqual(data, margedData)) {
+            console.log("マージデータを書き込み");
+            await setDoc(docRef, { data: data });
+            return;
+          }
+          console.log("ループして書き込みますがここでは書き込みません。");
+          return margedData;
+        } else {
+        }
+        console.log(data);
         await setDoc(docRef, { data: data });
         console.log(
           (patientNumber ? `患者番号${patientNumber}：` : "全般設定：") +
@@ -739,22 +754,6 @@ export default function App() {
       } catch (error) {
         console.error("Error deleting user data: ", error);
       }
-    }
-  };
-
-  const getLocalStorage = async (key: string): Promise<string | undefined> => {
-    try {
-      const value = await AsyncStorage.getItem(key);
-      return value;
-    } catch (err) {}
-    return undefined;
-  };
-
-  const saveLocalStorage = async (key: string, value: string) => {
-    try {
-      await AsyncStorage.setItem(key, value);
-    } catch (err) {
-      console.error(err);
     }
   };
 
@@ -832,6 +831,7 @@ export default function App() {
             setAdmobShow,
             setUser,
             reloadData,
+            reloadPersonData,
           }}
         >
           {modalNumber === 1 && <CommonPatient />}

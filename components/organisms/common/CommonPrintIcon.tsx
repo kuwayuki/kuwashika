@@ -38,7 +38,6 @@ export default function CommonPrintIcon() {
       });
     } catch (error) {
     } finally {
-      appContextDispatch.setAdmobShow(true);
       try {
         if (await StoreReview.hasAction()) {
           StoreReview.requestReview();
@@ -46,6 +45,7 @@ export default function CommonPrintIcon() {
       } catch (error) {
         console.log(error);
       }
+      appContextDispatch.setAdmobShow(true);
     }
   };
 
@@ -191,7 +191,7 @@ export default function CommonPrintIcon() {
     // PCRを作成
     let pcrTd: string[] = ["", "", "", ""];
     const pcrData = isPrecision
-      ? currentPersonData.PCR.basic // TODO: 直す？
+      ? currentPersonData.PCR.basic // FIXME: 直す？
       : currentPersonData.PCR.basic;
     TEETH_ALL.forEach((teeth: teethType) => {
       const teethPcr = pcrData.filter(

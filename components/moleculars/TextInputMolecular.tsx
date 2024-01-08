@@ -58,7 +58,7 @@ export default function TextInputMolecular(props: TextInputPropsEx) {
       {...props}
       editable={isAndroid()}
       // onTouchEnd={() => Keyboard.dismiss()}
-      // editable={isIpad()} TODO: 後で対応したい
+      // editable={isIpad()} FIXME: 後で対応したい
       onTouchStart={() => onFocus()}
       style={[props.style, getStatusColorStyle()]}
     />

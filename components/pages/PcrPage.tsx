@@ -106,7 +106,7 @@ export default function PcrPage({ navigation }: RootTabScreenProps<"TabPCR">) {
     teethValue: TEETH_TYPE,
     isPrecision = false
   ) => {
-    const temp = isPrecision ? [...teethValuesSimple] : [...teethValuesSimple]; // TODO: 直す？
+    const temp = isPrecision ? [...teethValuesSimple] : [...teethValuesSimple]; // FIXME: 直す？
     if (teethValue.value < 10) {
       temp[index] = {
         ...teethValue,
@@ -138,7 +138,7 @@ export default function PcrPage({ navigation }: RootTabScreenProps<"TabPCR">) {
     }
     isPrecision
       ? setTeethValuesSimple([...temp])
-      : setTeethValuesSimple([...temp]); // TODO: 直す？
+      : setTeethValuesSimple([...temp]); // FIXME: 直す？
   };
   const moveNavigation = () => {
     appContextDispatch.setModalNumber(100);

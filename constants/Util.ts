@@ -1,4 +1,6 @@
-import { TEETH_TYPE } from "./Constant";
+import { AUTH_FILE, DATA_FILE, SETTING_FILE, TEETH_TYPE } from "./Constant";
+import deepEqual from "deep-equal";
+import * as FileSystem from "expo-file-system";
 import dayjs from "dayjs";
 import "dayjs/locale/ja";
 import { TEETH_MATH } from "../components/moleculars/TextInputTeethMolecular";
@@ -8,6 +10,8 @@ import {
   Platform,
   PlatformIOSStatic,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { FileInfo } from "expo-file-system";
 
 /**
  * Settingファイルに保存されているデータ
@@ -38,6 +42,7 @@ export type SettingType = {
 export type PersonNumberType = {
   patientNumber: number;
   patientName?: string;
+  isDeleted?: boolean;
 };
 
 /**
@@ -279,3 +284,182 @@ export const parseFirestoreTimestampToDate = (input: {
     return null;
   }
 };
+
+export const getFileData = async (
+  patientNumber?: number,
+  isAuthData = false
+) => {
+  const fileUri =
+    patientNumber !== undefined
+      ? FileSystem.documentDirectory + patientNumber + DATA_FILE
+      : !isAuthData
+      ? FileSystem.documentDirectory + SETTING_FILE
+      : FileSystem.documentDirectory + AUTH_FILE;
+
+  const result: FileInfo = await FileSystem.getInfoAsync(fileUri);
+  if (result.exists) {
+    const data = await FileSystem.readAsStringAsync(fileUri);
+    return JSON.parse(data);
+  }
+};
+
+export const writeFileData = async (data: any, patientNumber?: number) => {
+  const fileUri =
+    patientNumber !== undefined
+      ? FileSystem.documentDirectory + patientNumber + DATA_FILE
+      : FileSystem.documentDirectory + SETTING_FILE;
+
+  await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(data));
+};
+
+export const deleteFileData = async (patientNumber?: number) => {
+  const fileUri =
+    patientNumber !== undefined
+      ? FileSystem.documentDirectory + patientNumber + DATA_FILE
+      : FileSystem.documentDirectory + SETTING_FILE;
+  try {
+    await FileSystem.deleteAsync(fileUri);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getLocalStorage = async (
+  key: string
+): Promise<string | undefined> => {
+  try {
+    const value = await AsyncStorage.getItem(key);
+    return value;
+  } catch (err) {}
+  return undefined;
+};
+
+export const saveLocalStorage = async (key: string, value: string) => {
+  try {
+    await AsyncStorage.setItem(key, value);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+/**
+ * ローカルデータとDBデータをマージする
+ * @param localData
+ * @param dbData
+ * @returns
+ */
+export const margeSettingData = (
+  localData: DataType,
+  dbData?: DataType
+): DataType => {
+  const margedData: DataType = {
+    setting: localData.setting,
+    persons: [],
+  } as DataType;
+  // console.log(localData);
+  // console.log(dbData);
+  if (!dbData || !Object.keys(dbData).length) return localData;
+
+  localData.persons.forEach((localPerson: PersonNumberType) => {
+    let addPerson: PersonNumberType = { ...localPerson };
+    const conflictDBPerson = dbData.persons.find(
+      (dbPerson) => dbPerson.patientNumber === localPerson.patientNumber
+    );
+    // 患者番号が競合しているが、データが違う場合
+    if (conflictDBPerson) {
+      // 名称が一致している場合は削除されている方を強くする
+      if (localPerson.patientName === conflictDBPerson.patientName) {
+        addPerson.isDeleted =
+          !!localPerson.isDeleted || !!conflictDBPerson.isDeleted;
+      } else {
+        // 不一致の場合は削除されていない方を強くする
+        addPerson = !localPerson.isDeleted ? localPerson : conflictDBPerson;
+      }
+    }
+
+    margedData.persons.push(addPerson);
+  });
+
+  // DBのデータが存在しない場合は追加
+  dbData.persons.forEach((dbPerson) => {
+    if (
+      !margedData.persons.find(
+        (person) => person.patientNumber === dbPerson.patientNumber
+      )
+    )
+      margedData.persons.push(dbPerson);
+  });
+
+  return margedData;
+};
+
+// /**
+//  * ローカルデータとDBデータをマージする
+//  * @param localDataPersons
+//  * @param dbDataPersons
+//  * @returns
+//  */
+// export const margePatientData = (
+//   localDataPersons: PersonDataType[],
+//   dbDataPersons?: PersonDataType[]
+// ): PersonDataType[] => {
+//   const margedData: PersonDataType[] = [];
+//   if (!dbDataPersons || !dbDataPersons.length) return localDataPersons;
+
+//   localDataPersons.forEach((localPerson: PersonDataType) => {
+//     let addPersonData: PersonDataType = { ...localPerson };
+//     const matchDBPerson = dbDataPersons.find((dbPerson) =>
+//       deepEqual(localPerson, dbPerson)
+//     );
+//     // データが一致しない場合
+//     if (!matchDBPerson) {
+//       const nearDBPerson = dbDataPersons.find(
+//         (dbPerson) =>
+//           localPerson.inspectionDataKindNumber ===
+//             dbPerson.inspectionDataKindNumber &&
+//           localPerson.date === dbPerson.date
+//       );
+
+//       if (nearDBPerson) {
+//         // 入力されている方を優先する
+//         const ppdBasic = localPerson.PPD.basic
+//           .map((basic) => basic.value)
+//           .filter((value) => !!value);
+//         const ppdPrecision = localPerson.PPD.precision
+//           .map((basic) => basic.value)
+//           .filter((value) => !!value);
+//         const nearDBppdBasic = nearDBPerson.PPD.basic
+//           .map((basic) => basic.value)
+//           .filter((value) => !!value);
+//         const nearDBppdPrecision = nearDBPerson.PPD.precision
+//           .map((basic) => basic.value)
+//           .filter((value) => !!value);
+//         if (
+//           ppdBasic.length > nearDBppdBasic.length ||
+//           ppdPrecision.length > nearDBppdPrecision.length
+//         ) {
+//           // 特になし
+//         } else {
+//           // 不一致の場合は削除されていない方を強くする
+//           addPersonData = nearDBPerson;
+//         }
+//       }
+//     }
+//     margedData.push(addPersonData);
+//   });
+
+//   // DBのデータが存在しない場合は追加
+//   dbDataPersons.forEach((dbPerson) => {
+//     if (
+//       !margedData.find(
+//         (localPerson) =>
+//           localPerson.inspectionDataKindNumber ===
+//             dbPerson.inspectionDataKindNumber &&
+//           localPerson.date === dbPerson.date
+//       )
+//     )
+//       margedData.push(dbPerson);
+//   });
+
+//   return margedData;
+// };

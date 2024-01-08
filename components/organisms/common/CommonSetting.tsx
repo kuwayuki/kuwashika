@@ -1,24 +1,23 @@
-import { useContext, useEffect, useState } from "react";
-import { Alert, Platform, ScrollView, StyleSheet, View } from "react-native";
 import * as FileSystem from "expo-file-system";
+import { getAuth, signOut } from "firebase/auth";
+import { useContext, useEffect, useState } from "react";
+import { Alert, ScrollView, StyleSheet, View } from "react-native";
+import Purchases, {
+  CustomerInfo,
+  PurchasesOffering,
+} from "react-native-purchases";
 import { AppContextDispatch, AppContextState } from "../../../App";
+import { AUTH_FILE } from "../../../constants/Constant";
 import { PPD_ORDER_DOWN, PPD_ORDER_UP } from "../../../constants/Util";
 import AlertAtom from "../../atoms/AlertAtom";
 import ButtonAtom from "../../atoms/ButtonAtom";
 import IconAtom from "../../atoms/IconAtom";
 import ModalAtom from "../../atoms/ModalAtom";
 import SwitchAtom from "../../atoms/SwitchAtom";
+import TextAtom from "../../atoms/TextAtom";
 import IconTitleAction from "../../moleculars/IconTitleAction";
 import MainTitleChildren from "../../moleculars/MainTitleChildren";
-import Purchases, {
-  CustomerInfo,
-  LOG_LEVEL,
-  PurchasesOffering,
-  PurchasesPackage,
-} from "react-native-purchases";
-import TextAtom from "../../atoms/TextAtom";
-import { getAuth, signOut } from "firebase/auth";
-import { AUTH_FILE } from "../../../constants/Constant";
+import CommonSubscription, { subscriptionDetails } from "./CommonSubscription";
 
 export default function CommonSetting() {
   const appContextState = useContext(AppContextState);
@@ -42,6 +41,7 @@ export default function CommonSetting() {
   const [currentOffering, setCurrentOffering] =
     useState<PurchasesOffering | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpenSubscription, setIsOpenSubscription] = useState(false);
 
   // 初期データ読込処理
   useEffect(() => {
@@ -138,12 +138,14 @@ export default function CommonSetting() {
     // TODO: 後で治す
     if (false) {
       appContextDispatch.setPremium(true);
+      setIsOpenSubscription(false);
       return true;
     }
 
     AlertAtom(
-      "月額有料登録：¥500/月",
-      `有料会員になると広告が表示されなくなり、サインインで別デバイスとのデータ共有が可能になります。月額課金しますか？`,
+      `${subscriptionDetails.title}[${subscriptionDetails.price}]`,
+      `${subscriptionDetails.benefits}`,
+      // `有料会員になると広告が表示されなくなり、サインインで別デバイスとのデータ共有が可能になります。月額課金しますか？`,
       async () => {
         if (!currentOffering || isLoading) return;
         const localpurchasesPackage = currentOffering.availablePackages[0];
@@ -162,8 +164,10 @@ export default function CommonSetting() {
           if (!e.userCancelled) {
             console.log(e);
           }
+          Alert.alert("登録に失敗しました。");
         } finally {
           setIsLoading(false);
+          setIsOpenSubscription(false);
         }
       }
     );
@@ -220,6 +224,15 @@ export default function CommonSetting() {
     await FileSystem.deleteAsync(fileUri);
   };
 
+  if (isOpenSubscription) {
+    return (
+      <CommonSubscription
+        onPress={payment}
+        onClose={() => setIsOpenSubscription(false)}
+      ></CommonSubscription>
+    );
+  }
+
   return (
     <ModalAtom isSetting={true}>
       <View
@@ -246,7 +259,7 @@ export default function CommonSetting() {
       >
         <MainTitleChildren title={"データ管理"} style={{ marginBottom: 16 }}>
           <IconTitleAction
-            title={"月額課金"}
+            title={"プレミアムプラン"}
             icon={<IconAtom name="payment" type="material-icon" />}
           >
             {appContextState.isPremium ? (
@@ -262,10 +275,10 @@ export default function CommonSetting() {
               </TextAtom>
             ) : (
               <ButtonAtom
-                onPress={payment}
+                onPress={() => setIsOpenSubscription(true)}
                 style={{ backgroundColor: "pink", padding: 12 }}
               >
-                有料
+                プランを確認
               </ButtonAtom>
             )}
           </IconTitleAction>

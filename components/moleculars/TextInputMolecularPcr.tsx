@@ -54,7 +54,7 @@ export default function TextInputMolecularPcr(props: PcrTextInputPropsEx) {
       ...indexStyle,
       backgroundColor: isInputed ? "red" : "#ededed",
       // backgroundColor: color,
-      // TODO: 後で治す,
+      // FIXME: 後で治す,
     } as StyleProp<TextStyle>;
     return style;
   };

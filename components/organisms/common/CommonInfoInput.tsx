@@ -4,7 +4,12 @@ import { Icon } from "react-native-elements";
 import { AppContextDispatch, AppContextState } from "../../../App";
 import { AdmobInter } from "../../../constants/AdmobInter";
 import { TAB_PAGE } from "../../../constants/Constant";
-import { PersonDataType, isIpad, isIphoneMini } from "../../../constants/Util";
+import {
+  PersonDataType,
+  PersonType,
+  isIpad,
+  isIphoneMini,
+} from "../../../constants/Util";
 import DatePickerAtom from "../../atoms/DatePickerAtom";
 import DropDownPickerAtom from "../../atoms/DropDownPickerAtom";
 import SwitchAtom from "../../atoms/SwitchAtom";
@@ -90,6 +95,12 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
             value={appContextState.inspectionDataNumber}
             setValue={appContextDispatch.setInspectionDataNumber}
             width={isIpad() ? 180 : isIphoneMini() ? 160 : 160}
+            onOpen={() => {
+              appContextDispatch.reloadPersonData(
+                { ...appContextState.currentPerson },
+                true
+              );
+            }}
           />
         </TitleAndAction>
         <TitleAndAction
