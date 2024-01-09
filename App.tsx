@@ -49,6 +49,7 @@ import {
   PersonDataType,
   PersonNumberType,
   PersonType,
+  checkPremium,
   deleteFileData,
   formatDate,
   getFileData,
@@ -228,13 +229,6 @@ export default function App() {
     };
     f();
   }, [isPremium]);
-
-  const checkPremium = (customerInfo: CustomerInfo) => {
-    if (typeof customerInfo.entitlements.active.Premium !== "undefined") {
-      return true;
-    }
-    return false;
-  };
 
   const initPurchases = useCallback(async () => {
     Purchases.setLogLevel(LOG_LEVEL.VERBOSE);

@@ -8,7 +8,11 @@ import Purchases, {
 } from "react-native-purchases";
 import { AppContextDispatch, AppContextState } from "../../../App";
 import { AUTH_FILE } from "../../../constants/Constant";
-import { PPD_ORDER_DOWN, PPD_ORDER_UP } from "../../../constants/Util";
+import {
+  PPD_ORDER_DOWN,
+  PPD_ORDER_UP,
+  checkPremium,
+} from "../../../constants/Util";
 import AlertAtom from "../../atoms/AlertAtom";
 import ButtonAtom from "../../atoms/ButtonAtom";
 import IconAtom from "../../atoms/IconAtom";
@@ -128,12 +132,6 @@ export default function CommonSetting() {
     f();
   }, []);
 
-  const checkPremium = (customerInfo: CustomerInfo) => {
-    if (typeof customerInfo.entitlements.active.Premium !== "undefined") {
-      return true;
-    }
-  };
-
   const payment = async () => {
     // TODO: 後で治す
     if (false) {
@@ -141,36 +139,29 @@ export default function CommonSetting() {
       setIsOpenSubscription(false);
       return true;
     }
+    if (!currentOffering || isLoading) return;
+    const localpurchasesPackage = currentOffering.availablePackages[0];
+    if (!localpurchasesPackage) return;
 
-    AlertAtom(
-      `${subscriptionDetails.title}[${subscriptionDetails.price}]`,
-      `${subscriptionDetails.benefits}`,
-      // `有料会員になると広告が表示されなくなり、サインインで別デバイスとのデータ共有が可能になります。月額課金しますか？`,
-      async () => {
-        if (!currentOffering || isLoading) return;
-        const localpurchasesPackage = currentOffering.availablePackages[0];
-        if (!localpurchasesPackage) return;
-        console.log(localpurchasesPackage);
-        setIsLoading(true);
-        try {
-          const { customerInfo } = await Purchases.purchasePackage(
-            localpurchasesPackage
-          );
-          if (checkPremium(customerInfo)) {
-            appContextDispatch.setPremium(true);
-            Alert.alert("登録しました。");
-          }
-        } catch (e: any) {
-          if (!e.userCancelled) {
-            console.log(e);
-          }
-          Alert.alert("登録に失敗しました。");
-        } finally {
-          setIsLoading(false);
-          setIsOpenSubscription(false);
-        }
+    console.log(localpurchasesPackage);
+    setIsLoading(true);
+    try {
+      const { customerInfo } = await Purchases.purchasePackage(
+        localpurchasesPackage
+      );
+      if (checkPremium(customerInfo)) {
+        appContextDispatch.setPremium(true);
+        Alert.alert("登録しました。");
       }
-    );
+    } catch (e: any) {
+      if (!e.userCancelled) {
+        console.log(e);
+      }
+      Alert.alert("登録に失敗しました。");
+    } finally {
+      setIsLoading(false);
+      setIsOpenSubscription(false);
+    }
   };
 
   const restorePurchases = async () => {

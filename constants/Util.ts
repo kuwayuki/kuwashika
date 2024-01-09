@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FileInfo } from "expo-file-system";
+import { CustomerInfo } from "react-native-purchases";
 
 /**
  * Settingファイルに保存されているデータ
@@ -340,6 +341,13 @@ export const saveLocalStorage = async (key: string, value: string) => {
   } catch (err) {
     console.error(err);
   }
+};
+
+export const checkPremium = (customerInfo: CustomerInfo) => {
+  if (typeof customerInfo.entitlements.active["ORDER"] !== "undefined") {
+    return true;
+  }
+  return false;
 };
 
 /**
