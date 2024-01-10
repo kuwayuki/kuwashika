@@ -131,7 +131,6 @@ npm run start
 
 % app.json-"version": "2"はずれるようにする必要がある。
 % app.json-"ios"."buildNumber": "2"はずれるようにする必要がある。
-eas login
 eas build -p ios
 eas submit --latest -p ios
 eas update --branch production --message "Bug Fixed"
@@ -139,3 +138,5 @@ eas update --branch production --message "Bug Fixed"
 % pacakge を追加した場合には必ず再インストールすること！
 eas build --profile development --platform ios
 npx expo start --dev-client
+
+ee68028@yahoo.ne.jp

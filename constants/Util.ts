@@ -471,3 +471,8 @@ export const margeSettingData = (
 
 //   return margedData;
 // };
+
+export const getRandomId = (maxCount: number) => {
+  const randomIndex = Math.floor(Math.random() * maxCount);
+  return randomIndex;
+};

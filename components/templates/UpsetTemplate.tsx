@@ -5,7 +5,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { AppContextState } from "../../App";
-import { BANNER_UNIT_IAD, TAB_PAGE } from "../../constants/Constant";
+import { BANNER_UNIT_ID, TAB_PAGE } from "../../constants/Constant";
 import { getScrollPosition, isAndroid } from "../../constants/Util";
 import ScrollViewAtom from "../atoms/ScrollViewAtom";
 import ScrollViewAndroid from "../moleculars/ScrollViewAndroid";
@@ -71,10 +71,23 @@ export default function UpsetTemplate() {
             <UpsetAllTeeth />
           )}
           {!appContext.isPremium && (
-            <BannerAd
-              unitId={BANNER_UNIT_IAD.BANNER_2}
-              size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-            />
+            <View
+              style={{
+                flexDirection: "row",
+                width: 100,
+              }}
+            >
+              <BannerAd
+                unitId={BANNER_UNIT_ID.BANNER_2}
+                size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+                requestOptions={{ keywords: ["Oral Surgery"] }}
+              />
+              <BannerAd
+                unitId={BANNER_UNIT_ID.BANNER_3}
+                size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+                requestOptions={{ keywords: ["Endodontics"] }}
+              />
+            </View>
           )}
         </ScrollViewAtom>
       </View>

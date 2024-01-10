@@ -55,6 +55,7 @@ import {
   getFileData,
   getLocalStorage,
   isAndroid,
+  isIpad,
   margeSettingData,
   parseDate,
   saveLocalStorage,
@@ -63,6 +64,7 @@ import {
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
+import { AdmobAppOpenAd } from "./constants/AdmobAppOpen";
 
 // 全ページの共通項目
 export type appContextState = {
@@ -163,9 +165,11 @@ export default function App() {
 
   useEffect(() => {
     (async () => {
-      await ScreenOrientation.lockAsync(
-        ScreenOrientation.OrientationLock.LANDSCAPE_LEFT
-      );
+      if (!isIpad()) {
+        await ScreenOrientation.lockAsync(
+          ScreenOrientation.OrientationLock.LANDSCAPE_LEFT
+        );
+      }
       const { granted, canAskAgain } = await getTrackingPermissionsAsync();
       if (!granted && canAskAgain && !isAndroid()) {
         Alert.alert(
@@ -261,6 +265,8 @@ export default function App() {
         );
         // setQuestionPremium(isDialog !== "false");
       }
+      // FIXME:後で出現
+      // AdmobAppOpenAd();
     }
   }, []);
 
