@@ -140,3 +140,9 @@ eas build --profile development --platform ios
 npx expo start --dev-client
 
 ee68028@yahoo.ne.jp
+
+eas build --platform ios --auto-submit
+
+% OTA
+eas build --platform ios --profile production
+eas update --branch production --message "Bug Fixed"
