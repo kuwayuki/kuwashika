@@ -1,20 +1,20 @@
-import * as React from "react";
+import { useContext } from "react";
 import { View } from "react-native";
 import { AppContextState } from "../../../App";
 import {
-  teethType,
   TEETH_DOWN,
   TEETH_TYPE,
   TEETH_UP,
+  teethType,
 } from "../../../constants/Constant";
 import TextReadMolecular from "../../moleculars/TextReadMolecular";
 import { PcrContextDispatch, PcrContextState } from "../../pages/PcrPage";
 import PcrOneBlockTeeth from "./PcrOneBlockTeeth";
 
 export default function PcrAllTeeth() {
-  const appContext = React.useContext(AppContextState);
-  const pcrContextState = React.useContext(PcrContextState);
-  const pcrContextDispatch = React.useContext(PcrContextDispatch);
+  const appContext = useContext(AppContextState);
+  const pcrContextState = useContext(PcrContextState);
+  const pcrContextDispatch = useContext(PcrContextDispatch);
 
   const onTouchMtAction = (teethGroupIndex: number) => {
     if (pcrContextState.focusNumber !== teethGroupIndex * 4) {
@@ -22,7 +22,7 @@ export default function PcrAllTeeth() {
       return;
     }
     const tempTeeths = appContext.isPrecision
-      ? [...pcrContextState.teethValuesSimple] // TODO: 直す？
+      ? [...pcrContextState.teethValuesSimple] // FIXME: 直す？
       : [...pcrContextState.teethValuesSimple];
     // PCRの場合は、タッチ時に対象を全て選択・非選択状態にする
     const selectValue = tempTeeths
@@ -39,7 +39,7 @@ export default function PcrAllTeeth() {
       }
     });
     appContext.isPrecision
-      ? pcrContextDispatch.setTeethValuesSimple(selectTeeths) // TODO: 直す？
+      ? pcrContextDispatch.setTeethValuesSimple(selectTeeths) // FIXME: 直す？
       : pcrContextDispatch.setTeethValuesSimple(selectTeeths);
   };
 
@@ -48,7 +48,7 @@ export default function PcrAllTeeth() {
       <PcrOneBlockTeeth
         teethValues={
           appContext.isPrecision
-            ? pcrContextState.teethValuesSimple // TODO: 直す？
+            ? pcrContextState.teethValuesSimple // FIXME: 直す？
             : pcrContextState.teethValuesSimple
         }
         setTeethValue={pcrContextDispatch.setTeethValue}

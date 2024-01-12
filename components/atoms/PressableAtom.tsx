@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useContext, useEffect, useState } from "react";
 import { Pressable, PressableProps, StyleSheet, Text } from "react-native";
 
 export type PressablePropsType = PressableProps & {
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   },
   button: {
     fontWeight: "bold",
-    borderWidth: 0.3,
+    borderWidth: 0.4,
     textAlignVertical: "middle",
     alignItems: "center",
     padding: 15,

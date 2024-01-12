@@ -1,4 +1,3 @@
-import * as React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { Text, View } from "../organisms/common/Themed";
 
@@ -11,7 +10,7 @@ export default function NotFoundScreen({
     <View style={styles.container}>
       <Text style={styles.title}>This screen doesn't exist.</Text>
       <TouchableOpacity
-        onPress={() => navigation.replace("Root")}
+        onPress={() => navigation.replace("歯周病検査")}
         style={styles.link}
       >
         <Text style={styles.linkText}>Go to home screen!</Text>

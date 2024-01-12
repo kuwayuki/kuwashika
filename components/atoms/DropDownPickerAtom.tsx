@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useContext, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import DropDownPicker, {
   DropDownPickerProps,
@@ -11,10 +11,10 @@ type DropDownPickerAtomProps = Omit<DropDownPickerProps, "open" | "setOpen"> & {
   width?: number;
 };
 export default function DropDownPickerAtom(props: DropDownPickerAtomProps) {
-  const [open, setOpen] = React.useState(false);
-  const appContext = React.useContext(AppContextState);
+  const [open, setOpen] = useState(false);
+  const appContext = useContext(AppContextState);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setOpen(false);
   }, [appContext.currentPerson]);
 
@@ -39,13 +39,11 @@ export default function DropDownPickerAtom(props: DropDownPickerAtomProps) {
             ? [styles.picker, { maxWidth: props.width }]
             : styles.picker
         }
-        dropDownContainerStyle={styles.dropDown}
-        // dropDownContainerStyle={
-        //   props.width !== undefined
-        //     ? [styles.picker, { maxWidth: props.width }]
-        //     : styles.picker
-        // }
-        // labelStyle={styles.picker}
+        dropDownContainerStyle={
+          props.width !== undefined
+            ? [styles.picker, { maxWidth: props.width }]
+            : styles.picker
+        }
         // placeholderStyle={styles.picker}
         // dropDownContainerStyle={styles.picker}
         // tickIconStyle={styles.picker}
@@ -76,18 +74,18 @@ export default function DropDownPickerAtom(props: DropDownPickerAtomProps) {
 }
 const styles = StyleSheet.create({
   picker: {
-    height: 37,
     fontSize: 14,
     minWidth: 80,
     maxWidth: 80,
     display: "flex",
-    // overflow: "hidden",
-    // flexDirection: "row",
+    borderWidth: 0,
+    borderRadius: 10,
+    backgroundColor: "whitesmoke",
+    minHeight: 36,
   },
   dropDown: {
     fontSize: 14,
     width: 160,
-    // textAlign: "right",
     alignSelf: "flex-end",
   },
 });

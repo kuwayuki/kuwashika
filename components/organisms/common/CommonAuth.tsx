@@ -1,122 +1,179 @@
 import {
   createUserWithEmailAndPassword,
+  getAuth,
+  sendEmailVerification,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
-  signOut,
-  UserCredential,
 } from "firebase/auth";
-import React, { useState } from "react";
-import {
-  Button,
-  KeyboardAvoidingView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { auth } from "../../../App";
+import { useContext, useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import { AppContextDispatch, AppContextState } from "../../../App";
 import TextInputAtom from "../../atoms/TextInputAtom";
+import * as FileSystem from "expo-file-system";
+import { AUTH_FILE } from "../../../constants/Constant";
 
 export default function CommonAuth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const appContextDispatch = useContext(AppContextDispatch);
+  const appContextState = useContext(AppContextState);
 
+  const auth = getAuth();
   const signIn = async (event: any) => {
-    event.preventDefault();
-    const user = await signInWithEmailAndPassword(auth, email, password);
-    console.log(user);
-  };
-
-  const logOut = async (event: any) => {
-    event.preventDefault();
-    await signOut(auth)
-      .then(function (user) {
-        console.log(user);
+    await signInWithEmailAndPassword(auth, email, password)
+      .then((credential) => {
+        appContextDispatch.setUser(credential.user);
+        appContextDispatch.setModalNumber(0);
+        appContextDispatch.setPatientNumber(
+          appContextState.currentPerson.patientNumber
+        );
+        writeFileData({ email, password });
       })
       .catch((error) => {
-        console.error(error);
+        const errorMessage = error.message;
+        alert(errorMessage);
       });
   };
 
+  const cancel = () => {
+    // Modalを閉じて、前の患者番号に戻す
+    appContextDispatch.setModalNumber(0);
+    appContextDispatch.setPatientNumber(
+      appContextState.currentPerson.patientNumber
+    );
+  };
+
   const handleRegister = async (event: any) => {
-    event.preventDefault();
-    try {
-      const user = await createUserWithEmailAndPassword(auth, email, password);
-    } catch (error) {
-      alert(error.message);
-    }
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        // メール認証を行う
+        sendEmailVerification(user)
+          .then(() => {
+            // 認証メール送信成功
+            alert("メールを承認してください。");
+            writeFileData({ email, password });
+            appContextDispatch.setUser(user);
+            appContextDispatch.setModalNumber(0);
+            appContextDispatch.setPatientNumber(
+              appContextState.currentPerson.patientNumber
+            );
+          })
+          .catch((error) => {
+            // 認証メール送信エラー
+            console.log(error);
+          });
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        alert(errorMessage);
+      });
+  };
+
+  const handleResetPassword = async (event: any) => {
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        console.log("パスワードリセットメールが送信されました。");
+        alert("メールを確認してください。");
+      })
+      .catch((error) => {
+        // エラー処理
+        console.error("パスワードリセットメール送信エラー", error);
+      });
+  };
+
+  const writeFileData = async (data: any) => {
+    const fileUri = FileSystem.documentDirectory + AUTH_FILE;
+    await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(data));
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior="padding"
+    <View
       style={{
-        justifyContent: "center",
-        alignItems: "center",
-        flex: 1,
+        height: "100%",
+        paddingTop: 16,
+        paddingLeft: 16,
       }}
     >
-      <Text style={{ fontSize: 20, marginBottom: 20 }}>ユーザ登録画面</Text>
-      <View style={{ marginBottom: 20 }}>
-        <TextInputAtom
-          style={{
-            width: 250,
-            borderWidth: 1,
-            padding: 5,
-            borderColor: "gray",
-          }}
-          onChangeText={setEmail}
-          value={email}
-          placeholder="メールアドレスを入力してください"
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-      </View>
-      <View style={{ marginBottom: 20 }}>
-        <TextInputAtom
-          style={{
-            width: 250,
-            borderWidth: 1,
-            padding: 5,
-            borderColor: "gray",
-          }}
-          onChangeText={setPassword}
-          value={password}
-          placeholder="パスワードを入力してください"
-          secureTextEntry={true}
-          autoCapitalize="none"
-        />
-      </View>
-      <TouchableOpacity
+      <View
         style={{
           padding: 10,
-          backgroundColor: "#88cb7f",
-          borderRadius: 10,
+          backgroundColor: "#EFFFF0",
+          alignItems: "center",
         }}
-        onPress={signIn}
       >
-        <Text style={{ color: "white" }}>サインイン</Text>
-      </TouchableOpacity>
-      {/* <TouchableOpacity
-        style={{
-          padding: 10,
-          backgroundColor: "#88cb7f",
-          borderRadius: 10,
-        }}
-        onPress={handleRegister}
-      > */}
-      <Text style={{ color: "blue" }} onPress={handleRegister}>
-        登録する
-      </Text>
-      <TouchableOpacity
-        style={{
-          padding: 10,
-          backgroundColor: "#88cb7f",
-          borderRadius: 10,
-        }}
-        onPress={logOut}
-      >
-        <Text style={{ color: "white" }}>ログアウト</Text>
-      </TouchableOpacity>
-      {/* </TouchableOpacity> */}
-    </KeyboardAvoidingView>
+        <View style={{ marginBottom: 20, width: 250 }}>
+          <TextInputAtom
+            style={{
+              width: "100%",
+              borderWidth: 1,
+              padding: 5,
+              borderColor: "gray",
+            }}
+            autoComplete={"email"}
+            autoFocus={true}
+            onChangeText={setEmail}
+            value={email}
+            placeholder="メールアドレスを入力してください"
+            placeholderTextColor={"gray"}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+        </View>
+        <View style={{ marginBottom: 20, width: 250 }}>
+          <TextInputAtom
+            style={{
+              width: "100%",
+              borderWidth: 1,
+              padding: 5,
+              borderColor: "gray",
+            }}
+            onChangeText={setPassword}
+            value={password}
+            placeholder="パスワードを入力してください"
+            placeholderTextColor={"gray"}
+            secureTextEntry={true}
+            autoCapitalize="none"
+          />
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            width: "100%",
+          }}
+        >
+          <TouchableOpacity
+            style={{
+              padding: 10,
+              backgroundColor: "#88cb7f",
+              borderRadius: 10,
+            }}
+            onPress={signIn}
+          >
+            <Text style={{ color: "white" }}>サインイン</Text>
+          </TouchableOpacity>
+          <Text style={{ color: "blue", padding: 10 }} onPress={handleRegister}>
+            登録する
+          </Text>
+          <TouchableOpacity
+            style={{
+              padding: 10,
+              backgroundColor: "gray",
+              borderRadius: 10,
+            }}
+            onPress={cancel}
+          >
+            <Text style={{ color: "white" }}>キャンセル</Text>
+          </TouchableOpacity>
+        </View>
+        <Text
+          style={{ color: "red", padding: 10 }}
+          onPress={handleResetPassword}
+        >
+          パスワードを忘れた
+        </Text>
+      </View>
+    </View>
   );
 }

@@ -1,22 +1,28 @@
-import * as React from "react";
+import { useContext, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { AppContextDispatch, AppContextState } from "../../../App";
-import { admobReward } from "../../../constants/Admob";
-import { INIT_PERSON, PersonType } from "../../../constants/Util";
-import { DropdownType } from "../../atoms/DropDownPickerAtom";
+import {
+  INIT_PERSON,
+  PersonNumberType,
+  PersonType,
+} from "../../../constants/Util";
 import ModalAtom from "../../atoms/ModalAtom";
 import PressableAtom from "../../atoms/PressableAtom";
 import TextInputAtom from "../../atoms/TextInputAtom";
 import TitleAndAction from "../../moleculars/TitleAndAction";
+import { LIMIT_COUNT } from "../../../constants/Constant";
 
 export default function CommonPatient() {
-  const appContextState = React.useContext(AppContextState);
-  const appContextDispatch = React.useContext(AppContextDispatch);
+  const appContextState = useContext(AppContextState);
+  const appContextDispatch = useContext(AppContextDispatch);
 
-  const [patientNumber, setPatientNumber] = React.useState<number>(undefined);
-  const [patientName, setPatientName] = React.useState<string>(undefined);
+  const [patientNumber, setPatientNumber] = useState<number>(undefined);
+  const [patientName, setPatientName] = useState<string>(undefined);
 
   const savePatient = () => {
+    if (!patientNumber || !patientName)
+      return alert("患者番号と患者名は必須です。");
+
     if (
       appContextState.patients
         .map((patient) => patient.value)
@@ -26,13 +32,10 @@ export default function CommonPatient() {
       return;
     }
 
-    // 患者番号の追加
-    const temp: DropdownType[] = [...appContextState.patients];
-    temp.push({
-      label: patientNumber.toString() + ":" + (patientName ?? ""),
-      value: patientNumber,
-    });
-    appContextDispatch.setPatients(temp);
+    // 患者追加時は広告を表示
+    if (appContextState.patients.length > LIMIT_COUNT.ADMOB_MAX_PATIENTS) {
+      appContextDispatch.setAdmobShow(true);
+    }
     appContextDispatch.setPatientNumber(patientNumber);
 
     // 全体データの更新
@@ -41,13 +44,24 @@ export default function CommonPatient() {
       data: [INIT_PERSON],
     } as PersonType);
 
+    const persons = [...appContextState.settingData.persons];
+    let isInclude = false;
+    const addPerson: PersonNumberType = {
+      patientNumber: patientNumber,
+      patientName: patientName,
+    };
+    persons.forEach((person) => {
+      if (person.patientNumber === patientNumber) {
+        person.patientName = addPerson.patientName;
+        person.isDeleted = false;
+        isInclude = true;
+      }
+    });
+    if (!isInclude) persons.push(addPerson);
     // 全体データの更新
-    appContextDispatch.registSettingData({
+    appContextDispatch.setSettingData({
       ...appContextState.settingData,
-      persons: [
-        ...appContextState.settingData.persons,
-        { patientNumber: patientNumber, patientName: patientName },
-      ],
+      persons: persons,
     });
 
     // モーダルを閉じる
@@ -73,6 +87,7 @@ export default function CommonPatient() {
             onChangeText={(num) =>
               setPatientNumber(num ? Number(num) : undefined)
             }
+            isTextInput={true}
           />
         </TitleAndAction>
         <TitleAndAction title={"患者名称"} style={{ marginBottom: 16 }}>
@@ -80,6 +95,7 @@ export default function CommonPatient() {
             value={patientName}
             onChangeText={setPatientName}
             style={{ fontSize: 18 }}
+            isTextInput={true}
           />
         </TitleAndAction>
       </View>

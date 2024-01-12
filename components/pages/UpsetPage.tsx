@@ -1,4 +1,4 @@
-import * as React from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { AppContextDispatch, AppContextState } from "../../App";
 import { TEETH_TYPE } from "../../constants/Constant";
 import { PersonDataType } from "../../constants/Util";
@@ -9,7 +9,7 @@ export type upsetContextState = {
   focusNumber: number;
   teethValuesSimple: TEETH_TYPE[]; // 32の歯
 };
-export const UpsetContextState = React.createContext({} as upsetContextState);
+export const UpsetContextState = createContext({} as upsetContextState);
 
 export type upsetContextDispatch = {
   setFocusNumber: (focusNumber: number) => void;
@@ -17,25 +17,21 @@ export type upsetContextDispatch = {
   setTeethValue: (index: number, teethValue: TEETH_TYPE) => void;
   moveNavigation: () => void;
 };
-export const UpsetContextDispatch = React.createContext(
-  {} as upsetContextDispatch
-);
+export const UpsetContextDispatch = createContext({} as upsetContextDispatch);
 
 export default function UpsetPage({
   navigation,
 }: RootTabScreenProps<"TabUpset">) {
-  const appContextState = React.useContext(AppContextState);
-  const appContextDispatch = React.useContext(AppContextDispatch);
+  const appContextState = useContext(AppContextState);
+  const appContextDispatch = useContext(AppContextDispatch);
 
-  const [focusNumber, setFocusNumber] = React.useState(0);
-  const [teethValuesSimple, setTeethValuesSimple] = React.useState<
-    TEETH_TYPE[]
-  >([]);
+  const [focusNumber, setFocusNumber] = useState(0);
+  const [teethValuesSimple, setTeethValuesSimple] = useState<TEETH_TYPE[]>([]);
 
   /**
    * 患者データから表示再読み込み
    */
-  React.useEffect(() => {
+  useEffect(() => {
     // navigation.navigate("TabPeriodontal");
     setFocusNumber(0);
   }, [appContextState.patientNumber, appContextState.inspectionDataNumber]);
@@ -43,14 +39,14 @@ export default function UpsetPage({
   /**
    * 患者データから表示再読み込み
    */
-  React.useEffect(() => {
+  useEffect(() => {
     setFocusNumber(0);
   }, []);
 
   /**
    * 患者データから表示再読み込み
    */
-  React.useEffect(() => {
+  useEffect(() => {
     if (!appContextState.currentPerson) return;
 
     const temp2: TEETH_TYPE[] = [
@@ -73,7 +69,7 @@ export default function UpsetPage({
   }, [appContextState.isReload]);
 
   /** データが変更される度に編集データを更新 */
-  React.useEffect(() => {
+  useEffect(() => {
     if (!appContextState.currentPerson) return;
     const data: PersonDataType = {
       ...appContextState.currentPerson.currentData,

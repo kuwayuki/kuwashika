@@ -1,7 +1,8 @@
-import * as React from "react";
+import { useContext } from "react";
 import { View } from "react-native";
 import { AppContextState } from "../../../App";
 import { TEETH_TYPE } from "../../../constants/Constant";
+import { isAndroid } from "../../../constants/Util";
 import TextInputLargeMolecular from "../../moleculars/TextInputLargeMolecular";
 import TextInputMolecularPcr from "../../moleculars/TextInputMolecularPcr";
 import TextInputSmallMolecular from "../../moleculars/TextInputSmallMolecular";
@@ -31,7 +32,7 @@ export const PCR_MATH_4 = [0, 1, 2, 3];
  * @returns
  */
 export default function CommonTeeth(props: teethProps) {
-  const appContext = React.useContext(AppContextState);
+  const appContext = useContext(AppContextState);
 
   const onTouchBlDrAction = (teethNum: number) => {
     if (props.isPcr) {
@@ -92,6 +93,7 @@ export default function CommonTeeth(props: teethProps) {
       props.teethValues[indexInit + 2]?.index,
       props.teethValues[indexInit + 3]?.index,
     ].includes(props.focusNumber);
+    const borderWidth = isFocus ? 1.5 : 0.5;
     return (
       <View
         style={{
@@ -100,15 +102,12 @@ export default function CommonTeeth(props: teethProps) {
           maxHeight: len,
           minWidth: len,
           minHeight: len,
+          marginBottom: isAndroid() ? -0.4 : undefined,
           // borderColor: "#696969",
           // backgroundColor: "#696969",
           // borderWidth: focusIndex === 0 ? 2 : 0.5,
           borderStyle: "solid",
-          borderWidth: isFocus ? 2 : 0.5,
-          // borderLeftWidth: focusIndex === 0 ? 2 : 0.5,
-          // borderTopWidth: focusIndex === 0 ? 2 : 0.5,
-          // borderRightWidth: focusIndex === 0 ? 2 : 0.5,
-          // borderBottomWidth: focusIndex === 0 ? 2 : 0.5,
+          borderWidth: borderWidth,
         }}
       >
         {PCR_MATH_4.map((math) => teeth(math))}

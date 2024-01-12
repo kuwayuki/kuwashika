@@ -1,4 +1,6 @@
-import { TEETH_TYPE } from "./Constant";
+import { AUTH_FILE, DATA_FILE, SETTING_FILE, TEETH_TYPE } from "./Constant";
+import deepEqual from "deep-equal";
+import * as FileSystem from "expo-file-system";
 import dayjs from "dayjs";
 import "dayjs/locale/ja";
 import { TEETH_MATH } from "../components/moleculars/TextInputTeethMolecular";
@@ -8,6 +10,9 @@ import {
   Platform,
   PlatformIOSStatic,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { FileInfo } from "expo-file-system";
+import { CustomerInfo } from "react-native-purchases";
 
 /**
  * Settingファイルに保存されているデータ
@@ -38,6 +43,7 @@ export type SettingType = {
 export type PersonNumberType = {
   patientNumber: number;
   patientName?: string;
+  isDeleted?: boolean;
 };
 
 /**
@@ -93,7 +99,7 @@ const INIT_DATA = (isPresion = false) => {
 export const INIT_PERSON: PersonDataType = {
   isPrecision: false,
   inspectionDataNumber: 1,
-  inspectionDataKindNumber: 1,
+  inspectionDataKindNumber: 0,
   inspectionDataName: "初診",
   date: new Date(),
   mtTeethNums: [],
@@ -162,6 +168,7 @@ export const getScrollPosition = (
   index?: number,
   isPrecision?: boolean
 ): any => {
+  const zoomScale = nativeEvent.zoomScale ?? 1;
   const partsTimesX = isPrecision ? 3 : 1;
   const partsTimesY = isPrecision ? 4 : 2;
   const maxColumns = 16 * partsTimesX;
@@ -175,12 +182,11 @@ export const getScrollPosition = (
   const indexPositionY = Math.floor(index / maxColumns);
 
   // 一マス分のサイズ
-  const timesX = (MAX_WIDTH * nativeEvent.zoomScale) / maxColumns;
-  const bornusY = nativeEvent.layoutMeasurement.height * nativeEvent.zoomScale;
+  const timesX = (MAX_WIDTH * zoomScale) / maxColumns;
+  const bornusY = nativeEvent.layoutMeasurement.height * zoomScale;
   // 端っこに行くにつれて差分を徐々に倍率を下げる（真ん中が最大）
   const positionX =
-    timesX * indexPositionX -
-    (nativeEvent.zoomScale >= 1 ? 300 : 100 * nativeEvent.zoomScale);
+    timesX * indexPositionX - (zoomScale >= 1 ? 300 : 100 * zoomScale);
   const positionY =
     (nativeEvent.contentSize.height / partsTimesY) * indexPositionY +
     (indexPositionY < partsTimesY / 2 ? -bornusY : bornusY);
@@ -192,11 +198,13 @@ export const pcrCalculation = (
   teethValues: TEETH_TYPE[],
   mtTeethNums: number[]
 ) => {
+  // 塗りつぶした数
   const filled = teethValues.filter(
     (teeth) => teeth.value === 1 && !mtTeethNums.includes(teeth.teethGroupIndex)
   );
+  // 塗りつぶした数
   const calc =
-    (filled.length / (teethValues.length - mtTeethNums.length)) * 100;
+    (filled.length / (teethValues.length - 4 * mtTeethNums.length)) * 100;
   return Math.round(calc * 10) / 10;
 };
 
@@ -227,4 +235,244 @@ export const isIpad = (): boolean => {
 export const isIphoneMini = (): boolean => {
   const windowWidth = Dimensions.get("window").width;
   return windowWidth < 750;
+};
+
+export const isAndroid = (): boolean => {
+  return Platform.OS === "android";
+};
+
+export const isIos = (): boolean => {
+  return Platform.OS === "ios";
+};
+
+export const getYMD = (date?: Date): string => {
+  try {
+    const dt = parseDate(date);
+    const y = dt.getFullYear();
+    const m = ("00" + (dt.getMonth() + 1)).slice(-2);
+    const d = ("00" + dt.getDate()).slice(-2);
+    const result = y + "/" + m + "/" + d;
+    return result;
+  } catch (error) {
+    return "";
+  }
+};
+
+export const parseDate = (input: any) => {
+  try {
+    if (input.seconds) {
+      return parseFirestoreTimestampToDate(input);
+    }
+    return new Date(input);
+  } catch (error) {
+    return input;
+  }
+};
+
+export const parseFirestoreTimestampToDate = (input: {
+  seconds: number;
+  nanoseconds: number;
+}) => {
+  if (
+    input &&
+    typeof input.seconds === "number" &&
+    typeof input.nanoseconds === "number"
+  ) {
+    // FirestoreのタイムスタンプをDateオブジェクトに変換
+    return new Date(input.seconds * 1000 + input.nanoseconds / 1000000);
+  } else {
+    // 入力が期待する形式でない場合は変換せずにnullを返す
+    return null;
+  }
+};
+
+export const getFileData = async (
+  patientNumber?: number,
+  isAuthData = false
+) => {
+  const fileUri =
+    patientNumber !== undefined
+      ? FileSystem.documentDirectory + patientNumber + DATA_FILE
+      : !isAuthData
+      ? FileSystem.documentDirectory + SETTING_FILE
+      : FileSystem.documentDirectory + AUTH_FILE;
+
+  const result: FileInfo = await FileSystem.getInfoAsync(fileUri);
+  if (result.exists) {
+    const data = await FileSystem.readAsStringAsync(fileUri);
+    return JSON.parse(data);
+  }
+};
+
+export const writeFileData = async (data: any, patientNumber?: number) => {
+  const fileUri =
+    patientNumber !== undefined
+      ? FileSystem.documentDirectory + patientNumber + DATA_FILE
+      : FileSystem.documentDirectory + SETTING_FILE;
+
+  await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(data));
+};
+
+export const deleteFileData = async (patientNumber?: number) => {
+  const fileUri =
+    patientNumber !== undefined
+      ? FileSystem.documentDirectory + patientNumber + DATA_FILE
+      : FileSystem.documentDirectory + SETTING_FILE;
+  try {
+    await FileSystem.deleteAsync(fileUri);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getLocalStorage = async (
+  key: string
+): Promise<string | undefined> => {
+  try {
+    const value = await AsyncStorage.getItem(key);
+    return value;
+  } catch (err) {}
+  return undefined;
+};
+
+export const saveLocalStorage = async (key: string, value: string) => {
+  try {
+    await AsyncStorage.setItem(key, value);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const checkPremium = (customerInfo: CustomerInfo) => {
+  if (typeof customerInfo.entitlements.active["ORDER"] !== "undefined") {
+    return true;
+  }
+  return false;
+};
+
+/**
+ * ローカルデータとDBデータをマージする
+ * @param localData
+ * @param dbData
+ * @returns
+ */
+export const margeSettingData = (
+  localData: DataType,
+  dbData?: DataType
+): DataType => {
+  const margedData: DataType = {
+    setting: localData.setting,
+    persons: [],
+  } as DataType;
+  // console.log(localData);
+  // console.log(dbData);
+  if (!dbData || !Object.keys(dbData).length) return localData;
+
+  localData.persons.forEach((localPerson: PersonNumberType) => {
+    let addPerson: PersonNumberType = { ...localPerson };
+    const conflictDBPerson = dbData.persons.find(
+      (dbPerson) => dbPerson.patientNumber === localPerson.patientNumber
+    );
+    // 患者番号が競合しているが、データが違う場合
+    if (conflictDBPerson) {
+      // 名称が一致している場合は削除されている方を強くする
+      if (localPerson.patientName === conflictDBPerson.patientName) {
+        addPerson.isDeleted =
+          !!localPerson.isDeleted || !!conflictDBPerson.isDeleted;
+      } else {
+        // 不一致の場合は削除されていない方を強くする
+        addPerson = !localPerson.isDeleted ? localPerson : conflictDBPerson;
+      }
+    }
+
+    margedData.persons.push(addPerson);
+  });
+
+  // DBのデータが存在しない場合は追加
+  dbData.persons.forEach((dbPerson) => {
+    if (
+      !margedData.persons.find(
+        (person) => person.patientNumber === dbPerson.patientNumber
+      )
+    )
+      margedData.persons.push(dbPerson);
+  });
+
+  return margedData;
+};
+
+// /**
+//  * ローカルデータとDBデータをマージする
+//  * @param localDataPersons
+//  * @param dbDataPersons
+//  * @returns
+//  */
+// export const margePatientData = (
+//   localDataPersons: PersonDataType[],
+//   dbDataPersons?: PersonDataType[]
+// ): PersonDataType[] => {
+//   const margedData: PersonDataType[] = [];
+//   if (!dbDataPersons || !dbDataPersons.length) return localDataPersons;
+
+//   localDataPersons.forEach((localPerson: PersonDataType) => {
+//     let addPersonData: PersonDataType = { ...localPerson };
+//     const matchDBPerson = dbDataPersons.find((dbPerson) =>
+//       deepEqual(localPerson, dbPerson)
+//     );
+//     // データが一致しない場合
+//     if (!matchDBPerson) {
+//       const nearDBPerson = dbDataPersons.find(
+//         (dbPerson) =>
+//           localPerson.inspectionDataKindNumber ===
+//             dbPerson.inspectionDataKindNumber &&
+//           localPerson.date === dbPerson.date
+//       );
+
+//       if (nearDBPerson) {
+//         // 入力されている方を優先する
+//         const ppdBasic = localPerson.PPD.basic
+//           .map((basic) => basic.value)
+//           .filter((value) => !!value);
+//         const ppdPrecision = localPerson.PPD.precision
+//           .map((basic) => basic.value)
+//           .filter((value) => !!value);
+//         const nearDBppdBasic = nearDBPerson.PPD.basic
+//           .map((basic) => basic.value)
+//           .filter((value) => !!value);
+//         const nearDBppdPrecision = nearDBPerson.PPD.precision
+//           .map((basic) => basic.value)
+//           .filter((value) => !!value);
+//         if (
+//           ppdBasic.length > nearDBppdBasic.length ||
+//           ppdPrecision.length > nearDBppdPrecision.length
+//         ) {
+//           // 特になし
+//         } else {
+//           // 不一致の場合は削除されていない方を強くする
+//           addPersonData = nearDBPerson;
+//         }
+//       }
+//     }
+//     margedData.push(addPersonData);
+//   });
+
+//   // DBのデータが存在しない場合は追加
+//   dbDataPersons.forEach((dbPerson) => {
+//     if (
+//       !margedData.find(
+//         (localPerson) =>
+//           localPerson.inspectionDataKindNumber ===
+//             dbPerson.inspectionDataKindNumber &&
+//           localPerson.date === dbPerson.date
+//       )
+//     )
+//       margedData.push(dbPerson);
+//   });
+
+//   return margedData;
+// };
+
+export const getRandomId = (maxCount: number) => {
+  const randomIndex = Math.floor(Math.random() * maxCount);
+  return randomIndex;
 };

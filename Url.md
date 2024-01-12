@@ -10,12 +10,6 @@ https://docs.expo.dev/versions/v44.0.0/sdk/auth-session/
 StoreReview
 https://docs.expo.dev/versions/v44.0.0/sdk/storereview/
 
-firebase
-https://console.firebase.google.com/project/perio-c5aa7/overview?hl=JA
-
-expo-Icon
-https://icons.expo.fyi/
-
 Expo で作成したアプリを App Store に申請するまで
 https://qiita.com/mildsummer/items/e98b1b8e4ea7f72b9899
 
@@ -48,6 +42,3 @@ https://docs-expo-dev.translate.goog/versions/latest/sdk/in-app-purchases/?_x_tr
 5.5 インチ (iPhone 8 Plus)
 12.9 インチ (iPad Pro (第 4 世代、第 3 世代))
 12.9 インチ (iPad Pro (第 2 世代))
-
-Firebase Login
-https://stackoverflow.com/questions/70904702/firebase-error-error-auth-network-request-failed

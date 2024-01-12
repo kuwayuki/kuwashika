@@ -1,37 +1,54 @@
-import * as React from "react";
+import * as FileSystem from "expo-file-system";
+import { getAuth, signOut } from "firebase/auth";
+import { useContext, useEffect, useState } from "react";
 import { Alert, ScrollView, StyleSheet, View } from "react-native";
+import Purchases, {
+  CustomerInfo,
+  PurchasesOffering,
+} from "react-native-purchases";
 import { AppContextDispatch, AppContextState } from "../../../App";
-import { PPD_ORDER_DOWN, PPD_ORDER_UP } from "../../../constants/Util";
+import { AUTH_FILE } from "../../../constants/Constant";
+import {
+  PPD_ORDER_DOWN,
+  PPD_ORDER_UP,
+  checkPremium,
+} from "../../../constants/Util";
 import AlertAtom from "../../atoms/AlertAtom";
 import ButtonAtom from "../../atoms/ButtonAtom";
 import IconAtom from "../../atoms/IconAtom";
 import ModalAtom from "../../atoms/ModalAtom";
 import SwitchAtom from "../../atoms/SwitchAtom";
+import TextAtom from "../../atoms/TextAtom";
 import IconTitleAction from "../../moleculars/IconTitleAction";
 import MainTitleChildren from "../../moleculars/MainTitleChildren";
+import CommonSubscription, { subscriptionDetails } from "./CommonSubscription";
 
 export default function CommonSetting() {
-  const appContextState = React.useContext(AppContextState);
-  const appContextDispatch = React.useContext(AppContextDispatch);
+  const appContextState = useContext(AppContextState);
+  const appContextDispatch = useContext(AppContextDispatch);
 
-  const [patientNumber, setPatientNumber] = React.useState<number>();
-  const [patientName, setPatientName] = React.useState<string>(undefined);
-  const [isPpdUpKo, setPpdUpKo] = React.useState<boolean>(
+  const [patientNumber, setPatientNumber] = useState<number>();
+  const [patientName, setPatientName] = useState<string>(undefined);
+  const [isPpdUpKo, setPpdUpKo] = useState<boolean>(
     appContextState.settingData.setting.ppdOrderType.up === PPD_ORDER_UP.ko
   );
-  const [isPpdDownHako, setPpdDownHako] = React.useState<boolean>(
+  const [isPpdDownHako, setPpdDownHako] = useState<boolean>(
     appContextState.settingData.setting.ppdOrderType.down ===
       PPD_ORDER_DOWN.hako
   );
-  const [isAutoMove, setAutoMove] = React.useState<boolean>(
+  const [isAutoMove, setAutoMove] = useState<boolean>(
     appContextState.settingData.setting.isAutoMove
   );
-  const [isPcrAutoMove, setPcrAutoMove] = React.useState<boolean>(
+  const [isPcrAutoMove, setPcrAutoMove] = useState<boolean>(
     appContextState.settingData.setting.isPcrAutoMove
   );
+  const [currentOffering, setCurrentOffering] =
+    useState<PurchasesOffering | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isOpenSubscription, setIsOpenSubscription] = useState(false);
 
   // 初期データ読込処理
-  React.useEffect(() => {
+  useEffect(() => {
     setPatientNumber(appContextState.patientNumber);
     const patient = appContextState.settingData.persons.find(
       (patient) => patient.patientNumber === appContextState.patientNumber
@@ -93,8 +110,77 @@ export default function CommonSetting() {
     );
   };
 
-  // ユーザーの削除
-  const payment = async () => {};
+  useEffect(() => {
+    const f = async () => {
+      Purchases.configure({
+        apiKey: "appl_NkrQYcmcIAPLFiwlYVyYtEBegvJ",
+      });
+      const customerInfo = await Purchases.getCustomerInfo();
+      if (checkPremium(customerInfo)) {
+        appContextDispatch.setPremium(true);
+        return;
+      }
+
+      const offerings = await Purchases.getOfferings();
+      if (
+        offerings.current !== null &&
+        offerings.current.availablePackages.length !== 0
+      ) {
+        setCurrentOffering(offerings.current);
+      }
+    };
+    f();
+  }, []);
+
+  const payment = async () => {
+    // TODO: 後で治す
+    if (false) {
+      appContextDispatch.setPremium(true);
+      setIsOpenSubscription(false);
+      return true;
+    }
+    if (!currentOffering || isLoading) return;
+    const localpurchasesPackage = currentOffering.availablePackages[0];
+    if (!localpurchasesPackage) return;
+
+    console.log(localpurchasesPackage);
+    setIsLoading(true);
+    try {
+      const { customerInfo } = await Purchases.purchasePackage(
+        localpurchasesPackage
+      );
+      if (checkPremium(customerInfo)) {
+        appContextDispatch.setPremium(true);
+        Alert.alert("登録しました。");
+      }
+    } catch (e: any) {
+      if (!e.userCancelled) {
+        console.log(e);
+      }
+      Alert.alert("登録に失敗しました。");
+    } finally {
+      setIsLoading(false);
+      setIsOpenSubscription(false);
+    }
+  };
+
+  const restorePurchases = async () => {
+    try {
+      setIsLoading(true);
+      const customerInfo = await Purchases.restorePurchases();
+      if (checkPremium(customerInfo)) {
+        appContextDispatch.setPremium(true);
+        Alert.alert("購入が復元されました。");
+      } else {
+        Alert.alert("復元する購入はありません。");
+      }
+    } catch (e) {
+      console.error("購入の復元に失敗しました：", e);
+      Alert.alert("購入の復元に失敗しました。");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // データの初期化
   const initData = async () => {
@@ -104,7 +190,7 @@ export default function CommonSetting() {
       async () => {
         // 全体データの更新
         appContextDispatch.setModalNumber(0);
-        await appContextDispatch.deletePerson();
+        appContextDispatch.deletePerson();
         Alert.alert("初期化しました");
       }
     );
@@ -120,7 +206,7 @@ export default function CommonSetting() {
       async () => {
         // 全体データの更新
         appContextDispatch.setModalNumber(0);
-        await appContextDispatch.deletePerson(appContextState.patientNumber);
+        appContextDispatch.deletePerson(appContextState.patientNumber);
         Alert.alert("削除しました");
       }
     );
@@ -133,7 +219,7 @@ export default function CommonSetting() {
       `検査データを削除しますがよろしいですか？`,
       async () => {
         appContextDispatch.setModalNumber(0);
-        await appContextDispatch.deletePerson(
+        appContextDispatch.deletePerson(
           undefined,
           appContextState.inspectionDataNumber
         );
@@ -141,6 +227,21 @@ export default function CommonSetting() {
       }
     );
   };
+
+  const deleteFileData = async () => {
+    const fileUri = FileSystem.documentDirectory + AUTH_FILE;
+    await FileSystem.deleteAsync(fileUri);
+  };
+
+  if (isOpenSubscription) {
+    return (
+      <CommonSubscription
+        onPress={payment}
+        onPressRestore={restorePurchases}
+        onClose={() => setIsOpenSubscription(false)}
+      ></CommonSubscription>
+    );
+  }
 
   return (
     <ModalAtom isSetting={true}>
@@ -166,20 +267,57 @@ export default function CommonSetting() {
           backgroundColor: "#EFFFF0",
         }}
       >
-        {/* <MainTitleChildren title={"アカウント"} style={{ marginBottom: 16 }}>
+        <MainTitleChildren title={"データ管理"} style={{ marginBottom: 16 }}>
           <IconTitleAction
-            title={"ユーザー"}
-            icon={<IconAtom name="sign-in" type="font-awesome" />}
-            // icon={<IconAtom name="sign-iout" type="font-awesome" />}
+            title={"プレミアムプラン"}
+            icon={<IconAtom name="payment" type="material-icon" />}
           >
-            <ButtonAtom
-              onPress={() => appContextDispatch.setModalNumber(101)}
-              style={{ backgroundColor: "orange", padding: 12 }}
-            >
-              サインイン
-            </ButtonAtom>
+            {appContextState.isPremium ? (
+              <TextAtom
+                style={{
+                  color: "blue",
+                  paddingRight: 4,
+                  textAlignVertical: "center",
+                  fontSize: 18,
+                }}
+              >
+                {"登録済"}
+              </TextAtom>
+            ) : (
+              <ButtonAtom
+                onPress={() => setIsOpenSubscription(true)}
+                style={{ backgroundColor: "pink", padding: 12 }}
+              >
+                プランを確認
+              </ButtonAtom>
+            )}
           </IconTitleAction>
-        </MainTitleChildren> */}
+          {appContextState.isPremium && (
+            <IconTitleAction
+              title={"ユーザー"}
+              icon={<IconAtom name="user" type="ant-design" />}
+            >
+              <ButtonAtom
+                onPress={() => {
+                  !appContextState.user
+                    ? appContextDispatch.setModalNumber(101)
+                    : signOut(getAuth()).then(async () => {
+                        await deleteFileData();
+                        appContextDispatch.setUser(null);
+                      });
+                }}
+                style={{
+                  backgroundColor: !appContextState.user
+                    ? "skyblue"
+                    : "lightgray",
+                  padding: 12,
+                }}
+              >
+                {!appContextState.user ? "サインイン" : "サインアウト"}
+              </ButtonAtom>
+            </IconTitleAction>
+          )}
+        </MainTitleChildren>
         <MainTitleChildren title={"共通設定設定"} style={{ marginBottom: 16 }}>
           <IconTitleAction
             title={"自動タブ移動"}
@@ -246,19 +384,6 @@ export default function CommonSetting() {
             />
           </IconTitleAction>
         </MainTitleChildren>
-        {/* <MainTitleChildren title={"データ管理"} style={{ marginBottom: 16 }}>
-          <IconTitleAction
-            title={"月額課金"}
-            icon={<IconAtom name="payment" type="material-icon" />}
-          >
-            <ButtonAtom
-              onPress={payment}
-              style={{ backgroundColor: "pink", padding: 12 }}
-            >
-              有料
-            </ButtonAtom>
-          </IconTitleAction>
-        </MainTitleChildren> */}
         <MainTitleChildren title={"データ削除"} style={{ marginBottom: 32 }}>
           <IconTitleAction
             title={"ユーザー"}

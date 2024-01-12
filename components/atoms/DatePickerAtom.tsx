@@ -1,6 +1,9 @@
-import DateTimePicker from "@react-native-community/datetimepicker";
-import * as React from "react";
-import { Platform, StyleSheet } from "react-native";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
+import { useContext, useEffect, useState } from "react";
+import { StyleSheet } from "react-native";
+import { getYMD, isAndroid, parseDate } from "../../constants/Util";
+import { View } from "../organisms/common/Themed";
+import ButtonAtom from "./ButtonAtom";
 
 export type DateProps = {
   date: Date;
@@ -8,39 +11,32 @@ export type DateProps = {
 };
 
 export default function DatePickerAtom(props: DateProps) {
-  const [show, setShow] = React.useState(false);
+  const [show, setShow] = useState(false);
 
-  /**
-   * データが変更される度に編集データを更新
-   */
-  React.useEffect(() => {
+  useEffect(() => {
     setShow(false);
   }, [props.date]);
 
-  const onChange = (event: any, selectedDate: any) => {
-    const currentDate = selectedDate || props.date;
-    setShow(Platform.OS === "ios");
-    props.setDate(currentDate);
+  const onChange = (event: any, selectedDate: Date) => {
+    setShow(false);
+    if (!selectedDate) return;
+    props.setDate(parseDate(selectedDate));
   };
 
-  function parseDate(input) {
-    try {
-      return new Date(input);
-    } catch (error) {
-      return input;
-    }
-  }
-
   return (
-    <DateTimePicker
-      locale={"ja"}
-      style={styles.base}
-      removeClippedSubviews={true}
-      value={parseDate(props.date)}
-      mode={"date"}
-      display="compact"
-      onChange={onChange}
-    />
+    <View>
+      {(show || !isAndroid()) && (
+        <RNDateTimePicker
+          locale={"ja"}
+          style={styles.base}
+          removeClippedSubviews={true}
+          value={parseDate(props.date)}
+          mode={"date"}
+          display={isAndroid() ? "default" : "compact"}
+          onChange={onChange}
+        />
+      )}
+    </View>
   );
 }
 

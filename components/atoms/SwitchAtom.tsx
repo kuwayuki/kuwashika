@@ -1,9 +1,9 @@
-import * as React from "react";
+import { useContext, useEffect, useState } from "react";
 import { StyleSheet, Switch } from "react-native";
 import { SwitchProps } from "react-native-elements";
 
 export default function SwitchAtom(props: SwitchProps) {
-  const [isEnabled, setIsEnabled] = React.useState(false);
+  const [isEnabled, setIsEnabled] = useState(false);
 
   return (
     <Switch

@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import { AppContextDispatch, AppContextState } from "../../../App";
 import {
@@ -8,7 +8,6 @@ import {
 } from "../../../constants/Constant";
 import { PPD_ORDER_DOWN, PPD_ORDER_UP } from "../../../constants/Util";
 import ButtonAtom from "../../atoms/ButtonAtom";
-import ButtonPressedMolecular from "../../moleculars/ButtonPressedMolecular";
 
 type buttonType = {
   status: TEETH_STATUS;
@@ -119,8 +118,8 @@ export const PCR_BUTTON_NAMES = [
 ];
 
 export default function CommonBottomButton(props: CommonButtonPropsType) {
-  const appContext = React.useContext(AppContextState);
-  const appContextDispatch = React.useContext(AppContextDispatch);
+  const appContext = useContext(AppContextState);
+  const appContextDispatch = useContext(AppContextDispatch);
 
   // １列の最大値
   const rows = props.teethValues.filter((value) => value.teethRow === 0);
@@ -219,7 +218,7 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
         props.focusNumber,
         {
           ...props.teethValues[props.focusNumber],
-          status: undefined,
+          status: null,
           value: button.value,
         } as TEETH_TYPE,
         appContext.isPrecision
@@ -252,41 +251,31 @@ export default function CommonBottomButton(props: CommonButtonPropsType) {
         justifyContent: "space-between",
       }}
     >
-      {buttonName.map((button) =>
-        button.value < 100 ? (
-          // 通常ボタン
-          <ButtonAtom
-            style={
-              button.color !== undefined
-                ? { backgroundColor: button.color }
-                : undefined
-            }
-            disabled={button.isDisabled}
-            onPress={() => buttonAction(button)}
-          >
-            {button.display ?? button.value}
-          </ButtonAtom>
-        ) : (
-          // 押しっぱなしボタン
-          <ButtonPressedMolecular
-            style={[
-              button.color !== undefined
-                ? { backgroundColor: button.color }
-                : undefined,
-              appContext.pressedValue === button.value
-                ? {
-                    backgroundColor: button.color,
-                    borderWidth: 2,
-                  }
-                : undefined,
-            ]}
-            disabled={button.isDisabled}
-            onPress={() => buttonAction(button)}
-          >
-            {button.display ?? button.value}
-          </ButtonPressedMolecular>
-        )
-      )}
+      {buttonName.map((button) => (
+        // 通常ボタン
+        <ButtonAtom
+          style={[
+            {
+              backgroundColor:
+                button.color !== undefined ? button.color : "white",
+              height: 46, // 固定の高さ
+              width: "auto", // 幅は内容に合わせる
+              padding: 15, // 通常のパディング
+            },
+            appContext.pressedValue === button.value
+              ? {
+                  borderWidth: 3,
+                  borderColor: "black",
+                  padding: 13, // borderWidthの分だけパディングを減らす
+                }
+              : null,
+          ]}
+          disabled={button.isDisabled}
+          onPress={() => buttonAction(button)}
+        >
+          {button.display ?? button.value}
+        </ButtonAtom>
+      ))}
     </View>
   );
 }

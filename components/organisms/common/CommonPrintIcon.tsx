@@ -1,7 +1,8 @@
-import * as Print from "expo-print";
-import * as React from "react";
 import dayjs from "dayjs";
 import "dayjs/locale/ja"; // これimportしないとエラー吐かれるa
+// import { AdMobRewarded } from "expo-ads-admob";
+import * as Print from "expo-print";
+import { useContext, useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { Icon } from "react-native-elements";
 import {
@@ -12,37 +13,40 @@ import {
   TEETH_TYPE,
 } from "../../../constants/Constant";
 import { pcrCalculation, ppdCalculation } from "../../../constants/Util";
-import { AppContextState } from "../../../App";
-import { AdMobRewarded } from "expo-ads-admob";
+import { AppContextDispatch, AppContextState } from "../../../App";
 import * as StoreReview from "expo-store-review";
-import { admobReward } from "../../../constants/Admob";
 
 export const SIZE = 48;
+
 export default function CommonPrintIcon() {
-  const [selectedPrinter, setSelectedPrinter] = React.useState<Print.Printer>();
-  const appContext = React.useContext(AppContextState);
+  const [selectedPrinter, setSelectedPrinter] = useState<Print.Printer>();
+  const appContext = useContext(AppContextState);
+  const appContextDispatch = useContext(AppContextDispatch);
+
+  // 印刷処理（and 評価 and 広告）
   const print = async () => {
     const html = createHtml();
     // On iOS/android prints the given html. On web prints the HTML from the current page.
-    await Print.printAsync({
-      html,
-      useMarkupFormatter: true,
-      // printerUrl: selectedPrinter?.url, // iOS only
-      // orientation: "portrait",
-      // orientation: "landscape",
-      orientation: Print.Orientation.landscape,
-    });
-
     try {
-      if (await StoreReview.hasAction()) {
-        // you can call StoreReview.requestReview()
-        StoreReview.requestReview();
-      }
+      await Print.printAsync({
+        html,
+        useMarkupFormatter: true,
+        // printerUrl: selectedPrinter?.url, // iOS only
+        // orientation: "portrait",
+        // orientation: "landscape",
+        orientation: Print.Orientation.landscape,
+      });
     } catch (error) {
-      console.log(error);
+    } finally {
+      try {
+        if (await StoreReview.hasAction()) {
+          StoreReview.requestReview();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+      appContextDispatch.setAdmobShow(true);
     }
-    // 広告
-    admobReward();
   };
 
   const createTr = (
@@ -78,7 +82,9 @@ export default function CommonPrintIcon() {
     let styles = `border: 1px solid #595959; font-size: 8pt; width: ${SIZE}px; height: ${heightSize}px;`;
     const value = typeof teeth !== "string" ? teeth.value ?? "" : teeth;
     if (typeof teeth !== "string") {
-      const isMT = appContext.mtTeethNums?.includes(teeth.teethGroupIndex);
+      const isMT = appContext?.mtTeethNums
+        ? appContext.mtTeethNums?.includes(teeth.teethGroupIndex)
+        : true;
 
       if (isMT) {
         styles = `color:#696969; background-color:#696969; border:0px; width: ${SIZE}px; height: ${heightSize}px;`;
@@ -99,7 +105,9 @@ export default function CommonPrintIcon() {
   };
 
   const createTdPcr = (teeths: TEETH_TYPE[], isPrecision = false) => {
-    const isMT = appContext.mtTeethNums?.includes(teeths[0].teethGroupIndex);
+    const isMT = appContext?.mtTeethNums
+      ? appContext.mtTeethNums?.includes(teeths[0].teethGroupIndex)
+      : true;
     let styles = `border: 1px solid #595959; width: ${SIZE}px; height: ${SIZE}px; `;
     let divRhombusAll = "";
     if (isMT) {
@@ -183,7 +191,7 @@ export default function CommonPrintIcon() {
     // PCRを作成
     let pcrTd: string[] = ["", "", "", ""];
     const pcrData = isPrecision
-      ? currentPersonData.PCR.basic // TODO: 直す？
+      ? currentPersonData.PCR.basic // FIXME: 直す？
       : currentPersonData.PCR.basic;
     TEETH_ALL.forEach((teeth: teethType) => {
       const teethPcr = pcrData.filter(
@@ -279,6 +287,7 @@ export default function CommonPrintIcon() {
       type="font-awesome"
       color="#3399FF"
       onPress={print}
+      containerStyle={{ margin: 0, padding: 0 }}
     />
   );
 }

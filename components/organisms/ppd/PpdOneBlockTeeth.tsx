@@ -1,10 +1,10 @@
-import * as React from "react";
+import { useContext } from "react";
 import { View } from "react-native";
 import { AppContextState } from "../../../App";
 import CommonTeeth, { teethProps } from "../common/CommonTeeth";
 
 export default function PpdOneBlockTeeth(props: teethProps) {
-  const appContext = React.useContext(AppContextState);
+  const appContext = useContext(AppContextState);
 
   return (
     <View

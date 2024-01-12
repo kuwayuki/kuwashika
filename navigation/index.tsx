@@ -6,7 +6,7 @@ import {
   NavigationContainer,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import * as React from "react";
+import { useContext, useEffect, useState } from "react";
 import { ColorSchemeName, Pressable } from "react-native";
 import ModalScreen from "../components/pages/ModalScreen";
 import NotFoundScreen from "../components/pages/NotFoundScreen";
@@ -21,6 +21,7 @@ import {
   RootTabScreenProps,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
+import { isIpad } from "../constants/Util";
 
 export default function Navigation({
   colorScheme,
@@ -85,6 +86,7 @@ function TopTabNavigator() {
         display: "flex",
         justifyContent: "flex-start",
         backgroundColor: Colors[colorScheme].background,
+        marginTop: isIpad() ? 10 : 0,
       }}
     >
       <TopTab.Screen

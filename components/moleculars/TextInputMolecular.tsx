@@ -1,7 +1,7 @@
-import * as React from "react";
 import { StyleProp, StyleSheet, TextStyle } from "react-native";
 import { TextInputPropsEx } from "../../constants/Constant";
-import TextInputTeethMolecular, { TEETH_MATH } from "./TextInputTeethMolecular";
+import { isAndroid } from "../../constants/Util";
+import TextInputTeethMolecular from "./TextInputTeethMolecular";
 
 export default function TextInputMolecular(props: TextInputPropsEx) {
   const onFocus = () => {
@@ -22,7 +22,7 @@ export default function TextInputMolecular(props: TextInputPropsEx) {
       return !props.isHideNum
         ? {
             backgroundColor: "#696969",
-            borderWidth: 0.3,
+            borderWidth: 0.4,
             color: "#696969",
           }
         : { backgroundColor: "#696969" };
@@ -48,6 +48,7 @@ export default function TextInputMolecular(props: TextInputPropsEx) {
       });
     if (isDrainage) Object.assign(style, { backgroundColor: "#FFCC00" });
     if (isBleeding) Object.assign(style, { color: "#FF3366" });
+    else Object.assign(style, { color: "#000" });
 
     return style;
   };
@@ -55,8 +56,9 @@ export default function TextInputMolecular(props: TextInputPropsEx) {
   return (
     <TextInputTeethMolecular
       {...props}
-      editable={false}
-      // editable={isIpad()} TODO: 後で対応したい
+      editable={isAndroid()}
+      // onTouchEnd={() => Keyboard.dismiss()}
+      // editable={isIpad()} FIXME: 後で対応したい
       onTouchStart={() => onFocus()}
       style={[props.style, getStatusColorStyle()]}
     />

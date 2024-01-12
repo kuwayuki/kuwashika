@@ -1,7 +1,7 @@
-import * as React from "react";
+import { useContext, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { AppContextDispatch, AppContextState } from "../../../App";
-import { INSPACTION_ITEMS } from "../../../constants/Constant";
+import { INSPACTION_ITEMS, LIMIT_COUNT } from "../../../constants/Constant";
 import DropDownPickerAtom, {
   DropdownType,
 } from "../../atoms/DropDownPickerAtom";
@@ -11,14 +11,14 @@ import TextInputAtom from "../../atoms/TextInputAtom";
 import TitleAndAction from "../../moleculars/TitleAndAction";
 
 export default function CommonInspection() {
-  const appContextState = React.useContext(AppContextState);
-  const appContextDispatch = React.useContext(AppContextDispatch);
+  const appContextState = useContext(AppContextState);
+  const appContextDispatch = useContext(AppContextDispatch);
 
   const [inspectionDataKindNumber, setInspectionDataKindNumber] =
-    React.useState<number>(undefined);
-  const [inspectionName, setInspectionName] = React.useState<string>(undefined);
+    useState<number>(undefined);
+  const [inspectionName, setInspectionName] = useState<string>(undefined);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const items = INSPACTION_ITEMS.map((item) => item.value);
     const index =
       items.indexOf(
@@ -31,6 +31,11 @@ export default function CommonInspection() {
     const currentPerson = appContextState.currentPerson;
     const numbers = currentPerson.data.map((data) => data.inspectionDataNumber);
     const nextDataNumber = Math.max(...numbers) + 1;
+
+    // データ追加時は広告を表示
+    if (appContextState.patients.length > LIMIT_COUNT.ADMOB_MAX_PATIENTS) {
+      // appContextDispatch.setAdmobShow(true);
+    }
 
     // 検査データの追加
     const temp: DropdownType[] = [...appContextState.inspectionData];
@@ -52,6 +57,7 @@ export default function CommonInspection() {
     // 現在データの引き継ぎ
     appContextDispatch.setCurrentPersonData({
       ...appContextState.currentPerson.currentData,
+      date: new Date(),
       inspectionDataNumber: nextDataNumber,
       inspectionDataKindNumber: inspectionDataKindNumber,
       inspectionDataName: addData.label,
@@ -91,6 +97,7 @@ export default function CommonInspection() {
               value={inspectionName}
               onChangeText={setInspectionName}
               style={{ fontSize: 18 }}
+              isTextInput={true}
             />
           </TitleAndAction>
         )}

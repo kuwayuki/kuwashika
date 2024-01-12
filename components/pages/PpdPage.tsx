@@ -1,4 +1,11 @@
-import * as React from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { AppContextDispatch, AppContextState } from "../../App";
 import { TEETH_TYPE } from "../../constants/Constant";
 import { PersonDataType } from "../../constants/Util";
@@ -10,7 +17,7 @@ export type ppdContextState = {
   teethValues: TEETH_TYPE[]; // 192の歯
   teethValuesSimple: TEETH_TYPE[]; // 32の歯
 };
-export const PpdContextState = React.createContext({} as ppdContextState);
+export const PpdContextState = createContext({} as ppdContextState);
 
 export type ppdContextDispatch = {
   setFocusNumber: (focusNumber: number) => void;
@@ -23,24 +30,22 @@ export type ppdContextDispatch = {
   ) => void;
   moveNavigation: () => void;
 };
-export const PpdContextDispatch = React.createContext({} as ppdContextDispatch);
+export const PpdContextDispatch = createContext({} as ppdContextDispatch);
 
 export default function PpdPage({
   navigation,
 }: RootTabScreenProps<"TabPeriodontal">) {
-  const appContextState = React.useContext(AppContextState);
-  const appContextDispatch = React.useContext(AppContextDispatch);
+  const appContextState = useContext(AppContextState);
+  const appContextDispatch = useContext(AppContextDispatch);
 
-  const [focusNumber, setFocusNumber] = React.useState(0);
-  const [teethValues, setTeethValues] = React.useState<TEETH_TYPE[]>([]);
-  const [teethValuesSimple, setTeethValuesSimple] = React.useState<
-    TEETH_TYPE[]
-  >([]);
+  const [focusNumber, setFocusNumber] = useState(0);
+  const [teethValues, setTeethValues] = useState<TEETH_TYPE[]>([]);
+  const [teethValuesSimple, setTeethValuesSimple] = useState<TEETH_TYPE[]>([]);
 
   /**
    * 患者データから表示再読み込み
    */
-  React.useEffect(() => {
+  useEffect(() => {
     setFocusNumber(0);
   }, [
     appContextState.patientNumber,
@@ -51,7 +56,7 @@ export default function PpdPage({
   /**
    * 患者データから表示再読み込み
    */
-  React.useEffect(() => {
+  useEffect(() => {
     if (!appContextState.currentPerson || !appContextState.isReload) return;
 
     const temp: TEETH_TYPE[] = [
@@ -87,7 +92,7 @@ export default function PpdPage({
   }, [appContextState.isReload]);
 
   /** データが変更される度に編集データを更新 */
-  React.useEffect(() => {
+  useEffect(() => {
     if (!appContextState.currentPerson) return;
     const data: PersonDataType = {
       ...appContextState.currentPerson.currentData,
@@ -104,55 +109,58 @@ export default function PpdPage({
    * @param index
    * @param teethValue
    */
-  const setTeethValue = (
-    index: number,
-    teethValue: TEETH_TYPE,
-    isPrecision = false
-  ) => {
-    const temp = isPrecision ? [...teethValues] : [...teethValuesSimple];
-    if (teethValue.value < 10) {
-      temp[index] = {
-        ...teethValue,
-        value: teethValue.value,
-      } as TEETH_TYPE;
-    } else if (teethValue.value === 10) {
-      const plus =
-        temp[index] && temp[index].value
-          ? temp[index].value + 1
-          : teethValue.value;
-      temp[index] = {
-        ...teethValue,
-        value: plus,
-      } as TEETH_TYPE;
-    } else if (teethValue.value === 11) {
-      const plus =
-        temp[index] && temp[index].value
-          ? temp[index].value - 1
-          : teethValue.value;
-      temp[index] = {
-        ...teethValue,
-        value: plus,
-      } as TEETH_TYPE;
-    } else {
-      temp[index] = {
-        ...teethValue,
-        value: teethValue.value,
-      } as TEETH_TYPE;
-    }
-    isPrecision ? setTeethValues([...temp]) : setTeethValuesSimple([...temp]);
-  };
+  const setTeethValue = useCallback(
+    (index: number, teethValue: TEETH_TYPE, isPrecision = false) => {
+      const temp = isPrecision ? [...teethValues] : [...teethValuesSimple];
+      if (teethValue.value < 10) {
+        temp[index] = {
+          ...teethValue,
+          value: teethValue.value,
+        } as TEETH_TYPE;
+      } else if (teethValue.value === 10) {
+        const plus =
+          temp[index] && temp[index].value
+            ? temp[index].value + 1
+            : teethValue.value;
+        temp[index] = {
+          ...teethValue,
+          value: plus,
+        } as TEETH_TYPE;
+      } else if (teethValue.value === 11) {
+        const plus =
+          temp[index] && temp[index].value
+            ? temp[index].value - 1
+            : teethValue.value;
+        temp[index] = {
+          ...teethValue,
+          value: plus,
+        } as TEETH_TYPE;
+      } else {
+        temp[index] = {
+          ...teethValue,
+          value: teethValue.value,
+        } as TEETH_TYPE;
+      }
+      isPrecision ? setTeethValues([...temp]) : setTeethValuesSimple([...temp]);
+    },
+    [teethValues, teethValuesSimple]
+  );
+
   const moveNavigation = () => {
     navigation.navigate("TabUpset");
   };
 
+  const ppdContextStateValue = useMemo(
+    () => ({
+      focusNumber,
+      teethValues,
+      teethValuesSimple,
+    }),
+    [focusNumber, teethValues, teethValuesSimple]
+  );
+
   return (
-    <PpdContextState.Provider
-      value={{
-        focusNumber,
-        teethValues,
-        teethValuesSimple,
-      }}
-    >
+    <PpdContextState.Provider value={ppdContextStateValue}>
       <PpdContextDispatch.Provider
         value={{
           setFocusNumber,

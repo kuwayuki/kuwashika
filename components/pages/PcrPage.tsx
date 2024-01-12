@@ -1,4 +1,4 @@
-import * as React from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { AppContextDispatch, AppContextState } from "../../App";
 import { TEETH_TYPE } from "../../constants/Constant";
 import { PersonDataType } from "../../constants/Util";
@@ -10,7 +10,7 @@ export type pcrContextState = {
   teethValues: TEETH_TYPE[]; // 192の歯
   teethValuesSimple: TEETH_TYPE[]; // 32の歯
 };
-export const PcrContextState = React.createContext({} as pcrContextState);
+export const PcrContextState = createContext({} as pcrContextState);
 
 export type pcrContextDispatch = {
   setFocusNumber: (focusNumber: number) => void;
@@ -23,22 +23,20 @@ export type pcrContextDispatch = {
   ) => void;
   moveNavigation: () => void;
 };
-export const PcrContextDispatch = React.createContext({} as pcrContextDispatch);
+export const PcrContextDispatch = createContext({} as pcrContextDispatch);
 
 export default function PcrPage({ navigation }: RootTabScreenProps<"TabPCR">) {
-  const appContextState = React.useContext(AppContextState);
-  const appContextDispatch = React.useContext(AppContextDispatch);
+  const appContextState = useContext(AppContextState);
+  const appContextDispatch = useContext(AppContextDispatch);
 
-  const [focusNumber, setFocusNumber] = React.useState(0);
-  const [teethValues, setTeethValues] = React.useState<TEETH_TYPE[]>([]);
-  const [teethValuesSimple, setTeethValuesSimple] = React.useState<
-    TEETH_TYPE[]
-  >([]);
+  const [focusNumber, setFocusNumber] = useState(0);
+  const [teethValues, setTeethValues] = useState<TEETH_TYPE[]>([]);
+  const [teethValuesSimple, setTeethValuesSimple] = useState<TEETH_TYPE[]>([]);
 
   /**
    * 患者データから表示再読み込み
    */
-  React.useEffect(() => {
+  useEffect(() => {
     // navigation.navigate("TabPeriodontal");
     setFocusNumber(0);
   }, [
@@ -50,7 +48,7 @@ export default function PcrPage({ navigation }: RootTabScreenProps<"TabPCR">) {
   /**
    * 患者データから表示再読み込み
    */
-  React.useEffect(() => {
+  useEffect(() => {
     if (!appContextState.currentPerson) return;
 
     const temp: TEETH_TYPE[] = [
@@ -86,7 +84,7 @@ export default function PcrPage({ navigation }: RootTabScreenProps<"TabPCR">) {
   }, [appContextState.isReload]);
 
   /** データが変更される度に編集データを更新 */
-  React.useEffect(() => {
+  useEffect(() => {
     if (!appContextState.currentPerson) return;
     const data: PersonDataType = {
       ...appContextState.currentPerson.currentData,
@@ -108,7 +106,7 @@ export default function PcrPage({ navigation }: RootTabScreenProps<"TabPCR">) {
     teethValue: TEETH_TYPE,
     isPrecision = false
   ) => {
-    const temp = isPrecision ? [...teethValuesSimple] : [...teethValuesSimple]; // TODO: 直す？
+    const temp = isPrecision ? [...teethValuesSimple] : [...teethValuesSimple]; // FIXME: 直す？
     if (teethValue.value < 10) {
       temp[index] = {
         ...teethValue,
@@ -140,7 +138,7 @@ export default function PcrPage({ navigation }: RootTabScreenProps<"TabPCR">) {
     }
     isPrecision
       ? setTeethValuesSimple([...temp])
-      : setTeethValuesSimple([...temp]); // TODO: 直す？
+      : setTeethValuesSimple([...temp]); // FIXME: 直す？
   };
   const moveNavigation = () => {
     appContextDispatch.setModalNumber(100);

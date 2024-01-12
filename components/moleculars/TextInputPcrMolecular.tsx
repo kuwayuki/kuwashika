@@ -1,4 +1,3 @@
-import * as React from "react";
 import { StyleSheet, View } from "react-native";
 import { TextInputPropsEx } from "../../constants/Constant";
 import TextInputMolecularPcr from "./TextInputMolecularPcr";
@@ -22,9 +21,6 @@ export default function TextInputPcrMolecular(props: PcrTextInputPropsEx) {
         maxHeight: len,
         minWidth: len,
         minHeight: len,
-        // borderColor: "#696969",
-        // backgroundColor: "#696969",
-        borderWidth: isFocus ? 2 : 0.5,
       }}
     >
       {MATH_4.map((math) => (

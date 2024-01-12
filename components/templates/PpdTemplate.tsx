@@ -1,33 +1,37 @@
-import * as React from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
   StyleSheet,
 } from "react-native";
 import { AppContextState } from "../../App";
-import { TAB_PAGE } from "../../constants/Constant";
-import { getScrollPosition } from "../../constants/Util";
+import { BANNER_UNIT_ID, TAB_PAGE } from "../../constants/Constant";
+import { getScrollPosition, isAndroid } from "../../constants/Util";
 import ScrollViewAtom from "../atoms/ScrollViewAtom";
+import ScrollViewAndroid from "../moleculars/ScrollViewAndroid";
 import CommonBottomButton from "../organisms/common/CommonBottomButton";
 import CommonInfoInput from "../organisms/common/CommonInfoInput";
 import { View } from "../organisms/common/Themed";
 import PpdAllTeeth from "../organisms/ppd/PpdAllTeeth";
 import { PpdContextDispatch, PpdContextState } from "../pages/PpdPage";
+import { BannerAd, BannerAdSize } from "react-native-google-mobile-ads";
 
 export default function PpdTemplate() {
-  const appContext = React.useContext(AppContextState);
-  const ppdContextState = React.useContext(PpdContextState);
-  const ppdContextDispatch = React.useContext(PpdContextDispatch);
-  const [nativeEvent, setNativeEvent] = React.useState<NativeScrollEvent>({
+  const appContext = useContext(AppContextState);
+  const ppdContextState = useContext(PpdContextState);
+  const ppdContextDispatch = useContext(PpdContextDispatch);
+  const [nativeEvent, setNativeEvent] = useState<NativeScrollEvent>({
     zoomScale: 0.99,
     contentSize: { width: 1823, height: 232 },
     layoutMeasurement: { width: 799, height: 185 },
   } as NativeScrollEvent);
-  const scrollViewRef = React.useRef(null);
+  const scrollViewRef = useRef(null);
+  const scrollViewAndroidRef = isAndroid() ? useRef(null) : undefined;
 
   // 初期データ読込処理
-  React.useEffect(() => {
+  useEffect(() => {
     scrollViewRef.current.scrollTo({ x: 0, y: 0 });
+    scrollViewAndroidRef?.current?.scrollTo({ x: 0, y: 0 });
   }, [appContext.patientNumber, appContext.inspectionDataNumber]);
 
   const moveScroll = (index?: number) => {
@@ -38,6 +42,7 @@ export default function PpdTemplate() {
         appContext.isPrecision
       );
       scrollViewRef.current.scrollTo({ ...position });
+      scrollViewAndroidRef?.current?.scrollTo({ ...position });
     }
   };
 
@@ -55,7 +60,36 @@ export default function PpdTemplate() {
           onScroll={handleScroll}
           onScrollEndDrag={handleScroll}
         >
-          <PpdAllTeeth />
+          {isAndroid() ? (
+            <ScrollViewAndroid
+              ref={scrollViewAndroidRef}
+              onScroll={handleScroll}
+              onScrollEndDrag={handleScroll}
+            >
+              <PpdAllTeeth />
+            </ScrollViewAndroid>
+          ) : (
+            <PpdAllTeeth />
+          )}
+          {!appContext.isPremium && (
+            <View
+              style={{
+                flexDirection: "row",
+                width: 100,
+              }}
+            >
+              <BannerAd
+                unitId={BANNER_UNIT_ID.BANNER}
+                size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+                requestOptions={{ keywords: ["Dental Equipment"] }}
+              />
+              <BannerAd
+                unitId={BANNER_UNIT_ID.BANNER_1}
+                size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+                requestOptions={{ keywords: ["Dental Insurance"] }}
+              />
+            </View>
+          )}
         </ScrollViewAtom>
       </View>
       {

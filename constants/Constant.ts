@@ -1,19 +1,17 @@
 import { TextInputProps } from "react-native";
 import { DropdownType } from "../components/atoms/DropDownPickerAtom";
 
+export const AUTH_FILE = "auth.json";
 export const SETTING_FILE = "setting.json";
 export const DATA_FILE = "_data.json";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 export const firebaseConfig = {
-  apiKey: "AIzaSyDK5BZLDENQgHazvA4v_vkif2RAMRr2ygI",
-  authDomain: "perio-c5aa7.firebaseapp.com",
-  projectId: "perio-c5aa7",
-  storageBucket: "perio-c5aa7.appspot.com",
-  messagingSenderId: "922948003582",
-  appId: "1:922948003582:web:6d50ee60bf0ddcedc767af",
-  measurementId: "G-8599V06VJH",
+  apiKey: "AIzaSyDOZ-bkbFqUfwsPVCGaCqIlnObTRdt5wgM",
+  authDomain: "peruo-131ec.firebaseapp.com",
+  projectId: "peruo-131ec",
+  storageBucket: "peruo-131ec.appspot.com",
+  messagingSenderId: "647021308669",
+  appId: "1:647021308669:web:592e5439864ef273ef6c94",
 };
 
 export enum TAB_PAGE {
@@ -116,7 +114,7 @@ export const TEETH_DOWN: teethType[] = [...TEETH_ALL].filter(
 export const INSPACTION_ITEMS: DropdownType[] = [
   { label: "Sc後", value: 1 },
   { label: "SRP後", value: 2 },
-  { label: "SRP/P重防", value: 3 },
+  { label: "SPT/P重防", value: 3 },
   { label: "任意入力", value: 10 },
 ];
 
@@ -134,4 +132,25 @@ export const PRINT_PPD = {
   LOW: [1, 2, 3],
   MIDDLE: [4, 5],
   HIGH: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
+};
+
+export const LIMIT_COUNT = {
+  ADMOB_MAX_PATIENTS: 10,
+};
+
+export const BANNER_UNIT_ID = {
+  INTERSTIAL: "ca-app-pub-2103807205659646/3067799275",
+  INTERSTIAL_2: "ca-app-pub-2103807205659646/2139213606",
+  INTERSTIAL_3: "ca-app-pub-2103807205659646/4180737796",
+  BANNER: "ca-app-pub-2103807205659646/6311766057",
+  BANNER_1: "ca-app-pub-2103807205659646/4236793713",
+  BANNER_2: "ca-app-pub-2103807205659646/4806827282",
+  BANNER_3: "ca-app-pub-2103807205659646/5506515491",
+  BANNER_4: "ca-app-pub-2103807205659646/6643465209",
+  BANNER_5: "ca-app-pub-2103807205659646/1035135055",
+  APP_OPEN_1: "ca-app-pub-2103807205659646/1199351237",
+};
+
+export const LOCAL_STORAGE = {
+  IS_DISPLAY_PREMIUM_QUESTION: "IS_DISPLAY_PREMIUM_QUESTION",
 };

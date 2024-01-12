@@ -1,9 +1,15 @@
-import * as React from "react";
-import { StatusBar, StyleSheet, View } from "react-native";
+import { useContext, useEffect } from "react";
+import { View } from "react-native";
 import { Icon } from "react-native-elements";
 import { AppContextDispatch, AppContextState } from "../../../App";
+import { AdmobInter } from "../../../constants/AdmobInter";
 import { TAB_PAGE } from "../../../constants/Constant";
-import { isIpad, isIphoneMini, PersonDataType } from "../../../constants/Util";
+import {
+  PersonDataType,
+  PersonType,
+  isIpad,
+  isIphoneMini,
+} from "../../../constants/Util";
 import DatePickerAtom from "../../atoms/DatePickerAtom";
 import DropDownPickerAtom from "../../atoms/DropDownPickerAtom";
 import SwitchAtom from "../../atoms/SwitchAtom";
@@ -15,13 +21,13 @@ type CommonInfoInputPropsType = {
 };
 
 export default function CommonInfoInput(props: CommonInfoInputPropsType) {
-  const appContextState = React.useContext(AppContextState);
-  const appContextDispatch = React.useContext(AppContextDispatch);
+  const appContextState = useContext(AppContextState);
+  const appContextDispatch = useContext(AppContextDispatch);
 
   /**
    * データが変更される度に編集データを更新
    */
-  React.useEffect(() => {
+  useEffect(() => {
     if (!appContextState.currentPerson) return;
     const currentData = appContextState.currentPerson.currentData;
     if (
@@ -77,6 +83,10 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
             value={appContextState.patientNumber}
             setValue={appContextDispatch.setPatientNumber}
             width={isIpad() ? 180 : isIphoneMini() ? 120 : 150}
+            onOpen={() => {
+              // 患者を開くたびにDBを確認する。
+              appContextDispatch.reloadData(false, undefined, true);
+            }}
           />
         </TitleAndAction>
         <TitleAndAction title={isIphoneMini() ? "" : "データ"}>
@@ -85,6 +95,12 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
             value={appContextState.inspectionDataNumber}
             setValue={appContextDispatch.setInspectionDataNumber}
             width={isIpad() ? 180 : isIphoneMini() ? 160 : 160}
+            onOpen={() => {
+              appContextDispatch.reloadPersonData(
+                { ...appContextState.currentPerson },
+                true
+              );
+            }}
           />
         </TitleAndAction>
         <TitleAndAction
@@ -106,6 +122,12 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
           justifyContent: "flex-end",
         }}
       >
+        {!appContextState.isPremium && (
+          <AdmobInter
+            isShow={appContextState.isAdmobShow}
+            setShow={appContextDispatch.setAdmobShow}
+          />
+        )}
         <CommonPrintIcon />
         <Icon
           raised
@@ -113,17 +135,9 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
           type="font-awesome"
           color="#999999"
           onPress={() => appContextDispatch.setModalNumber(100)}
-          // onPress={() => appContext.setRegistDatabase(undefined)}
-          // onPress={() => appContext.setRegistDatabase(appContext.currentPerson)}
+          containerStyle={{ margin: 0, padding: 0 }}
         />
       </View>
     </View>
   );
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: StatusBar.currentHeight,
-    marginHorizontal: 16,
-  },
-});

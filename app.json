@@ -1,46 +1,78 @@
 {
   "expo": {
-    "plugins": ["expo-tracking-transparency"],
-    "name": "ペルオチャートLite",
-    "slug": "PeruoChartLite",
-    "version": "1.0.1",
+    "plugins": [
+      "expo-tracking-transparency",
+      [
+        "expo-screen-orientation",
+        {
+          "initialOrientation": "DEFAULT"
+        }
+      ]
+    ],
+    "name": "ぺリオチャート",
+    "slug": "PerioChart",
+    "version": "1.0.15",
     "orientation": "landscape",
-    "icon": "./assets/images/icon.png",
-    "scheme": "peruochartlite",
+    "icon": "./assets/images/file-000.png",
+    "scheme": "periochart",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/8b7207bb-0b5f-47d3-b77f-4241135e1365"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
+      "buildNumber": "12",
       "supportsTablet": true,
+      "requireFullScreen": true,
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-2103807205659646~3739470895"
       },
       "infoPlist": {
         "NSUserTrackingUsageDescription": "「許可」を押すと、他社のデータも活用し、よりお客様に適した広告が表示されます。",
+        "NSMicrophoneUsageDescription": "This app uses the microphone to allow users to send orders via voice message.",
         "SKAdNetworkItems": [
           {
             "SKAdNetworkIdentifier": "cstr6suwn9.skadnetwork"
           }
         ]
       },
-      "bundleIdentifier": "com.kuwahara.PeruoChartLite"
+      "bundleIdentifier": "com.kuwahara.ExpoExample"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/icon-android.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-2103807205659646~2121866348"
+      },
+      "permissions": [],
+      "package": "com.kuwahara.ExpoExample",
+      "versionCode": 8
     },
     "web": {
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/file-000.png"
     },
-    "description": ""
+    "description": "",
+    "extra": {
+      "eas": {
+        "projectId": "8b7207bb-0b5f-47d3-b77f-4241135e1365"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    }
+  },
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-xxxxxxxx~xxxxxxxx",
+    "ios_app_id": "ca-app-pub-2103807205659646~3739470895",
+    "delay_app_measurement_init": true,
+    "user_tracking_usage_description": "「許可」を押すと、他社のデータも活用し、よりお客様に適した広告が表示されます。"
   }
 }

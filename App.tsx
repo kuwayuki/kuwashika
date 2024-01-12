@@ -1,34 +1,70 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import deepEqual from "deep-equal";
 import * as FileSystem from "expo-file-system";
 import { FileInfo } from "expo-file-system";
+import * as ScreenOrientation from "expo-screen-orientation";
 import { StatusBar } from "expo-status-bar";
 import {
   getTrackingPermissionsAsync,
   requestTrackingPermissionsAsync,
 } from "expo-tracking-transparency";
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import React from "react";
-import { Alert, LogBox } from "react-native"; // TODO: 後で消す
+import {
+  User,
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+  setDoc,
+} from "firebase/firestore";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Alert, LogBox } from "react-native";
+import Purchases, { CustomerInfo, LOG_LEVEL } from "react-native-purchases";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import AlertAtom from "./components/atoms/AlertAtom";
 import { DropdownType } from "./components/atoms/DropDownPickerAtom";
 import CommonAuth from "./components/organisms/common/CommonAuth";
 import CommonInspection from "./components/organisms/common/CommonInspection";
 import CommonPatient from "./components/organisms/common/CommonPatient";
 import CommonSetting from "./components/organisms/common/CommonSetting";
-import { DATA_FILE, firebaseConfig, SETTING_FILE } from "./constants/Constant";
+import {
+  AUTH_FILE,
+  DATA_FILE,
+  LOCAL_STORAGE,
+  SETTING_FILE,
+  firebaseConfig,
+} from "./constants/Constant";
 import {
   DataType,
   DateFormat,
-  formatDate,
   INIT_PERSON,
   INIT_SETTING_DATA,
   PersonDataType,
   PersonNumberType,
   PersonType,
+  checkPremium,
+  deleteFileData,
+  formatDate,
+  getFileData,
+  getLocalStorage,
+  isAndroid,
+  isIpad,
+  margeSettingData,
+  parseDate,
+  saveLocalStorage,
+  writeFileData,
 } from "./constants/Util";
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
+import { AdmobAppOpenAd } from "./constants/AdmobAppOpen";
 
 // 全ページの共通項目
 export type appContextState = {
@@ -45,7 +81,9 @@ export type appContextState = {
   isPrecision: boolean;
   mtTeethNums: number[];
   pressedValue: number;
-  // auth: Auth;
+  isPremium: boolean;
+  isAdmobShow: boolean;
+  user: User;
 };
 export const AppContextState = React.createContext({} as appContextState);
 
@@ -68,31 +106,38 @@ export type appContextDispatch = {
   setMtTeethNums: (mtTeethNums: number[]) => void;
   setPressedValue: (pressedValue: number) => void;
   deletePerson: (patientNumber?: number, inspectionDataNumber?: number) => void;
+  setPremium: (isPremium: boolean) => void;
+  setAdmobShow: (isAdmobShow: boolean) => void;
+  setUser: (user: User) => void;
+  reloadData: (
+    isFileReload: boolean,
+    isDBRead: boolean,
+    isDBOnly: boolean
+  ) => void;
+  reloadPersonData: (personNumber: PersonNumberType, isDBOnly: boolean) => void;
 };
 export const AppContextDispatch = React.createContext({} as appContextDispatch);
 export const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-// const auth = initializeAuth(app);
-// setAuth(auth);
-// // setAuth(getAuth(app));
 
 export default function App() {
   LogBox.ignoreAllLogs();
-  const [currentPerson, setCurrentPerson] = React.useState<PersonType>();
-  const [settingData, setSettingData] = React.useState<DataType>(undefined);
-  const [inspectionDate, setInspectionDate] = React.useState(new Date());
-  const [modalNumber, setModalNumber] = React.useState(0);
-  const [patientNumber, setPatientNumber] = React.useState(-1);
-  const [patients, setPatients] = React.useState<DropdownType[]>([]);
-  const [inspectionDataNumber, setInspectionDataNumber] = React.useState(0);
-  const [inspectionData, setInspectionData] = React.useState<DropdownType[]>(
-    []
-  );
-  const [isPrecision, setPrecision] = React.useState(false);
-  const [isInitRead, setInitRead] = React.useState(false);
-  const [isReload, setReload] = React.useState(false);
-  const [mtTeethNums, setMtTeethNums] = React.useState<number[]>([]);
-  const [pressedValue, setPressedValue] = React.useState(-1);
+  const [currentPerson, setCurrentPerson] = useState<PersonType>();
+  const [settingData, setSettingData] = useState<DataType>(undefined);
+  const [inspectionDate, setInspectionDate] = useState(new Date());
+  const [modalNumber, setModalNumber] = useState(0);
+  const [patientNumber, setPatientNumber] = useState(-1);
+  const [patients, setPatients] = useState<DropdownType[]>([]);
+  const [inspectionDataNumber, setInspectionDataNumber] = useState(0);
+  const [inspectionData, setInspectionData] = useState<DropdownType[]>([]);
+  const [isPrecision, setPrecision] = useState(false);
+  const [isInitRead, setInitRead] = useState(false);
+  const [isReload, setReload] = useState(false);
+  const [mtTeethNums, setMtTeethNums] = useState<number[]>([]);
+  const [pressedValue, setPressedValue] = useState(-1);
+  const [isQuestionPremium, setQuestionPremium] = useState(false);
+  const [isPremium, setPremium] = useState(false);
+  const [isAdmobShow, setAdmobShow] = useState(false);
+  const [user, setUser] = useState(null);
 
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
@@ -118,10 +163,15 @@ export default function App() {
     } as PersonType);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     (async () => {
+      if (!isIpad()) {
+        await ScreenOrientation.lockAsync(
+          ScreenOrientation.OrientationLock.LANDSCAPE_LEFT
+        );
+      }
       const { granted, canAskAgain } = await getTrackingPermissionsAsync();
-      if (!granted && canAskAgain) {
+      if (!granted && canAskAgain && !isAndroid()) {
         Alert.alert(
           "許可することで広告が最適化",
           "トラッキングを許可することで、マネーフォロー内の広告が適切に最適化され、関連性の高い広告が表示されます。\n\nまた、アプリ作者に広告収入が発生するので、このアプリの改善に使用します。",
@@ -141,45 +191,192 @@ export default function App() {
     })();
   }, []);
 
-  // React.useEffect(() => {
-  //   const app = initializeApp(firebaseConfig);
-  //   const auth = initializeAuth(app);
-  //   setAuth(auth);
-  //   // setAuth(getAuth(app));
-  // }, []);
-  // React.useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       console.log(user);
-  //       // setUser(user);
-  //     } else {
-  //       // setUser("");
-  //     }
-  //   });
-  //   return () => unsubscribe();
-  // }, []);
-
   // 初期データ読込処理
-  React.useEffect(() => {
-    reloadData(true);
+  useEffect(() => {
+    if (!isInitRead) reloadData(true, false);
+  }, [isInitRead]);
+
+  // プレミアム時はDB（ないなら元ファイル）を読み込む
+  useEffect(() => {
+    if (user && isPremium && isInitRead) {
+      reloadData(false);
+    }
+  }, [user, isPremium, isInitRead]);
+
+  // 患者数やデータ数が変わった場合はDBを読み込む
+  useEffect(() => {
+    if (user && isPremium && isInitRead) {
+      reloadData(false, undefined, true);
+    }
+  }, [settingData?.persons?.length, currentPerson?.data?.length]);
+
+  useEffect(() => {
+    const f = async () => {
+      if (user && isPremium && isInitRead) {
+        console.log("初回データ書き込み");
+        const initDB = await getDB(undefined, false);
+        // 初回ログイン時はDBのデータを書き込む
+        if (!initDB) {
+          await saveDB(settingData);
+        }
+        // 未保存の患者データはすべてDBに書き込み
+        for (const person of settingData.persons) {
+          const initPersonDB = await getDB(person.patientNumber);
+          if (!initPersonDB) {
+            const readData = await getFileData(person.patientNumber);
+            if (readData) {
+              await saveDB(readData, person.patientNumber);
+            }
+          }
+        }
+      }
+    };
+    f();
+  }, [isPremium]);
+
+  const initPurchases = useCallback(async () => {
+    Purchases.setLogLevel(LOG_LEVEL.VERBOSE);
+    Purchases.configure({ apiKey: "appl_NkrQYcmcIAPLFiwlYVyYtEBegvJ" });
+    const customerInfo = await Purchases.getCustomerInfo();
+    if (checkPremium(customerInfo)) {
+      setPremium(true);
+      return;
+    } else {
+      const isDialogStr = await getLocalStorage(
+        LOCAL_STORAGE.IS_DISPLAY_PREMIUM_QUESTION
+      );
+      // TODO: 後で戻す
+      if (isDialogStr !== "false" && false) {
+        AlertAtom(
+          "★プレミアム機能追加★",
+          `広告が表示されなくなり、サインインで別デバイスとのデータ共有が可能になります。右上の設定画面から登録可能です。`,
+          () => {
+            setQuestionPremium(false);
+            saveLocalStorage(
+              LOCAL_STORAGE.IS_DISPLAY_PREMIUM_QUESTION,
+              String(false)
+            );
+          },
+          () => {
+            setQuestionPremium(false);
+          },
+          "今後は表示しない",
+          "閉じる"
+        );
+        // setQuestionPremium(isDialog !== "false");
+      }
+      // FIXME:後で出現
+      // AdmobAppOpenAd();
+    }
+  }, []);
+
+  type auth = {
+    email: string;
+    password: string;
+  };
+
+  useEffect(() => {
+    if (!isPremium) return;
+
+    const auth = getAuth();
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // ユーザーがサインインしている
+        if (user.emailVerified) {
+          // メールアドレスが確認されている
+          console.log("ログイン中");
+        } else {
+          // メールアドレスが未確認
+          alert("メールアドレスは未認証です。");
+        }
+        setUser(user);
+      } else {
+        console.log("ログアウト");
+        try {
+          const data = (await getFileData(undefined, true)) as auth;
+          let email: string, password: string;
+          if (data) {
+            email = data.email;
+            password = data.password;
+            const credential = await signInWithEmailAndPassword(
+              auth,
+              email,
+              password
+            );
+            if (credential?.user) {
+              setUser(credential.user);
+              return;
+            }
+          }
+        } catch (error) {}
+        setUser(null);
+      }
+    });
+  }, [isPremium]);
+
+  useEffect(() => {
+    initPurchases();
   }, []);
 
   // データ自動保存
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isInitRead) return;
     registPatientData(currentPerson);
   }, [currentPerson?.data]);
 
-  // 設定データ自動保存
-  React.useEffect(() => {
+  // 設定データ更新時自動保存
+  useEffect(() => {
     if (!isInitRead || !settingData) return;
-    registSettingData(settingData);
+    console.log("全てを書き込む");
+    registSettingData(settingData, true);
+  }, [settingData]);
+
+  // 患者変更時の患者リストの更新
+  useEffect(() => {
+    if (!settingData?.persons) return;
+
+    // 患者番号をセット
+    const newPatients = [{ label: "新規", value: 0 }];
+    // let maxLen = 1;
+    // settingData.persons.forEach((person) => {
+    //   if (person.isDeleted) return;
+    //   const len = person.patientNumber.toString().length;
+    //   if (len > maxLen) maxLen = len;
+    // });
+    settingData.persons.forEach((person) => {
+      if (person.isDeleted) return;
+      newPatients.push({
+        label:
+          person.patientNumber +
+          // zeroPadding(person.patientNumber, maxLen) +
+          ":" +
+          (person.patientName ?? ""),
+        value: person.patientNumber,
+      });
+    });
+    console.log("患者リストの更新");
+    console.log(newPatients);
+    if (deepEqual(patients, newPatients)) return;
+
+    setPatients(newPatients.sort((a, b) => a.value - b.value));
+    if (
+      !patientNumber ||
+      patientNumber === -1 ||
+      !settingData.persons.find(
+        (person) => !person.isDeleted && person.patientNumber === patientNumber
+      )
+    )
+      setPatientNumber(newPatients[1].value);
   }, [settingData]);
 
   // 患者番号変更処理
-  React.useEffect(() => {
+  useEffect(() => {
     const read = async () => {
       if (!isInitRead) return;
+      if (patientNumber == undefined) {
+        setPatientNumber(currentPerson.patientNumber);
+        return;
+      }
 
       // 検査データと内部データを全て変更
       if (patientNumber !== 0 && settingData.persons) {
@@ -198,9 +395,12 @@ export default function App() {
   }, [patientNumber]);
 
   // 検査データ変更処理
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isInitRead || !currentPerson) return;
-
+    if (inspectionDataNumber == undefined) {
+      setInspectionDataNumber(currentPerson.currentData?.inspectionDataNumber);
+      return;
+    }
     // 検査データと内部データを全て変更
     if (inspectionDataNumber !== 0) {
       const personData = currentPerson.data.find(
@@ -221,84 +421,78 @@ export default function App() {
     setModalNumber(2);
   }, [inspectionDataNumber]);
 
+  // 検査データ変更処理
+  useEffect(() => {
+    if (!isInitRead || !currentPerson) return;
+    saveDB(currentPerson.data, currentPerson.patientNumber);
+  }, [inspectionDataNumber, patientNumber]);
   /**
-   * 全データ変更処理
+   * 全データリロード処理
    * @param isFileReload
    */
-  const reloadData = async (isFileReload = false) => {
+  const reloadData = async (
+    isFileReload = false,
+    isDBRead = true,
+    isDBOnly = false
+  ) => {
     let refleshData: DataType;
-    if (isFileReload) {
-      const result: FileInfo = await FileSystem.getInfoAsync(
-        FileSystem.documentDirectory + SETTING_FILE
-      );
-      if (result.exists) {
-        const data = await FileSystem.readAsStringAsync(
-          FileSystem.documentDirectory + SETTING_FILE
-        );
-        refleshData = JSON.parse(data) as DataType;
-      } else {
-        // 初期データサンプル登録処理
-        refleshData = { ...INIT_SETTING_DATA };
-        registSettingData(refleshData);
-      }
-      setInitRead(true);
-    } else {
-      refleshData = { ...settingData };
+    if (isDBRead) {
+      if (isDBOnly) console.log("reload DB Only");
+      refleshData = await getDB();
     }
-    setSettingData(refleshData);
-
-    // 患者番号をセット
-    const patients = [{ label: "新規", value: 0 }];
-    let maxLen = 1;
-    refleshData.persons.forEach((person) => {
-      const len = person.patientNumber.toString().length;
-      if (len > maxLen) maxLen = len;
-    });
-    refleshData.persons.forEach((person) =>
-      patients.push({
-        label:
-          person.patientNumber +
-          // zeroPadding(person.patientNumber, maxLen) +
-          ":" +
-          (person.patientName ?? ""),
-        value: person.patientNumber,
-      })
-    );
-    setPatients(patients.sort((a, b) => a.value - b.value));
-
-    if (isFileReload) setPatientNumber(patients[1].value);
+    if (!isDBOnly && !refleshData) {
+      if (isFileReload) {
+        refleshData = await getFileData();
+        if (!refleshData) {
+          // 初期データサンプル登録処理
+          refleshData = { ...INIT_SETTING_DATA };
+        }
+        registSettingData(refleshData, true);
+        setInitRead(true);
+      } else {
+        refleshData = { ...settingData };
+      }
+    }
+    if (refleshData && !deepEqual(refleshData, settingData)) {
+      console.log("DBデータを保存します。");
+      console.log(refleshData);
+      console.log(settingData);
+      setSettingData(refleshData);
+    }
   };
-  function zeroPadding(NUM, LEN) {
-    return (Array(LEN).join(" ") + NUM).slice(-LEN);
-  }
+
   /**
    * 患者番号変更時の処理
    * 検査データと内部データの変更
    * @param personNumber
    */
-  const reloadPersonData = async (personNumber: PersonNumberType) => {
+  const reloadPersonData = async (
+    personNumber: PersonNumberType,
+    isDBOnly = false
+  ) => {
     let refleshData: PersonDataType[];
-    const dataName =
-      FileSystem.documentDirectory + personNumber.patientNumber + DATA_FILE;
-
-    const result: FileInfo = await FileSystem.getInfoAsync(dataName);
-    // 存在する場合は読み込み
-    if (result.exists) {
-      const readData = await FileSystem.readAsStringAsync(dataName);
-      refleshData = JSON.parse(readData) as PersonDataType[];
-      setInitRead(true);
+    refleshData = await getDB(personNumber.patientNumber);
+    if (!isDBOnly) {
+      if (!refleshData) {
+        refleshData = await getFileData(personNumber.patientNumber);
+        if (refleshData) {
+          setInitRead(true);
+        } else {
+          // 存在しない場合は初期データを書き込み
+          refleshData = [INIT_PERSON];
+          registPatientData({
+            patientNumber: personNumber.patientNumber,
+            data: refleshData,
+          } as PersonType);
+        }
+      }
     } else {
-      // 存在しない場合は初期データを書き込み
-      refleshData = [INIT_PERSON];
-      registPatientData({
-        patientNumber: personNumber.patientNumber,
-        data: refleshData,
-      } as PersonType);
+      console.log("検査データ再読み込み");
+      console.log(refleshData);
     }
 
     // 検査データ
     const inspectionData = [{ label: "新規追加", value: 0 }];
-    // refleshData.forEach((data) =>
     refleshData
       .sort((a, b) => {
         return a.date > b.date ? 1 : -1;
@@ -306,14 +500,17 @@ export default function App() {
       .forEach((data) =>
         inspectionData.push({
           label:
-            formatDate(data.date, DateFormat.MM_DD) +
-            ":" +
-            data.inspectionDataName,
+            isDBOnly && data.inspectionDataNumber === inspectionDataNumber
+              ? data.inspectionDataName
+              : formatDate(parseDate(data.date), DateFormat.MM_DD) +
+                ":" +
+                data.inspectionDataName,
           value: data.inspectionDataNumber,
         })
       );
     setInspectionData(inspectionData);
 
+    if (isDBOnly) return;
     // 検査データの最後のをセット
     reloadPersonInspectionData(refleshData, personNumber);
   };
@@ -355,17 +552,8 @@ export default function App() {
     patientNumber?: number,
     inspectionDataNumber?: number
   ) => {
-    if (patientNumber) {
-      // 指定ユーザーのみ削除
-      await FileSystem.deleteAsync(
-        FileSystem.documentDirectory + patientNumber + DATA_FILE
-      );
-      const patient = [...settingData.persons].filter(
-        (person) => person.patientNumber !== patientNumber
-      );
-      const settingTemp: DataType = { ...settingData, persons: patient };
-      setSettingData(settingTemp);
-    } else if (inspectionDataNumber) {
+    // 指定ユーザーのみ削除
+    if (inspectionDataNumber) {
       // 検査データ除外のみ
       const data = [...currentPerson.data].filter(
         (personData) => personData.inspectionDataNumber !== inspectionDataNumber
@@ -375,42 +563,58 @@ export default function App() {
       );
       const index = data.length > 1 ? data.length : 0;
       setInspectionData(inspectionTemp);
-      setInspectionDataNumber(index ?? 1);
+      setInspectionDataNumber(data[index - 1].inspectionDataNumber);
       setCurrentPerson({
         ...currentPerson,
         data: data,
         currentData: index ? data[index - 1] : INIT_PERSON,
       });
+      await reloadData(true);
     } else {
-      // 全データ削除(新規以外)
-      const patientsOnly: DropdownType[] = [...patients].filter(
-        (pats: DropdownType) => pats.value
-      );
-      patientsOnly.forEach((patient: DropdownType) => {
-        try {
-          FileSystem.deleteAsync(
-            FileSystem.documentDirectory + patient.value + DATA_FILE
-          );
-        } catch (error) {
-          console.log(error);
-        }
-      });
-      await FileSystem.deleteAsync(FileSystem.documentDirectory + SETTING_FILE);
+      // データ削除(新規以外)
+      await deleteDataAllOrPatientRelations(patientNumber);
     }
-    await reloadData(true);
+  };
+
+  const db = getFirestore(app);
+
+  /**
+   * Jsonデータを関係各位に保存
+   * @param settingData
+   */
+  const registSettingData = async (settingData: DataType, isSaveDB = false) => {
+    const margeData = isSaveDB ? await saveDB(settingData) : undefined;
+    if (margeData) return;
+    console.log("下記を書き込む。");
+    console.log(settingData);
+    writeFileData(settingData);
+    setSettingData(settingData);
   };
 
   /**
-   * Jsonデータをデータベースに保存
-   * @param settingData
+   * DB削除処理（患者削除時/初期化）
    */
-  const registSettingData = async (settingData: DataType) => {
-    // ファイル書き込み
-    FileSystem.writeAsStringAsync(
-      FileSystem.documentDirectory + SETTING_FILE,
-      JSON.stringify(settingData)
-    );
-    setSettingData(settingData);
+  const deleteDataAllOrPatientRelations = async (tmpPatientNumber?: number) => {
+    if (tmpPatientNumber !== undefined) {
+      const tmpSettingData: DataType = { ...settingData };
+      tmpSettingData.persons.forEach((person) => {
+        if (person.patientNumber === tmpPatientNumber) person.isDeleted = true;
+      });
+      console.log("下記を再保存します。");
+      console.log(tmpSettingData);
+      await registSettingData(tmpSettingData);
+      console.log("ファイルの削除します。");
+      await deleteFileData(tmpPatientNumber);
+      console.log("DBの削除します。");
+      await deleteDB(tmpPatientNumber);
+    } else {
+      await deleteDB();
+      settingData.persons.forEach((person) => {
+        deleteFileData(person.patientNumber);
+      });
+      await deleteFileData();
+      setInitRead(false);
+    }
   };
 
   /**
@@ -420,34 +624,192 @@ export default function App() {
   const registPatientData = (currentPerson: PersonType) => {
     let writeData: PersonDataType[] = [...currentPerson.data];
     // ファイル書き込み
-    FileSystem.writeAsStringAsync(
-      FileSystem.documentDirectory + currentPerson.patientNumber + DATA_FILE,
-      JSON.stringify(writeData)
-    );
+    writeFileData(writeData, currentPerson.patientNumber);
   };
+
+  const getDB = async (patientNumber?: number, isMarge = true) => {
+    if (user && isPremium) {
+      try {
+        console.log(
+          (patientNumber ? `患者番号${patientNumber}：` : "全般設定：") +
+            "読み込む"
+        );
+        const docRef = doc(
+          db,
+          "users",
+          patientNumber ? `${user.uid}_${patientNumber}` : user.uid
+        );
+        const docSnap = await getDoc(docRef);
+        if (!docSnap.exists()) return undefined;
+        if (!patientNumber && isMarge) {
+          const mergeData = margeSettingData(settingData, docSnap.data().data);
+          console.log(mergeData);
+          return mergeData;
+        }
+        return docSnap.data().data;
+      } catch (error) {
+        console.error("Error reading user data: ", error);
+      }
+    }
+    return undefined;
+  };
+
+  /**
+   * 下記のタイミングでDBに保存する
+   * １．全般設定：初回及び、下記全般
+   * ２．患者番号／検査データ：患者番号の変更時／検査データの変更時
+   * ※全般設定は患者番号が増減した場合に、他の環境から読み込んで変更する必要があるので注意
+   * @param data
+   * @param patientNumber
+   * @returns
+   */
+  const saveDB = async (data: any, patientNumber?: number) => {
+    if (user && isPremium && isInitRead && data) {
+      try {
+        console.log(
+          (patientNumber ? `患者番号${patientNumber}：` : "全般設定：") +
+            "書き込む"
+        );
+        if (
+          patientNumber &&
+          !settingData.persons.find(
+            (person) => person.patientNumber === patientNumber
+          )
+        )
+          return;
+
+        const docRef = doc(
+          db,
+          "users",
+          patientNumber ? `${user.uid}_${patientNumber}` : user.uid
+        );
+        // 設定データ更新時は両方の削除追加が怖いので厳密にチェック
+        if (patientNumber === undefined) {
+          const docSnap = await getDoc(docRef);
+          console.log(docSnap.exists());
+          if (docSnap.exists() && deepEqual(docSnap.data().data, data)) {
+            console.log("データが同じため、書き込みません。");
+            return;
+          }
+          if (docSnap.exists()) console.log(docSnap.data().data);
+
+          const margedData = margeSettingData(
+            { ...data },
+            docSnap.exists() ? docSnap.data()?.data : undefined
+          );
+          console.log(margedData);
+          if (docSnap.exists() && deepEqual(docSnap.data().data, margedData)) {
+            console.log("マージデータが同じため、書き込みません。");
+            return margedData;
+          } else if (deepEqual(data, margedData)) {
+            console.log("マージデータを書き込み");
+            await setDoc(docRef, { data: data });
+            return;
+          }
+          console.log("ループして書き込みますがここでは書き込みません。");
+          return margedData;
+        } else {
+        }
+        console.log(data);
+        await setDoc(docRef, { data: data });
+        console.log(
+          (patientNumber ? `患者番号${patientNumber}：` : "全般設定：") +
+            "書き込みました"
+        );
+      } catch (error) {
+        console.error("Error adding user data: ", error);
+      }
+    }
+  };
+
+  /**
+   * 初期化及び、患者データの削除時
+   * @param patientNumber
+   *
+   */
+  const deleteDB = async (patientNumber?: number) => {
+    if (user && isPremium) {
+      console.log(
+        (patientNumber ? `患者番号${patientNumber}：` : "全般設定：") + "削除"
+      );
+      try {
+        if (patientNumber) {
+          await deleteDoc(
+            doc(
+              db,
+              "users",
+              patientNumber ? `${user.uid}_${patientNumber}` : user.uid
+            )
+          );
+        } else {
+          const querySnapshot = await getDocs(collection(db, "users"));
+          const deleteIds: string[] = [];
+          querySnapshot.forEach((doc) => {
+            if (doc.id.startsWith(user.uid)) deleteIds.push(doc.id);
+          });
+          await Promise.all(
+            deleteIds.map((deleteId) => {
+              deleteDoc(doc(db, "users", deleteId));
+            })
+          );
+        }
+      } catch (error) {
+        console.error("Error deleting user data: ", error);
+      }
+    }
+  };
+
+  const appContextStateValue = useMemo(
+    () => ({
+      isReload,
+      isInitRead,
+      settingData,
+      currentPerson,
+      modalNumber,
+      inspectionDate,
+      patients,
+      patientNumber,
+      inspectionDataNumber,
+      inspectionData,
+      isPrecision,
+      mtTeethNums,
+      pressedValue,
+      isPremium,
+      isAdmobShow,
+      user,
+    }),
+    [
+      isReload,
+      isInitRead,
+      settingData,
+      currentPerson,
+      modalNumber,
+      inspectionDate,
+      patients,
+      patientNumber,
+      inspectionDataNumber,
+      inspectionData,
+      isPrecision,
+      mtTeethNums,
+      pressedValue,
+      isPremium,
+      isAdmobShow,
+      user,
+    ]
+  );
+
+  const setMtTeethNumsMemoized = useCallback(
+    (newValue: number[]) => {
+      setMtTeethNums(newValue);
+    },
+    [setMtTeethNums]
+  );
 
   if (!isLoadingComplete) {
     return null;
   } else {
     return (
-      <AppContextState.Provider
-        value={{
-          isReload,
-          isInitRead,
-          settingData,
-          currentPerson,
-          modalNumber,
-          inspectionDate,
-          patients,
-          patientNumber,
-          inspectionDataNumber,
-          inspectionData,
-          isPrecision,
-          mtTeethNums,
-          pressedValue,
-          // auth,
-        }}
-      >
+      <AppContextState.Provider value={appContextStateValue}>
         <AppContextDispatch.Provider
           value={{
             setReload,
@@ -464,9 +826,14 @@ export default function App() {
             setPrecision,
             registSettingData,
             registPatientData,
-            setMtTeethNums,
+            setMtTeethNums: setMtTeethNumsMemoized,
             setPressedValue,
             deletePerson,
+            setPremium,
+            setAdmobShow,
+            setUser,
+            reloadData,
+            reloadPersonData,
           }}
         >
           {modalNumber === 1 && <CommonPatient />}

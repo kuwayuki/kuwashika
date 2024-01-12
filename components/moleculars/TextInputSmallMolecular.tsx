@@ -1,4 +1,3 @@
-import * as React from "react";
 import { StyleSheet } from "react-native";
 import { TextInputPropsEx } from "../../constants/Constant";
 import TextInputMolecular from "./TextInputMolecular";

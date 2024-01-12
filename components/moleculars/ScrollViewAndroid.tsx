@@ -1,13 +1,14 @@
 import { forwardRef } from "react";
 import { ScrollView, ScrollViewProps, StyleSheet } from "react-native";
 
-const ScrollViewAtom = forwardRef((props: ScrollViewProps, ref: any) => {
+const ScrollViewAndroid = forwardRef((props: ScrollViewProps, ref: any) => {
   return (
     <ScrollView
       {...props}
-      style={styles.scrollView}
-      ref={ref}
       horizontal={false}
+      ref={ref}
+      persistentScrollbar={true}
+      showsVerticalScrollIndicator={true}
       decelerationRate={"normal"}
       maximumZoomScale={3}
       minimumZoomScale={0.5}
@@ -17,12 +18,6 @@ const ScrollViewAtom = forwardRef((props: ScrollViewProps, ref: any) => {
   );
 });
 
-const styles = StyleSheet.create({
-  scrollView: {
-    minHeight: "80%",
-    marginHorizontal: 10,
-    backgroundColor: "#FFFFEE",
-  },
-});
+const styles = StyleSheet.create({});
 
-export default ScrollViewAtom;
+export default ScrollViewAndroid;
