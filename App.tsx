@@ -246,7 +246,7 @@ export default function App() {
         LOCAL_STORAGE.IS_DISPLAY_PREMIUM_QUESTION
       );
       // TODO: 後で戻す
-      if (isDialogStr !== "false" && false) {
+      if (isDialogStr !== "false") {
         AlertAtom(
           "★プレミアム機能追加★",
           `広告が表示されなくなり、サインインで別デバイスとのデータ共有が可能になります。右上の設定画面から登録可能です。`,
