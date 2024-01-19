@@ -64,7 +64,7 @@ import {
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
-import { AdmobAppOpenAd } from "./constants/AdmobAppOpen";
+import { initializeAppOpenAd, showAppOpenAd } from "./constants/AdmobAppOpen";
 
 // 全ページの共通項目
 export type appContextState = {
@@ -265,8 +265,9 @@ export default function App() {
         );
         // setQuestionPremium(isDialog !== "false");
       } else {
-        // FIXME:後で出現
-        // AdmobAppOpenAd();
+        initializeAppOpenAd(() => {
+          showAppOpenAd();
+        });
       }
     }
   }, []);
