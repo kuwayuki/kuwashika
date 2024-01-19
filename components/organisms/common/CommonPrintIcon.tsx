@@ -25,9 +25,10 @@ export default function CommonPrintIcon() {
 
   // 印刷処理（and 評価 and 広告）
   const print = async () => {
-    const html = createHtml();
+    appContextDispatch.setAdmobShow(true);
     // On iOS/android prints the given html. On web prints the HTML from the current page.
     try {
+      const html = createHtml();
       await Print.printAsync({
         html,
         useMarkupFormatter: true,
@@ -45,7 +46,6 @@ export default function CommonPrintIcon() {
       } catch (error) {
         console.log(error);
       }
-      appContextDispatch.setAdmobShow(true);
     }
   };
 

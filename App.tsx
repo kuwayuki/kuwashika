@@ -264,9 +264,10 @@ export default function App() {
           "閉じる"
         );
         // setQuestionPremium(isDialog !== "false");
+      } else {
+        // FIXME:後で出現
+        // AdmobAppOpenAd();
       }
-      // FIXME:後で出現
-      // AdmobAppOpenAd();
     }
   }, []);
 

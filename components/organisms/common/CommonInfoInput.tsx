@@ -4,12 +4,7 @@ import { Icon } from "react-native-elements";
 import { AppContextDispatch, AppContextState } from "../../../App";
 import { AdmobInter } from "../../../constants/AdmobInter";
 import { TAB_PAGE } from "../../../constants/Constant";
-import {
-  PersonDataType,
-  PersonType,
-  isIpad,
-  isIphoneMini,
-} from "../../../constants/Util";
+import { PersonDataType, isIpad, isIphoneMini } from "../../../constants/Util";
 import DatePickerAtom from "../../atoms/DatePickerAtom";
 import DropDownPickerAtom from "../../atoms/DropDownPickerAtom";
 import SwitchAtom from "../../atoms/SwitchAtom";

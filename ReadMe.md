@@ -120,6 +120,7 @@ eas build --profile development-simulator --platform ios
 
 % ビルドした状態でのみテストしたいとき(Purchase や Google-Admob)
 npm install --dev-client
+% pacakge を追加した場合には必ず再インストールすること！
 eas build --profile development --platform ios
 % QR コードを読み取る
 npx expo start --dev-client
@@ -131,11 +132,10 @@ npm run start
 
 % app.json-"version": "2"はずれるようにする必要がある。
 % app.json-"ios"."buildNumber": "2"はずれるようにする必要がある。
-eas build -p ios
-eas submit --latest -p ios
-eas update --branch production --message "Bug Fixed"
+% eas build -p ios
+% eas submit --latest -p ios
+% eas update --branch production --message "Bug Fixed"
 
-% pacakge を追加した場合には必ず再インストールすること！
 eas build --profile development --platform ios
 npx expo start --dev-client
 
@@ -143,6 +143,8 @@ ee68028@yahoo.ne.jp
 
 eas build --platform ios --auto-submit
 
-% OTA
+% ★OTA (初回だけ production で公開。次回以降は eas update で OTA)
 eas build --platform ios --profile production
+eas submit --latest -p ios
+% OTA(以降はこれだけで OK)
 eas update --branch production --message "Bug Fixed"

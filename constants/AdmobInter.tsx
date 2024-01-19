@@ -3,8 +3,9 @@ import { InterstitialAd, AdEventType } from "react-native-google-mobile-ads";
 import { BANNER_UNIT_ID } from "./Constant";
 import { getRandomId } from "./Util";
 
-function ADMOB_ID() {
+function selectAdId() {
   const random = getRandomId(3);
+  // ここで適切な広告IDの選択ロジックを実装します
   switch (random) {
     case 0:
       return BANNER_UNIT_ID.INTERSTIAL;
@@ -15,10 +16,15 @@ function ADMOB_ID() {
   }
   return BANNER_UNIT_ID.INTERSTIAL_3;
 }
-const id = ADMOB_ID();
-let interstitial = InterstitialAd.createForAdRequest(id, {
-  keywords: ["Dental Education"],
-});
+
+let interstitial;
+
+const initializeAd = () => {
+  const id = selectAdId();
+  interstitial = InterstitialAd.createForAdRequest(id, {
+    keywords: ["dental"],
+  });
+};
 
 export type AdmobInterType = {
   isShow: boolean;
@@ -29,37 +35,38 @@ export function AdmobInter(props: AdmobInterType) {
   const [loaded, setLoaded] = useState(false);
 
   const loadAd = () => {
-    const id = ADMOB_ID();
-    interstitial = InterstitialAd.createForAdRequest(id, {
-      keywords: ["Dental Conferences"],
-    });
+    initializeAd();
     interstitial.load();
   };
 
-  const unsubscribeLoaded = interstitial.addAdEventListener(
-    AdEventType.LOADED,
-    () => {
-      setLoaded(true);
-    }
-  );
-
-  const unsubscribeClosed = interstitial.addAdEventListener(
-    AdEventType.CLOSED,
-    () => {
-      // loadAd(); // 広告を再ロード
-    }
-  );
-  const unsubscribeError = interstitial.addAdEventListener(
-    AdEventType.ERROR,
-    (event) => {
-      console.log(event);
-      console.log("error");
-      setLoaded(false);
-    }
-  );
+  useEffect(() => {
+    loadAd();
+  }, []);
 
   useEffect(() => {
-    // Unsubscribe from events on unmount
+    const unsubscribeLoaded = interstitial.addAdEventListener(
+      AdEventType.LOADED,
+      () => {
+        setLoaded(true);
+      }
+    );
+
+    const unsubscribeClosed = interstitial.addAdEventListener(
+      AdEventType.CLOSED,
+      () => {
+        setLoaded(false);
+        loadAd(); // 広告を再ロード
+      }
+    );
+
+    const unsubscribeError = interstitial.addAdEventListener(
+      AdEventType.ERROR,
+      (error) => {
+        console.error("Ad Load Error: ", error);
+        setLoaded(false);
+      }
+    );
+
     return () => {
       unsubscribeLoaded();
       unsubscribeClosed();
@@ -68,17 +75,13 @@ export function AdmobInter(props: AdmobInterType) {
   }, []);
 
   useEffect(() => {
-    if (loaded) return;
-    loadAd(); // 再ロード
-    console.log("再ロード");
-  }, [loaded]);
-
-  useEffect(() => {
-    if (props.isShow && interstitial?.loaded) {
-      interstitial.show();
+    if (props.isShow && loaded) {
+      if (interstitial?.loaded) {
+        interstitial.show();
+      }
       props.setShow(false);
-      setLoaded(false);
     }
-  }, [interstitial?.loaded, props.isShow]);
+  }, [props.isShow, loaded]);
+
   return null;
 }
