@@ -9,6 +9,7 @@ import ModalAtom from "../../atoms/ModalAtom";
 import PressableAtom from "../../atoms/PressableAtom";
 import TextInputAtom from "../../atoms/TextInputAtom";
 import TitleAndAction from "../../moleculars/TitleAndAction";
+import { showInterstitialAd } from "../../../constants/AdmobInter";
 
 export default function CommonInspection() {
   const appContextState = useContext(AppContextState);
@@ -34,7 +35,7 @@ export default function CommonInspection() {
 
     // データ追加時は広告を表示
     if (appContextState.patients.length > LIMIT_COUNT.ADMOB_MAX_PATIENTS) {
-      // appContextDispatch.setAdmobShow(true);
+      // showInterstitialAd();
     }
 
     // 検査データの追加

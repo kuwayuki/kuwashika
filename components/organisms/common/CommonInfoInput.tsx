@@ -2,7 +2,6 @@ import { useContext, useEffect } from "react";
 import { View } from "react-native";
 import { Icon } from "react-native-elements";
 import { AppContextDispatch, AppContextState } from "../../../App";
-import { AdmobInter } from "../../../constants/AdmobInter";
 import { TAB_PAGE } from "../../../constants/Constant";
 import { PersonDataType, isIpad, isIphoneMini } from "../../../constants/Util";
 import DatePickerAtom from "../../atoms/DatePickerAtom";
@@ -117,12 +116,6 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
           justifyContent: "flex-end",
         }}
       >
-        {!appContextState.isPremium && (
-          <AdmobInter
-            isShow={appContextState.isAdmobShow}
-            setShow={appContextDispatch.setAdmobShow}
-          />
-        )}
         <CommonPrintIcon />
         <Icon
           raised

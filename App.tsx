@@ -1,7 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import deepEqual from "deep-equal";
-import * as FileSystem from "expo-file-system";
-import { FileInfo } from "expo-file-system";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { StatusBar } from "expo-status-bar";
 import {
@@ -26,7 +23,7 @@ import {
 } from "firebase/firestore";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Alert, LogBox } from "react-native";
-import Purchases, { CustomerInfo, LOG_LEVEL } from "react-native-purchases";
+import Purchases, { LOG_LEVEL } from "react-native-purchases";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import AlertAtom from "./components/atoms/AlertAtom";
 import { DropdownType } from "./components/atoms/DropDownPickerAtom";
@@ -34,13 +31,8 @@ import CommonAuth from "./components/organisms/common/CommonAuth";
 import CommonInspection from "./components/organisms/common/CommonInspection";
 import CommonPatient from "./components/organisms/common/CommonPatient";
 import CommonSetting from "./components/organisms/common/CommonSetting";
-import {
-  AUTH_FILE,
-  DATA_FILE,
-  LOCAL_STORAGE,
-  SETTING_FILE,
-  firebaseConfig,
-} from "./constants/Constant";
+import { initializeInterstitialAd } from "./constants/AdmobInter";
+import { LOCAL_STORAGE, firebaseConfig } from "./constants/Constant";
 import {
   DataType,
   DateFormat,
@@ -64,7 +56,6 @@ import {
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
-import { initializeAppOpenAd, showAppOpenAd } from "./constants/AdmobAppOpen";
 
 // 全ページの共通項目
 export type appContextState = {
@@ -82,7 +73,6 @@ export type appContextState = {
   mtTeethNums: number[];
   pressedValue: number;
   isPremium: boolean;
-  isAdmobShow: boolean;
   user: User;
 };
 export const AppContextState = React.createContext({} as appContextState);
@@ -107,7 +97,6 @@ export type appContextDispatch = {
   setPressedValue: (pressedValue: number) => void;
   deletePerson: (patientNumber?: number, inspectionDataNumber?: number) => void;
   setPremium: (isPremium: boolean) => void;
-  setAdmobShow: (isAdmobShow: boolean) => void;
   setUser: (user: User) => void;
   reloadData: (
     isFileReload: boolean,
@@ -136,7 +125,6 @@ export default function App() {
   const [pressedValue, setPressedValue] = useState(-1);
   const [isQuestionPremium, setQuestionPremium] = useState(false);
   const [isPremium, setPremium] = useState(false);
-  const [isAdmobShow, setAdmobShow] = useState(false);
   const [user, setUser] = useState(null);
 
   const isLoadingComplete = useCachedResources();
@@ -264,11 +252,12 @@ export default function App() {
           "閉じる"
         );
         // setQuestionPremium(isDialog !== "false");
-      } else {
-        initializeAppOpenAd(() => {
-          showAppOpenAd();
-        });
       }
+      initializeInterstitialAd();
+      // TODO: 後で治す
+      // initializeAppOpenAd(() => {
+      //   showAppOpenAd();
+      // });
     }
   }, []);
 
@@ -777,7 +766,6 @@ export default function App() {
       mtTeethNums,
       pressedValue,
       isPremium,
-      isAdmobShow,
       user,
     }),
     [
@@ -795,7 +783,6 @@ export default function App() {
       mtTeethNums,
       pressedValue,
       isPremium,
-      isAdmobShow,
       user,
     ]
   );
@@ -832,7 +819,6 @@ export default function App() {
             setPressedValue,
             deletePerson,
             setPremium,
-            setAdmobShow,
             setUser,
             reloadData,
             reloadPersonData,

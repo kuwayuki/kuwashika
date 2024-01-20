@@ -15,6 +15,10 @@ import {
 import { pcrCalculation, ppdCalculation } from "../../../constants/Util";
 import { AppContextDispatch, AppContextState } from "../../../App";
 import * as StoreReview from "expo-store-review";
+import {
+  initializeInterstitialAd,
+  showInterstitialAd,
+} from "../../../constants/AdmobInter";
 
 export const SIZE = 48;
 
@@ -25,8 +29,8 @@ export default function CommonPrintIcon() {
 
   // 印刷処理（and 評価 and 広告）
   const print = async () => {
-    appContextDispatch.setAdmobShow(true);
     // On iOS/android prints the given html. On web prints the HTML from the current page.
+    showInterstitialAd();
     try {
       const html = createHtml();
       await Print.printAsync({
@@ -46,6 +50,7 @@ export default function CommonPrintIcon() {
       } catch (error) {
         console.log(error);
       }
+      initializeInterstitialAd();
     }
   };
 
