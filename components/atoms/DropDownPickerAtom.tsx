@@ -4,6 +4,7 @@ import DropDownPicker, {
   DropDownPickerProps,
 } from "react-native-dropdown-picker";
 import { AppContextState } from "../../App";
+import { isIpad } from "../../constants/Util";
 
 export type DropdownType = { label: string; value: number; kind?: number };
 
@@ -41,9 +42,14 @@ export default function DropDownPickerAtom(props: DropDownPickerAtomProps) {
         }
         dropDownContainerStyle={
           props.width !== undefined
-            ? [styles.picker, { maxWidth: props.width }]
+            ? [
+                styles.picker,
+                { maxWidth: props.width, maxHeight: isIpad() ? 400 : 200 },
+              ]
             : styles.picker
         }
+        searchPlaceholder="検索フィルター"
+        placeholder="項目を選択"
         // placeholderStyle={styles.picker}
         // dropDownContainerStyle={styles.picker}
         // tickIconStyle={styles.picker}

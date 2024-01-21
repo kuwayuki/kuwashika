@@ -48,6 +48,8 @@ import {
   getLocalStorage,
   isAndroid,
   isIpad,
+  isRandomEqualsZero,
+  margeInspectionData,
   margeSettingData,
   parseDate,
   saveLocalStorage,
@@ -56,6 +58,7 @@ import {
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
+import { initializeAppOpenAd, showAppOpenAd } from "./constants/AdmobAppOpen";
 
 // 全ページの共通項目
 export type appContextState = {
@@ -104,6 +107,12 @@ export type appContextDispatch = {
     isDBOnly: boolean
   ) => void;
   reloadPersonData: (personNumber: PersonNumberType, isDBOnly: boolean) => void;
+  saveDB: (
+    data: any,
+    patientNumber?: number,
+    userAgent?: any,
+    isNoCheckPremium?: boolean
+  ) => void;
 };
 export const AppContextDispatch = React.createContext({} as appContextDispatch);
 export const app = initializeApp(firebaseConfig);
@@ -234,10 +243,10 @@ export default function App() {
         LOCAL_STORAGE.IS_DISPLAY_PREMIUM_QUESTION
       );
       // TODO: 後で戻す
-      if (isDialogStr !== "false" && false) {
+      if (isDialogStr !== "false") {
         AlertAtom(
           "★プレミアム機能追加★",
-          `広告が表示されなくなり、サインインで別デバイスとのデータ共有が可能になります。右上の設定画面から登録可能です。`,
+          `広告が表示されなくなり、サインイン(β版)で別デバイスとのデータ共有が可能になります。右上の設定画面から登録可能です。`,
           () => {
             setQuestionPremium(false);
             saveLocalStorage(
@@ -252,12 +261,14 @@ export default function App() {
           "閉じる"
         );
         // setQuestionPremium(isDialog !== "false");
+      } else {
+        if (isRandomEqualsZero(3)) {
+          initializeAppOpenAd(() => {
+            showAppOpenAd();
+          });
+        }
       }
       initializeInterstitialAd();
-      // TODO: 後で治す
-      // initializeAppOpenAd(() => {
-      //   showAppOpenAd();
-      // });
     }
   }, []);
 
@@ -327,7 +338,7 @@ export default function App() {
     if (!settingData?.persons) return;
 
     // 患者番号をセット
-    const newPatients = [{ label: "新規", value: 0 }];
+    const newPatients = [{ label: "＋ 新規", value: 0 }];
     // let maxLen = 1;
     // settingData.persons.forEach((person) => {
     //   if (person.isDeleted) return;
@@ -483,7 +494,7 @@ export default function App() {
     }
 
     // 検査データ
-    const inspectionData = [{ label: "新規追加", value: 0 }];
+    const inspectionData = [{ label: "＋ 新規追加", value: 0 }];
     refleshData
       .sort((a, b) => {
         return a.date > b.date ? 1 : -1;
@@ -652,10 +663,20 @@ export default function App() {
    * ※全般設定は患者番号が増減した場合に、他の環境から読み込んで変更する必要があるので注意
    * @param data
    * @param patientNumber
+   * @param isNoCheckPremium 検査データ番号が指定されている場合は対象だけ更新
    * @returns
    */
-  const saveDB = async (data: any, patientNumber?: number) => {
-    if (user && isPremium && isInitRead && data) {
+  const saveDB = async (
+    data: any,
+    patientNumber?: number,
+    userAgent?: any,
+    isNoCheckPremium = false
+  ) => {
+    let tempUser = user;
+    if (isNoCheckPremium) {
+      tempUser = userAgent;
+    }
+    if (tempUser && (isPremium || isNoCheckPremium) && isInitRead && data) {
       try {
         console.log(
           (patientNumber ? `患者番号${patientNumber}：` : "全般設定：") +
@@ -672,17 +693,21 @@ export default function App() {
         const docRef = doc(
           db,
           "users",
-          patientNumber ? `${user.uid}_${patientNumber}` : user.uid
+          patientNumber ? `${tempUser.uid}_${patientNumber}` : tempUser.uid
         );
+        if (isNoCheckPremium) {
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) return;
+        }
         // 設定データ更新時は両方の削除追加が怖いので厳密にチェック
         if (patientNumber === undefined) {
           const docSnap = await getDoc(docRef);
-          console.log(docSnap.exists());
+          // console.log(docSnap.exists());
           if (docSnap.exists() && deepEqual(docSnap.data().data, data)) {
             console.log("データが同じため、書き込みません。");
             return;
           }
-          if (docSnap.exists()) console.log(docSnap.data().data);
+          // if (docSnap.exists()) console.log(docSnap.data().data);
 
           const margedData = margeSettingData(
             { ...data },
@@ -699,8 +724,28 @@ export default function App() {
           }
           console.log("ループして書き込みますがここでは書き込みません。");
           return margedData;
-        } else {
         }
+        //  else if (inspectionDataNumber !== undefined) {
+        //   const docSnap = await getDoc(docRef);
+        //   if (docSnap.exists() && deepEqual(docSnap.data().data, data)) {
+        //     console.log("データが同じため、書き込みません。");
+        //     return;
+        //   }
+
+        //   const margedData = margeInspectionData(
+        //     [...data],
+        //     docSnap.exists() ? docSnap.data()?.data : undefined,
+        //     inspectionDataNumber
+        //   );
+        //   if (docSnap.exists() && deepEqual(docSnap.data().data, margedData)) {
+        //     console.log("マージデータが同じため、書き込みません。");
+        //     return margedData;
+        //   }
+        //   console.log("マージデータを書き込み");
+        //   await setDoc(docRef, { data: margedData });
+        //   console.log(data);
+        //   return;
+        // }
         console.log(data);
         await setDoc(docRef, { data: data });
         console.log(
@@ -822,6 +867,7 @@ export default function App() {
             setUser,
             reloadData,
             reloadPersonData,
+            saveDB,
           }}
         >
           {modalNumber === 1 && <CommonPatient />}

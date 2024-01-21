@@ -12,7 +12,7 @@ export const subscriptionDetails = {
   title: "ペリオチャートプレミアムプラン",
   price: "¥500/月",
   benefits:
-    "プレミアムプランの加入で、アプリを広告なしで利用できます。\r\nまた、サインインで別アプリとのデータ共有を行うことができます。\r\n(共通のApple IDで利用する必要があります。)",
+    "プレミアムプランの加入で、アプリを広告なしで利用できます。\r\nまた、サインイン(β版)で別アプリとのデータ共有を行うことができます。\r\n(共通のApple IDで利用する必要があります。)",
   termsUrl: "https://kuwank.hatenablog.com/entry/2024/01/07/230214", // 利用規約のURL
   privacyPolicyUrl: "https://kuwank.hatenablog.com/entry/2024/01/07/230533", // プライバシーポリシーのURL
 };

@@ -401,6 +401,58 @@ export const margeSettingData = (
   return margedData;
 };
 
+/**
+ * ローカルデータとDBデータをマージする
+ * @param localData
+ * @param dbData
+ * @returns
+ */
+export const margeInspectionData = (
+  localData: PersonDataType[],
+  dbData?: PersonDataType[],
+  inspectionDataNumber?: number
+): PersonDataType[] => {
+  const margedData: PersonDataType[] = [];
+  if (!dbData?.length) return localData;
+  console.log("マージします。");
+  console.log(localData);
+  console.log(dbData);
+  console.log(inspectionDataNumber);
+
+  const target = localData.find(
+    (local) => local.inspectionDataNumber === inspectionDataNumber
+  );
+  const isDeleted = !target;
+
+  let isAdded = false;
+  dbData.forEach((dbUnitData) => {
+    let db = dbUnitData;
+    if (isDeleted) {
+      const deleted = dbUnitData.inspectionDataNumber === inspectionDataNumber;
+      if (deleted) return;
+    } else {
+      // 種別と日付が一致している場合は競合しているとみなす
+      const conflictDBData = dbData.find(
+        (dbPerson) =>
+          dbPerson.inspectionDataKindNumber ===
+            target.inspectionDataKindNumber && dbPerson.date === target.date
+      );
+      // 競合がある場合はマージ
+      if (conflictDBData) {
+        isAdded = true;
+        db = conflictDBData;
+      }
+    }
+    margedData.push(db);
+  });
+
+  if (!isDeleted && !isAdded) {
+    margedData.push(target);
+  }
+  console.log(margedData);
+  return margedData;
+};
+
 // /**
 //  * ローカルデータとDBデータをマージする
 //  * @param localDataPersons
@@ -475,4 +527,9 @@ export const margeSettingData = (
 export const getRandomId = (maxCount: number) => {
   const randomIndex = Math.floor(Math.random() * maxCount);
   return randomIndex;
+};
+
+export const isRandomEqualsZero = (maxCount: number) => {
+  const randomIndex = Math.floor(Math.random() * maxCount);
+  return randomIndex === 0;
 };

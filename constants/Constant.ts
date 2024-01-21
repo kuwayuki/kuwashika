@@ -135,7 +135,7 @@ export const PRINT_PPD = {
 };
 
 export const LIMIT_COUNT = {
-  ADMOB_MAX_PATIENTS: 10,
+  ADMOB_MAX_PATIENTS: 5,
 };
 
 export const BANNER_UNIT_ID = {

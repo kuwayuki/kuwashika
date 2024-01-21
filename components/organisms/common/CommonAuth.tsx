@@ -11,6 +11,7 @@ import { AppContextDispatch, AppContextState } from "../../../App";
 import TextInputAtom from "../../atoms/TextInputAtom";
 import * as FileSystem from "expo-file-system";
 import { AUTH_FILE } from "../../../constants/Constant";
+import { getFileData } from "../../../constants/Util";
 
 export default function CommonAuth() {
   const [email, setEmail] = useState("");
@@ -21,13 +22,30 @@ export default function CommonAuth() {
   const auth = getAuth();
   const signIn = async (event: any) => {
     await signInWithEmailAndPassword(auth, email, password)
-      .then((credential) => {
+      .then(async (credential) => {
         appContextDispatch.setUser(credential.user);
         appContextDispatch.setModalNumber(0);
         appContextDispatch.setPatientNumber(
           appContextState.currentPerson.patientNumber
         );
         writeFileData({ email, password });
+
+        for (const person of appContextState.settingData.persons) {
+          console.log(person);
+          try {
+            const readData = await getFileData(person.patientNumber);
+            console.log(person.patientNumber + "書き込む");
+            console.log(readData);
+            if (readData) {
+              appContextDispatch.saveDB(
+                readData,
+                person.patientNumber,
+                credential.user,
+                true
+              );
+            }
+          } catch (error) {}
+        }
       })
       .catch((error) => {
         const errorMessage = error.message;
