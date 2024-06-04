@@ -3,7 +3,8 @@ import { BANNER_UNIT_ID } from "./Constant";
 import { getRandomId } from "./Util";
 
 function selectAdId() {
-  const random = getRandomId(3);
+  const random = getRandomId(0);
+  // const random = getRandomId(3);
   switch (random) {
     case 0:
       return BANNER_UNIT_ID.INTERSTIAL;

@@ -20,6 +20,10 @@ import {
   initializeInterstitialAd,
   showInterstitialAd,
 } from "../../../constants/AdmobInter";
+import {
+  rewardInitializeInterstitialAd,
+  showRewardInterstitialAd,
+} from "../../../constants/AdmobRewardInter";
 
 export const SIZE = 48;
 
@@ -32,7 +36,8 @@ export default function CommonPrintIcon() {
   const print = async () => {
     // On iOS/android prints the given html. On web prints the HTML from the current page.
     if (appContext.patients.length > LIMIT_COUNT.ADMOB_MAX_PATIENTS) {
-      showInterstitialAd();
+      // showInterstitialAd();
+      showRewardInterstitialAd();
     }
     try {
       const html = createHtml();
@@ -53,6 +58,7 @@ export default function CommonPrintIcon() {
       } catch (error) {
         console.log(error);
       }
+      rewardInitializeInterstitialAd();
       initializeInterstitialAd();
     }
   };

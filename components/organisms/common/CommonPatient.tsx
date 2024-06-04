@@ -12,6 +12,7 @@ import TextInputAtom from "../../atoms/TextInputAtom";
 import TitleAndAction from "../../moleculars/TitleAndAction";
 import { LIMIT_COUNT } from "../../../constants/Constant";
 import { showInterstitialAd } from "../../../constants/AdmobInter";
+import { showRewardInterstitialAd } from "../../../constants/AdmobRewardInter";
 
 export default function CommonPatient() {
   const appContextState = useContext(AppContextState);
@@ -35,7 +36,8 @@ export default function CommonPatient() {
 
     // 患者追加時は広告を表示
     if (appContextState.patients.length > LIMIT_COUNT.ADMOB_MAX_PATIENTS) {
-      showInterstitialAd();
+      // showInterstitialAd();
+      showRewardInterstitialAd();
     }
     appContextDispatch.setPatientNumber(patientNumber);
 

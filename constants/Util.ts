@@ -533,3 +533,6 @@ export const isRandomEqualsZero = (maxCount: number) => {
   const randomIndex = Math.floor(Math.random() * maxCount);
   return randomIndex === 0;
 };
+
+export const sleep = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));

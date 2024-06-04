@@ -11,7 +11,7 @@
     ],
     "name": "ぺリオチャート",
     "slug": "PerioChart",
-    "version": "1.0.18",
+    "version": "1.0.21",
     "orientation": "landscape",
     "icon": "./assets/images/file-000.png",
     "scheme": "periochart",
@@ -27,7 +27,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "buildNumber": "15",
+      "buildNumber": "18",
       "supportsTablet": true,
       "requireFullScreen": true,
       "config": {

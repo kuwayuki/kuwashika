@@ -246,7 +246,7 @@ export default function App() {
       if (isDialogStr !== "false") {
         AlertAtom(
           "★プレミアム機能追加★",
-          `広告が表示されなくなり、サインイン(β版)で別デバイスとのデータ共有が可能になります。右上の設定画面から登録可能です。`,
+          `広告が表示されなくなり、サインインで別デバイスとのデータ共有が可能になります。右上の設定画面から登録可能です。`,
           () => {
             setQuestionPremium(false);
             saveLocalStorage(
@@ -262,7 +262,7 @@ export default function App() {
         );
         // setQuestionPremium(isDialog !== "false");
       } else {
-        if (isRandomEqualsZero(3)) {
+        if (isRandomEqualsZero(1)) {
           initializeAppOpenAd(() => {
             showAppOpenAd();
           });
