@@ -35,7 +35,10 @@ export default function CommonPrintIcon() {
   // 印刷処理（and 評価 and 広告）
   const print = async () => {
     // On iOS/android prints the given html. On web prints the HTML from the current page.
-    if (appContext.patients.length > LIMIT_COUNT.ADMOB_MAX_PATIENTS) {
+    if (
+      !appContext.isPremium &&
+      appContext.patients.length > LIMIT_COUNT.ADMOB_MAX_PATIENTS
+    ) {
       // showInterstitialAd();
       showRewardInterstitialAd();
     }

@@ -35,7 +35,10 @@ export default function CommonPatient() {
     }
 
     // 患者追加時は広告を表示
-    if (appContextState.patients.length > LIMIT_COUNT.ADMOB_MAX_PATIENTS) {
+    if (
+      !appContextState.isPremium &&
+      appContextState.patients.length > LIMIT_COUNT.ADMOB_MAX_PATIENTS
+    ) {
       // showInterstitialAd();
       showRewardInterstitialAd();
     }
