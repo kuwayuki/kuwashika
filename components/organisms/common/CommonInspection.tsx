@@ -29,20 +29,10 @@ export default function CommonInspection() {
     setInspectionDataKindNumber(INSPACTION_ITEMS[index < 3 ? index : 0].value);
   }, []);
 
-  const savePatient = () => {
+  const func = async () => {
     const currentPerson = appContextState.currentPerson;
     const numbers = currentPerson.data.map((data) => data.inspectionDataNumber);
     const nextDataNumber = Math.max(...numbers) + 1;
-
-    // データ追加時は広告を表示
-    if (
-      !appContextState.isPremium &&
-      appContextState.patients.length > LIMIT_COUNT.ADMOB_MAX_PATIENTS
-    ) {
-      // showInterstitialAd();
-      showRewardInterstitialAd();
-    }
-
     // 検査データの追加
     const temp: DropdownType[] = [...appContextState.inspectionData];
     // 任意入力以外はそのまま設定
@@ -72,6 +62,20 @@ export default function CommonInspection() {
     // モーダルを閉じる
     appContextDispatch.setModalNumber(0);
   };
+
+  const savePatient = () => {
+    // データ追加時は広告を表示
+    if (
+      !appContextState.isPremium &&
+      appContextState.patients.length > LIMIT_COUNT.ADMOB_MAX_PATIENTS
+    ) {
+      // showInterstitialAd();
+      showRewardInterstitialAd(func);
+    } else {
+      func();
+    }
+  };
+
   const cancel = () => {
     // Modalを閉じて、前の検査番号に戻す
     appContextDispatch.setModalNumber(0);

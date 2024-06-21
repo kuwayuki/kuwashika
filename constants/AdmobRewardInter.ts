@@ -29,9 +29,11 @@ function selectAdId() {
 }
 
 let interstitial: RewardedInterstitialAd | null = null;
-let isAdmobing: boolean = false;
 
-export function rewardInitializeInterstitialAd(isLoadedShow?: boolean) {
+export function rewardInitializeInterstitialAd(
+  isLoadedShow?: boolean,
+  func?: (data?: any) => Promise<void>
+) {
   // alert("initializeInterstitialAd");
   const id = selectAdId();
   interstitial = RewardedInterstitialAd.createForAdRequest(id);
@@ -50,17 +52,16 @@ export function rewardInitializeInterstitialAd(isLoadedShow?: boolean) {
 
   interstitial.addAdEventListener(RewardedAdEventType.EARNED_REWARD, () => {
     console.log("Ad Rewarded");
-    isAdmobing = true;
+    if (func) func();
   });
 
   interstitial.addAdEventListener(AdEventType.CLOSED, (error) => {
     console.error("Ad Load Closed: ", error);
-    interstitial?.load();
   });
 
   interstitial.addAdEventListener(AdEventType.ERROR, (error) => {
     console.error("Ad Load Error: ", error);
-    interstitial?.load();
+    if (func) func();
   });
 }
 
@@ -68,12 +69,15 @@ export function rewardInitializeInterstitialAd(isLoadedShow?: boolean) {
  * ロード済で即時抗告表示したい場合
  * @param setAdClosed
  */
-export async function showRewardInterstitialAd() {
+export async function showRewardInterstitialAd(
+  func: (data?: any) => Promise<void>
+) {
   if (interstitial?.loaded) {
     interstitial!.show();
+    func();
   } else {
     // 再読み込み&広告表示
-    rewardInitializeInterstitialAd(true);
+    rewardInitializeInterstitialAd(true, func);
   }
 }
 

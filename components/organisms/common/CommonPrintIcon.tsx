@@ -2,28 +2,21 @@ import dayjs from "dayjs";
 import "dayjs/locale/ja"; // これimportしないとエラー吐かれるa
 // import { AdMobRewarded } from "expo-ads-admob";
 import * as Print from "expo-print";
-import { useContext, useEffect, useState } from "react";
+import * as StoreReview from "expo-store-review";
+import { useContext, useState } from "react";
 import { StyleSheet } from "react-native";
 import { Icon } from "react-native-elements";
+import { AppContextDispatch, AppContextState } from "../../../App";
+import { initializeInterstitialAd } from "../../../constants/AdmobInter";
+import { showRewardInterstitialAd } from "../../../constants/AdmobRewardInter";
 import {
   PRINT_PPD,
   PRINT_TITLE,
-  teethType,
   TEETH_ALL,
   TEETH_TYPE,
-  LIMIT_COUNT,
+  teethType,
 } from "../../../constants/Constant";
 import { pcrCalculation, ppdCalculation } from "../../../constants/Util";
-import { AppContextDispatch, AppContextState } from "../../../App";
-import * as StoreReview from "expo-store-review";
-import {
-  initializeInterstitialAd,
-  showInterstitialAd,
-} from "../../../constants/AdmobInter";
-import {
-  rewardInitializeInterstitialAd,
-  showRewardInterstitialAd,
-} from "../../../constants/AdmobRewardInter";
 
 export const SIZE = 48;
 
@@ -32,16 +25,16 @@ export default function CommonPrintIcon() {
   const appContext = useContext(AppContextState);
   const appContextDispatch = useContext(AppContextDispatch);
 
+  const PrintAndReward = async (): Promise<void> => {
+    if (!appContext.isPremium) {
+      showRewardInterstitialAd(print);
+    } else {
+      await print();
+    }
+  };
+
   // 印刷処理（and 評価 and 広告）
   const print = async () => {
-    // On iOS/android prints the given html. On web prints the HTML from the current page.
-    if (
-      !appContext.isPremium &&
-      appContext.patients.length > LIMIT_COUNT.ADMOB_MAX_PATIENTS
-    ) {
-      // showInterstitialAd();
-      showRewardInterstitialAd();
-    }
     try {
       const html = createHtml();
       await Print.printAsync({
@@ -61,7 +54,6 @@ export default function CommonPrintIcon() {
       } catch (error) {
         console.log(error);
       }
-      rewardInitializeInterstitialAd();
       initializeInterstitialAd();
     }
   };
@@ -303,7 +295,7 @@ export default function CommonPrintIcon() {
       name="print"
       type="font-awesome"
       color="#3399FF"
-      onPress={print}
+      onPress={PrintAndReward}
       containerStyle={{ margin: 0, padding: 0 }}
     />
   );

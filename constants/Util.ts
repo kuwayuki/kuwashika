@@ -146,6 +146,7 @@ export enum DateFormat {
   MM_DD_dd = "MM/DD(dd)",
   YY_MM_DD = "YYYY/MM/DD",
   MM_DD = "MM/DD",
+  Y_MM_DD = "YY/MM/DD",
 }
 
 export const formatDate = (date: Date, type: DateFormat): string => {
@@ -158,6 +159,8 @@ export const formatDate = (date: Date, type: DateFormat): string => {
       return dayjs(date).locale("ja").format("YYYY/MM/DD");
     case DateFormat.MM_DD:
       return dayjs(date).locale("ja").format("MM/DD");
+    case DateFormat.Y_MM_DD:
+      return dayjs(date).locale("ja").format("YY/MM/DD");
     default:
       return "";
   }

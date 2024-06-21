@@ -40,8 +40,13 @@ export default function CommonPatient() {
       appContextState.patients.length > LIMIT_COUNT.ADMOB_MAX_PATIENTS
     ) {
       // showInterstitialAd();
-      showRewardInterstitialAd();
+      showRewardInterstitialAd(func);
+    } else {
+      func();
     }
+  };
+
+  const func = async () => {
     appContextDispatch.setPatientNumber(patientNumber);
 
     // 全体データの更新
@@ -73,6 +78,7 @@ export default function CommonPatient() {
     // モーダルを閉じる
     appContextDispatch.setModalNumber(0);
   };
+
   const cancel = () => {
     // Modalを閉じて、前の患者番号に戻す
     appContextDispatch.setModalNumber(0);

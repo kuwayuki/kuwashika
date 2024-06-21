@@ -504,7 +504,7 @@ export default function App() {
           label:
             isDBOnly && data.inspectionDataNumber === inspectionDataNumber
               ? data.inspectionDataName
-              : formatDate(parseDate(data.date), DateFormat.MM_DD) +
+              : formatDate(parseDate(data.date), DateFormat.Y_MM_DD) +
                 ":" +
                 data.inspectionDataName,
           value: data.inspectionDataNumber,
