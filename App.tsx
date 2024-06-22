@@ -59,6 +59,7 @@ import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
 import { initializeAppOpenAd, showAppOpenAd } from "./constants/AdmobAppOpen";
+import { i18n } from "./components/locales/i18n";
 
 // 全ページの共通項目
 export type appContextState = {
@@ -135,6 +136,7 @@ export default function App() {
   const [isQuestionPremium, setQuestionPremium] = useState(false);
   const [isPremium, setPremium] = useState(false);
   const [user, setUser] = useState(null);
+  const locale = i18n.locale;
 
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
@@ -169,21 +171,10 @@ export default function App() {
       }
       const { granted, canAskAgain } = await getTrackingPermissionsAsync();
       if (!granted && canAskAgain && !isAndroid()) {
-        Alert.alert(
-          "許可することで広告が最適化",
-          "トラッキングを許可することで、マネーフォロー内の広告が適切に最適化され、関連性の高い広告が表示されます。\n\nまた、アプリ作者に広告収入が発生するので、このアプリの改善に使用します。",
-          [
-            {
-              text: "OK",
-              onPress: async () => {
-                const { status } = await requestTrackingPermissionsAsync();
-                if (status === "granted") {
-                  console.log("Yay! I have user permission to track data");
-                }
-              },
-            },
-          ]
-        );
+        const { status } = await requestTrackingPermissionsAsync();
+        if (status === "granted") {
+          console.log("Yay! I have user permission to track data");
+        }
       }
     })();
   }, []);
@@ -210,9 +201,7 @@ export default function App() {
   useEffect(() => {
     const f = async () => {
       if (user && isPremium && isInitRead) {
-        console.log("初回データ書き込み");
         const initDB = await getDB(undefined, false);
-        // 初回ログイン時はDBのデータを書き込む
         if (!initDB) {
           await saveDB(settingData);
         }
@@ -243,10 +232,10 @@ export default function App() {
         LOCAL_STORAGE.IS_DISPLAY_PREMIUM_QUESTION
       );
       // TODO: 後で戻す
-      if (isDialogStr !== "false") {
+      if (isDialogStr !== "false" && locale === "ja") {
         AlertAtom(
-          "★プレミアム機能追加★",
-          `広告が表示されなくなり、サインインで別デバイスとのデータ共有が可能になります。右上の設定画面から登録可能です。`,
+          i18n.t("subscription.premium_features"),
+          i18n.t("subscription.benefits2"),
           () => {
             setQuestionPremium(false);
             saveLocalStorage(
@@ -257,8 +246,8 @@ export default function App() {
           () => {
             setQuestionPremium(false);
           },
-          "今後は表示しない",
-          "閉じる"
+          i18n.t("common.never_show_again"),
+          i18n.t("common.close")
         );
         // setQuestionPremium(isDialog !== "false");
       } else {
@@ -286,14 +275,12 @@ export default function App() {
         // ユーザーがサインインしている
         if (user.emailVerified) {
           // メールアドレスが確認されている
-          console.log("ログイン中");
         } else {
           // メールアドレスが未確認
-          alert("メールアドレスは未認証です。");
+          alert(i18n.t("alerts.email_not_verified"));
         }
         setUser(user);
       } else {
-        console.log("ログアウト");
         try {
           const data = (await getFileData(undefined, true)) as auth;
           let email: string, password: string;
@@ -329,7 +316,6 @@ export default function App() {
   // 設定データ更新時自動保存
   useEffect(() => {
     if (!isInitRead || !settingData) return;
-    console.log("全てを書き込む");
     registSettingData(settingData, true);
   }, [settingData]);
 
@@ -356,7 +342,6 @@ export default function App() {
         value: person.patientNumber,
       });
     });
-    console.log("患者リストの更新");
     console.log(newPatients);
     if (deepEqual(patients, newPatients)) return;
 
@@ -456,7 +441,6 @@ export default function App() {
       }
     }
     if (refleshData && !deepEqual(refleshData, settingData)) {
-      console.log("DBデータを保存します。");
       console.log(refleshData);
       console.log(settingData);
       setSettingData(refleshData);
@@ -489,12 +473,11 @@ export default function App() {
         }
       }
     } else {
-      console.log("検査データ再読み込み");
       console.log(refleshData);
     }
 
     // 検査データ
-    const inspectionData = [{ label: "＋ 新規追加", value: 0 }];
+    const inspectionData = [{ label: i18n.t("patient.new_patient"), value: 0 }];
     refleshData
       .sort((a, b) => {
         return a.date > b.date ? 1 : -1;
@@ -587,7 +570,6 @@ export default function App() {
   const registSettingData = async (settingData: DataType, isSaveDB = false) => {
     const margeData = isSaveDB ? await saveDB(settingData) : undefined;
     if (margeData) return;
-    console.log("下記を書き込む。");
     console.log(settingData);
     writeFileData(settingData);
     setSettingData(settingData);
@@ -602,12 +584,9 @@ export default function App() {
       tmpSettingData.persons.forEach((person) => {
         if (person.patientNumber === tmpPatientNumber) person.isDeleted = true;
       });
-      console.log("下記を再保存します。");
       console.log(tmpSettingData);
       await registSettingData(tmpSettingData);
-      console.log("ファイルの削除します。");
       await deleteFileData(tmpPatientNumber);
-      console.log("DBの削除します。");
       await deleteDB(tmpPatientNumber);
     } else {
       await deleteDB();
@@ -632,10 +611,6 @@ export default function App() {
   const getDB = async (patientNumber?: number, isMarge = true) => {
     if (user && isPremium) {
       try {
-        console.log(
-          (patientNumber ? `患者番号${patientNumber}：` : "全般設定：") +
-            "読み込む"
-        );
         const docRef = doc(
           db,
           "users",
@@ -678,10 +653,6 @@ export default function App() {
     }
     if (tempUser && (isPremium || isNoCheckPremium) && isInitRead && data) {
       try {
-        console.log(
-          (patientNumber ? `患者番号${patientNumber}：` : "全般設定：") +
-            "書き込む"
-        );
         if (
           patientNumber &&
           !settingData.persons.find(
@@ -704,7 +675,7 @@ export default function App() {
           const docSnap = await getDoc(docRef);
           // console.log(docSnap.exists());
           if (docSnap.exists() && deepEqual(docSnap.data().data, data)) {
-            console.log("データが同じため、書き込みません。");
+            // console.log("データが同じため、書き込みません。");
             return;
           }
           // if (docSnap.exists()) console.log(docSnap.data().data);
@@ -715,14 +686,14 @@ export default function App() {
           );
           console.log(margedData);
           if (docSnap.exists() && deepEqual(docSnap.data().data, margedData)) {
-            console.log("マージデータが同じため、書き込みません。");
+            // console.log("マージデータが同じため、書き込みません。");
             return margedData;
           } else if (deepEqual(data, margedData)) {
-            console.log("マージデータを書き込み");
+            // console.log("マージデータを書き込み");
             await setDoc(docRef, { data: data });
             return;
           }
-          console.log("ループして書き込みますがここでは書き込みません。");
+          // console.log("ループして書き込みますがここでは書き込みません。");
           return margedData;
         }
         //  else if (inspectionDataNumber !== undefined) {
@@ -748,10 +719,11 @@ export default function App() {
         // }
         console.log(data);
         await setDoc(docRef, { data: data });
-        console.log(
-          (patientNumber ? `患者番号${patientNumber}：` : "全般設定：") +
-            "書き込みました"
-        );
+        // console.log(
+        //   (patientNumber
+        //     ? `${i18n.t("patient.patient_number")}${patientNumber}：`
+        //     : "全般設定：") + "書き込みました"
+        // );
       } catch (error) {
         console.error("Error adding user data: ", error);
       }
@@ -765,9 +737,11 @@ export default function App() {
    */
   const deleteDB = async (patientNumber?: number) => {
     if (user && isPremium) {
-      console.log(
-        (patientNumber ? `患者番号${patientNumber}：` : "全般設定：") + "削除"
-      );
+      // console.log(
+      //   (patientNumber
+      //     ? `${i18n.t("patient.patient_number")}${patientNumber}：`
+      //     : "全般設定：") + "削除"
+      // );
       try {
         if (patientNumber) {
           await deleteDoc(

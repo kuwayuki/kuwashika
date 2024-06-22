@@ -7,11 +7,12 @@
         {
           "initialOrientation": "DEFAULT"
         }
-      ]
+      ],
+      "expo-localization"
     ],
     "name": "ぺリオチャート",
     "slug": "PerioChart",
-    "version": "1.0.24",
+    "version": "1.0.25",
     "orientation": "landscape",
     "icon": "./assets/images/file-000.png",
     "scheme": "periochart",
@@ -21,71 +22,178 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "locales": {
+      "ja": "./components/locales/ja/translation.json",
+      "en": "./components/locales/en/translation.json",
+      "de": "./components/locales/de/translation.json",
+      "es": "./components/locales/es/translation.json",
+      "fr": "./components/locales/fr/translation.json",
+      "ko": "./components/locales/ko/translation.json",
+      "pt": "./components/locales/pt-BR/translation.json",
+      "zh": "./components/locales/zh-CN/translation.json",
+      "hi": "./components/locales/hi/translation.json"
+    },
     "updates": {
       "fallbackToCacheTimeout": 0,
       "url": "https://u.expo.dev/8b7207bb-0b5f-47d3-b77f-4241135e1365"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "buildNumber": "21",
+      "buildNumber": "22",
       "supportsTablet": true,
       "requireFullScreen": true,
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-2103807205659646~3739470895"
       },
       "infoPlist": {
-        "NSUserTrackingUsageDescription": "「許可」を押すと、他社のデータも活用し、よりお客様に適した広告が表示されます。",
-        "NSMicrophoneUsageDescription": "This app uses the microphone to allow users to send orders via voice message.",
         "SKAdNetworkItems": [
-          { "SKAdNetworkIdentifier": "cstr6suwn9.skadnetwork" },
-          { "SKAdNetworkIdentifier": "4fzdc2evr5.skadnetwork" },
-          { "SKAdNetworkIdentifier": "4pfyvq9l8r.skadnetwork" },
-          { "SKAdNetworkIdentifier": "2fnua5tdw4.skadnetwork" },
-          { "SKAdNetworkIdentifier": "ydx93a7ass.skadnetwork" },
-          { "SKAdNetworkIdentifier": "5a6flpkh64.skadnetwork" },
-          { "SKAdNetworkIdentifier": "p78axxw29g.skadnetwork" },
-          { "SKAdNetworkIdentifier": "v72qych5uu.skadnetwork" },
-          { "SKAdNetworkIdentifier": "ludvb6z3bs.skadnetwork" },
-          { "SKAdNetworkIdentifier": "cp8zw746q7.skadnetwork" },
-          { "SKAdNetworkIdentifier": "3sh42y64q3.skadnetwork" },
-          { "SKAdNetworkIdentifier": "c6k4g5qg8m.skadnetwork" },
-          { "SKAdNetworkIdentifier": "s39g8k73mm.skadnetwork" },
-          { "SKAdNetworkIdentifier": "3qy4746246.skadnetwork" },
-          { "SKAdNetworkIdentifier": "f38h382jlk.skadnetwork" },
-          { "SKAdNetworkIdentifier": "hs6bdukanm.skadnetwork" },
-          { "SKAdNetworkIdentifier": "v4nxqhlyqp.skadnetwork" },
-          { "SKAdNetworkIdentifier": "wzmmz9fp6w.skadnetwork" },
-          { "SKAdNetworkIdentifier": "yclnxrl5pm.skadnetwork" },
-          { "SKAdNetworkIdentifier": "t38b2kh725.skadnetwork" },
-          { "SKAdNetworkIdentifier": "7ug5zh24hu.skadnetwork" },
-          { "SKAdNetworkIdentifier": "gta9lk7p23.skadnetwork" },
-          { "SKAdNetworkIdentifier": "vutu7akeur.skadnetwork" },
-          { "SKAdNetworkIdentifier": "y5ghdn5j9k.skadnetwork" },
-          { "SKAdNetworkIdentifier": "n6fk4nfna4.skadnetwork" },
-          { "SKAdNetworkIdentifier": "v9wttpbfk9.skadnetwork" },
-          { "SKAdNetworkIdentifier": "n38lu8286q.skadnetwork" },
-          { "SKAdNetworkIdentifier": "47vhws6wlr.skadnetwork" },
-          { "SKAdNetworkIdentifier": "kbd757ywx3.skadnetwork" },
-          { "SKAdNetworkIdentifier": "9t245vhmpl.skadnetwork" },
-          { "SKAdNetworkIdentifier": "eh6m2bh4zr.skadnetwork" },
-          { "SKAdNetworkIdentifier": "a2p9lx4jpn.skadnetwork" },
-          { "SKAdNetworkIdentifier": "22mmun2rn5.skadnetwork" },
-          { "SKAdNetworkIdentifier": "4468km3ulz.skadnetwork" },
-          { "SKAdNetworkIdentifier": "2u9pt9hc89.skadnetwork" },
-          { "SKAdNetworkIdentifier": "8s468mfl3y.skadnetwork" },
-          { "SKAdNetworkIdentifier": "klf5c3l5u5.skadnetwork" },
-          { "SKAdNetworkIdentifier": "ppxm28t8ap.skadnetwork" },
-          { "SKAdNetworkIdentifier": "ecpz2srf59.skadnetwork" },
-          { "SKAdNetworkIdentifier": "uw77j35x4d.skadnetwork" },
-          { "SKAdNetworkIdentifier": "pwa73g5rt2.skadnetwork" },
-          { "SKAdNetworkIdentifier": "mlmmfzh3r3.skadnetwork" },
-          { "SKAdNetworkIdentifier": "578prtvx9j.skadnetwork" },
-          { "SKAdNetworkIdentifier": "4dzt52r2t5.skadnetwork" },
-          { "SKAdNetworkIdentifier": "e5fvkxwrpn.skadnetwork" },
-          { "SKAdNetworkIdentifier": "8c4e2ghe7u.skadnetwork" },
-          { "SKAdNetworkIdentifier": "zq492l623r.skadnetwork" },
-          { "SKAdNetworkIdentifier": "3rd42ekr43.skadnetwork" },
-          { "SKAdNetworkIdentifier": "3qcr597p9d.skadnetwork" }
+          {
+            "SKAdNetworkIdentifier": "cstr6suwn9.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "4fzdc2evr5.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "4pfyvq9l8r.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "2fnua5tdw4.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "ydx93a7ass.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "5a6flpkh64.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "p78axxw29g.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "v72qych5uu.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "ludvb6z3bs.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "cp8zw746q7.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "3sh42y64q3.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "c6k4g5qg8m.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "s39g8k73mm.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "3qy4746246.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "f38h382jlk.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "hs6bdukanm.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "v4nxqhlyqp.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "wzmmz9fp6w.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "yclnxrl5pm.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "t38b2kh725.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "7ug5zh24hu.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "gta9lk7p23.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "vutu7akeur.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "y5ghdn5j9k.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "n6fk4nfna4.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "v9wttpbfk9.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "n38lu8286q.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "47vhws6wlr.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "kbd757ywx3.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "9t245vhmpl.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "eh6m2bh4zr.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "a2p9lx4jpn.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "22mmun2rn5.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "4468km3ulz.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "2u9pt9hc89.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "8s468mfl3y.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "klf5c3l5u5.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "ppxm28t8ap.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "ecpz2srf59.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "uw77j35x4d.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "pwa73g5rt2.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "mlmmfzh3r3.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "578prtvx9j.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "4dzt52r2t5.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "e5fvkxwrpn.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "8c4e2ghe7u.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "zq492l623r.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "3rd42ekr43.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "3qcr597p9d.skadnetwork"
+          }
         ]
       },
       "bundleIdentifier": "com.kuwahara.ExpoExample"

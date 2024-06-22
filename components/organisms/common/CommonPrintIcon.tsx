@@ -17,6 +17,7 @@ import {
   teethType,
 } from "../../../constants/Constant";
 import { pcrCalculation, ppdCalculation } from "../../../constants/Util";
+import { i18n } from "../../locales/i18n";
 
 export const SIZE = 48;
 
@@ -188,7 +189,6 @@ export default function CommonPrintIcon() {
       PRINT_PPD.HIGH
     );
 
-    // 動揺度を作成
     let upsetTd: string[] = ["", ""];
     const upsetData = currentPersonData.UPSET.basic;
     upsetData.forEach((teeth: TEETH_TYPE) => {
@@ -236,7 +236,7 @@ export default function CommonPrintIcon() {
     )}
     ${createTr(
       upsetTd[0],
-      "動揺度",
+      i18n.t("navigation.upset"),
       undefined,
       PRINT_TITLE[2],
       dayjs(currentPersonData.date).locale("ja").format("YYYY/MM/DD")
@@ -271,7 +271,7 @@ export default function CommonPrintIcon() {
     }
     ${createTr(
       upsetTd[1],
-      "動揺度",
+      i18n.t("navigation.upset"),
       undefined,
       PRINT_TITLE[6],
       ppdHigh.toString()

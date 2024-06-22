@@ -9,6 +9,7 @@ import DropDownPickerAtom from "../../atoms/DropDownPickerAtom";
 import SwitchAtom from "../../atoms/SwitchAtom";
 import TitleAndAction from "../../moleculars/TitleAndAction";
 import CommonPrintIcon from "./CommonPrintIcon";
+import { i18n } from "../../locales/i18n";
 
 type CommonInfoInputPropsType = {
   tabPage: TAB_PAGE;
@@ -71,7 +72,7 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
             setDate={appContextDispatch.setInspectionDate}
           />
         </TitleAndAction>
-        <TitleAndAction title={isIphoneMini() ? "" : "患者"}>
+        <TitleAndAction title={isIphoneMini() ? "" : i18n.t("common.patient")}>
           <DropDownPickerAtom
             items={appContextState.patients}
             value={appContextState.patientNumber}
@@ -83,7 +84,7 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
             }}
           />
         </TitleAndAction>
-        <TitleAndAction title={isIphoneMini() ? "" : "データ"}>
+        <TitleAndAction title={isIphoneMini() ? "" : i18n.t("common.data")}>
           <DropDownPickerAtom
             items={appContextState.inspectionData}
             value={appContextState.inspectionDataNumber}
@@ -98,7 +99,11 @@ export default function CommonInfoInput(props: CommonInfoInputPropsType) {
           />
         </TitleAndAction>
         <TitleAndAction
-          title={appContextState.isPrecision ? "精密" : "基本"}
+          title={
+            appContextState.isPrecision
+              ? i18n.t("common.precision")
+              : i18n.t("common.basic")
+          }
           style={props.tabPage && { display: "none" }}
         >
           <SwitchAtom

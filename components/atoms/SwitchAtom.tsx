@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import { StyleSheet, Switch } from "react-native";
 import { SwitchProps } from "react-native-elements";
 

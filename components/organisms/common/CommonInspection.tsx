@@ -11,6 +11,7 @@ import TextInputAtom from "../../atoms/TextInputAtom";
 import TitleAndAction from "../../moleculars/TitleAndAction";
 import { showInterstitialAd } from "../../../constants/AdmobInter";
 import { showRewardInterstitialAd } from "../../../constants/AdmobRewardInter";
+import { i18n } from "../../locales/i18n";
 
 export default function CommonInspection() {
   const appContextState = useContext(AppContextState);
@@ -89,7 +90,7 @@ export default function CommonInspection() {
     <ModalAtom>
       <View style={{ zIndex: 1000 }}>
         <TitleAndAction
-          title={"検査データ"}
+          title={i18n.t("inspection.inspection_data")}
           style={{ marginBottom: 16, zIndex: 1002 }}
         >
           <DropDownPickerAtom
@@ -101,7 +102,7 @@ export default function CommonInspection() {
         </TitleAndAction>
         {inspectionDataKindNumber === INSPACTION_ITEMS[3].value && (
           <TitleAndAction
-            title={"検査名称　"}
+            title={i18n.t("inspection.inspection_name")}
             style={{ marginBottom: 16, zIndex: 1001 }}
           >
             <TextInputAtom
@@ -123,12 +124,12 @@ export default function CommonInspection() {
         <PressableAtom
           style={[styles.button, styles.buttonClose]}
           onPress={savePatient}
-          value={"追加"}
+          value={i18n.t("common.add")}
         />
         <PressableAtom
           style={[styles.button, styles.buttonClose]}
           onPress={cancel}
-          value={"キャンセル"}
+          value={i18n.t("common.cancel")}
         />
       </View>
     </ModalAtom>

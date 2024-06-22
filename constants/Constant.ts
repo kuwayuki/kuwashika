@@ -1,5 +1,6 @@
 import { TextInputProps } from "react-native";
 import { DropdownType } from "../components/atoms/DropDownPickerAtom";
+import { i18n } from "../components/locales/i18n";
 
 export const AUTH_FILE = "auth.json";
 export const SETTING_FILE = "setting.json";
@@ -112,19 +113,19 @@ export const TEETH_DOWN: teethType[] = [...TEETH_ALL].filter(
 );
 
 export const INSPACTION_ITEMS: DropdownType[] = [
-  { label: "Sc後", value: 1 },
-  { label: "SRP後", value: 2 },
-  { label: "SPT/P重防", value: 3 },
-  { label: "任意入力", value: 10 },
+  { label: i18n.t("additional.Sc_after"), value: 1 },
+  { label: i18n.t("additional.SRP_after"), value: 2 },
+  { label: i18n.t("additional.SPT/P_restricted"), value: 3 },
+  { label: i18n.t("additional.optional_input"), value: 10 },
 ];
 
 export const PRINT_TITLE = {
-  1: "データ",
-  2: "検査日",
-  3: "現在歯数",
+  1: i18n.t("common.data"),
+  2: i18n.t("inspection.inspection_date"),
+  3: i18n.t("additional.current_tooth_count"),
   4: "1~3mm",
   5: "4~5mm",
-  6: "6mm以上",
+  6: `6mm${i18n.t("additional.above")}`,
   7: "PCR",
 };
 

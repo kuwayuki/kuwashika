@@ -1,0 +1,115 @@
+{
+  "NSUserTrackingUsageDescription": "Bitte erlauben Sie das Tracking, um Anzeigen mit Daten von Drittanbietern anzuzeigen.",
+  "NSMicrophoneUsageDescription": "Diese App verwendet das Mikrofon, um Sprachbestellungen zu senden.",
+  "userTrackingPermission": "Bitte erlauben Sie das Tracking, um Anzeigen mit Daten von Drittanbietern anzuzeigen.",
+  "user_tracking_usage_description": "Bitte erlauben Sie das Tracking, um Anzeigen mit Daten von Drittanbietern anzuzeigen.",
+  "microphonePermission": "Diese App verwendet das Mikrofon, um Sprachbestellungen zu senden.",
+  "common": {
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "patient": "Patient",
+    "data": "Daten",
+    "basic": "Grundlegend",
+    "precision": "Präzision",
+    "add": "Hinzufügen",
+    "close": "Schließen",
+    "never_show_again": "Nicht mehr anzeigen"
+  },
+  "patient": {
+    "patient_number": "Patientennummer",
+    "patient_name": "Patientenname",
+    "patient_number_required": "Patientennummer und Name sind erforderlich.",
+    "patient_number_exists": "Diese Patientennummer existiert bereits.",
+    "new_patient": "＋ Neu hinzufügen"
+  },
+  "inspection": {
+    "inspection_date": "Inspektionsdatum",
+    "inspection_data": "Inspektionsdaten",
+    "inspection_name": "Inspektionsname"
+  },
+  "alerts": {
+    "email_not_verified": "E-Mail-Adresse ist nicht verifiziert.",
+    "delete_confirm": "Möchten Sie wirklich löschen?",
+    "delete_confirmation": "Möchten Sie wirklich alle Daten löschen?",
+    "delete_inspection_data_confirmation": "Möchten Sie die Inspektionsdaten wirklich löschen?",
+    "initialized": "Initialisiert",
+    "deleted": "Gelöscht",
+    "premium_subscribed": "Abonniert.",
+    "restore_purchase_success": "Kauf wiederhergestellt.",
+    "restore_purchase_failure": "Fehler bei der Wiederherstellung des Kaufs.",
+    "no_purchase_to_restore": "Kein Kauf zum Wiederherstellen.",
+    "subscription_failed": "Abonnement fehlgeschlagen."
+  },
+  "actions": {
+    "initialize": "Initialisieren"
+  },
+  "navigation": {
+    "tab_one_screen": "Parodontalerkrankung",
+    "upset": "Mobilität"
+  },
+  "auth": {
+    "email_placeholder": "Bitte geben Sie Ihre E-Mail-Adresse ein",
+    "password_placeholder": "Bitte geben Sie Ihr Passwort ein",
+    "register": "Registrieren",
+    "forgot_password": "Passwort vergessen",
+    "email_verification_sent": "Bitte bestätigen Sie Ihre E-Mail.",
+    "password_reset_sent": "Bitte überprüfen Sie Ihre E-Mail."
+  },
+  "buttons": {
+    "bleeding": "Blutung",
+    "drainage": "Drainage"
+  },
+  "settings": {
+    "data_management": "Datenverwaltung",
+    "premium_plan": "Premium-Plan",
+    "subscribed": "Abonniert",
+    "check_plan": "Plan überprüfen",
+    "user": "Benutzer",
+    "sign_in": "Anmelden",
+    "sign_out": "Abmelden",
+    "common_settings": "Allgemeine Einstellungen",
+    "auto_tab_move": "Automatisches Tab-Wechseln",
+    "ppd_detailed_settings": "PPD Detaileinstellungen",
+    "upper_teeth_order": "Obere Zahnreihenfolge:",
+    "lower_teeth_order": "Untere Zahnreihenfolge:",
+    "pcr_detailed_settings": "PCR Detaileinstellungen",
+    "auto_focus": "Autofokus",
+    "data_deletion": "Datenlöschung",
+    "delete_user": "Benutzer löschen",
+    "delete_inspection_data": "Inspektionsdaten löschen",
+    "initialize_all_data": "Alle Daten initialisieren",
+    "upper_teeth_right": "Von oben rechts",
+    "lower_teeth_left": "Von unten links",
+    "lower_teeth_right": "Von unten rechts"
+  },
+  "subscription": {
+    "premium_features": "★ Premium-Funktionen hinzufügen ★",
+    "title": "Periodontal Chart Premium-Plan",
+    "price": "¥500/Monat",
+    "benefits": "Durch das Abonnieren des Premium-Plans können Sie die App ohne Werbung nutzen.\r\nSie können auch Daten mit anderen Apps teilen, indem Sie sich anmelden.\r\n(Sie müssen dieselbe Apple-ID verwenden.)",
+    "benefits_2": "Werbung wird nicht mehr angezeigt, und Sie können Daten über mehrere Geräte hinweg teilen. Sie können sich im Einstellungsbildschirm oben rechts registrieren.",
+    "subscribe_button": "Premium-Plan abonnieren",
+    "restore_button": "Kauf wiederherstellen",
+    "terms_and_conditions": "Geschäftsbedingungen",
+    "privacy_policy": "Datenschutzrichtlinie",
+    "auto_renewal_text": "Dieses Abonnement wird automatisch verlängert. Sie können es jederzeit aus den App Store-Kontoeinstellungen mindestens 24 Stunden vor Ablauf des aktuellen Zeitraums kündigen.",
+    "premium_join": "Durch das Abonnieren des Premium-Plans",
+    "accept": "stimmen Sie den Geschäftsbedingungen und der Datenschutzrichtlinie zu."
+  },
+  "edit_screen_info": {
+    "input_placeholder": "Bitte eingeben"
+  },
+  "dropdown": {
+    "search_placeholder": "Suchfilter",
+    "placeholder": "Element auswählen"
+  },
+  "additional": {
+    "Sc_after": "Sc",
+    "SRP_after": "SRP",
+    "SPT/P_restricted": "SPT/P",
+    "optional_input": "Optional",
+    "current_tooth_count": "Aktuelle Zahnzahl",
+    "above": "Oben",
+    "sample": "Beispiel"
+  }
+}

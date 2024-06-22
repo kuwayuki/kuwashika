@@ -1,6 +1,7 @@
 import { Text, TouchableOpacity, View } from "react-native";
 import ButtonAtom from "../../atoms/ButtonAtom";
 import { openURL } from "expo-linking";
+import { i18n } from "../../locales/i18n";
 
 type CommonSubscriptionType = {
   onPress: () => void;
@@ -9,10 +10,9 @@ type CommonSubscriptionType = {
 };
 
 export const subscriptionDetails = {
-  title: "ペリオチャートプレミアムプラン",
-  price: "¥500/月",
-  benefits:
-    "プレミアムプランの加入で、アプリを広告なしで利用できます。\r\nまた、サインインで別アプリとのデータ共有を行うことができます。\r\n(共通のApple IDで利用する必要があります。)",
+  title: i18n.t("subscription.title"),
+  price: i18n.t("subscription.price"),
+  benefits: i18n.t("subscription.benefits"),
   termsUrl: "https://kuwank.hatenablog.com/entry/2024/01/07/230214", // 利用規約のURL
   privacyPolicyUrl: "https://kuwank.hatenablog.com/entry/2024/01/07/230533", // プライバシーポリシーのURL
 };
@@ -45,7 +45,9 @@ export default function CommonSubscription(props: CommonSubscriptionType) {
           onPress={props.onPress}
           style={{ marginBottom: 10, backgroundColor: "aqua", width: 400 }}
         >
-          プレミアムプランに登録{`[${subscriptionDetails.price}]`}
+          {`${i18n.t("subscription.subscribe_button")}[${
+            subscriptionDetails.price
+          }]`}
         </ButtonAtom>
         <View
           style={{
@@ -61,7 +63,7 @@ export default function CommonSubscription(props: CommonSubscriptionType) {
               marginRight: 30,
             }}
           >
-            キャンセル
+            {i18n.t("common.cancel")}
           </ButtonAtom>
           <ButtonAtom
             onPress={props.onPressRestore}
@@ -70,7 +72,7 @@ export default function CommonSubscription(props: CommonSubscriptionType) {
               width: 150,
             }}
           >
-            購入の復元
+            {i18n.t("subscription.restore_button")}
           </ButtonAtom>
         </View>
         <View
@@ -78,24 +80,30 @@ export default function CommonSubscription(props: CommonSubscriptionType) {
             flexDirection: "row",
           }}
         >
-          <Text style={{ color: "white" }}>プレミアムプランの加入で、</Text>
+          <Text style={{ color: "white" }}>
+            {i18n.t("subscription.premium_join")}
+          </Text>
           <TouchableOpacity
             onPress={() => openURL(subscriptionDetails.termsUrl)}
           >
-            <Text style={{ color: "pink" }}>利用規約</Text>
+            <Text style={{ color: "pink" }}>
+              {i18n.t("subscription.terms_and_conditions")}
+            </Text>
           </TouchableOpacity>
           <Text style={{ color: "white" }}>・</Text>
           <TouchableOpacity
             onPress={() => openURL(subscriptionDetails.privacyPolicyUrl)}
           >
-            <Text style={{ color: "pink" }}>プライバシーポリシー</Text>
+            <Text style={{ color: "pink" }}>
+              {i18n.t("subscription.privacy_policy")}
+            </Text>
           </TouchableOpacity>
-          <Text style={{ color: "white" }}>に同意いただいたとみなします。</Text>
+          <Text style={{ color: "white" }}>
+            {i18n.t("subscription.accept")}
+          </Text>
         </View>
         <Text style={{ color: "white" }}>
-          本サブスクリプションは自動的に更新されます。
-          更新は、契約期間の終了24時間前までにApp
-          Storeのアカウント設定からいつでもキャンセル可能です。
+          {i18n.t("subscription.auto_renewal_text")}
         </Text>
       </View>
     </View>

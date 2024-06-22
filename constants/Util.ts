@@ -13,6 +13,7 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FileInfo } from "expo-file-system";
 import { CustomerInfo } from "react-native-purchases";
+import { i18n } from "../components/locales/i18n";
 
 /**
  * Settingファイルに保存されているデータ
@@ -128,11 +129,11 @@ export const INIT_SETTING_DATA: DataType = {
   persons: [
     {
       patientNumber: 1,
-      patientName: "患者名A",
+      patientName: `${i18n.t("patient.patient_name")}A`,
     },
     {
       patientNumber: 9999,
-      patientName: "サンプル",
+      patientName: i18n.t("additional.sample"),
     },
   ],
 };
@@ -417,7 +418,6 @@ export const margeInspectionData = (
 ): PersonDataType[] => {
   const margedData: PersonDataType[] = [];
   if (!dbData?.length) return localData;
-  console.log("マージします。");
   console.log(localData);
   console.log(dbData);
   console.log(inspectionDataNumber);

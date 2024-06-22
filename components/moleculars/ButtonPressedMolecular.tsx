@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacityProps } from "react-native";
+import { TouchableOpacityProps } from "react-native";
 import ButtonAtom from "../atoms/ButtonAtom";
 
 export default function ButtonPressedMolecular(props: TouchableOpacityProps) {

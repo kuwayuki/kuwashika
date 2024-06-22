@@ -22,10 +22,12 @@ import TextAtom from "../../atoms/TextAtom";
 import IconTitleAction from "../../moleculars/IconTitleAction";
 import MainTitleChildren from "../../moleculars/MainTitleChildren";
 import CommonSubscription, { subscriptionDetails } from "./CommonSubscription";
+import { i18n } from "../../locales/i18n";
 
 export default function CommonSetting() {
   const appContextState = useContext(AppContextState);
   const appContextDispatch = useContext(AppContextDispatch);
+  const locale = i18n.locale;
 
   const [patientNumber, setPatientNumber] = useState<number>();
   const [patientName, setPatientName] = useState<string>(undefined);
@@ -151,13 +153,13 @@ export default function CommonSetting() {
       );
       if (checkPremium(customerInfo)) {
         appContextDispatch.setPremium(true);
-        Alert.alert("登録しました。");
+        Alert.alert(i18n.t("alerts.premium_subscribed"));
       }
     } catch (e: any) {
       if (!e.userCancelled) {
         console.log(e);
       }
-      Alert.alert("登録に失敗しました。");
+      Alert.alert(i18n.t("alerts.subscription_failed"));
     } finally {
       setIsLoading(false);
       setIsOpenSubscription(false);
@@ -170,13 +172,12 @@ export default function CommonSetting() {
       const customerInfo = await Purchases.restorePurchases();
       if (checkPremium(customerInfo)) {
         appContextDispatch.setPremium(true);
-        Alert.alert("購入が復元されました。");
+        Alert.alert(i18n.t("alerts.restore_purchase_success"));
       } else {
-        Alert.alert("復元する購入はありません。");
+        Alert.alert(i18n.t("alerts.no_purchase_to_restore"));
       }
     } catch (e) {
-      console.error("購入の復元に失敗しました：", e);
-      Alert.alert("購入の復元に失敗しました。");
+      Alert.alert(i18n.t("alerts.restore_purchase_failure"));
     } finally {
       setIsLoading(false);
     }
@@ -185,13 +186,13 @@ export default function CommonSetting() {
   // データの初期化
   const initData = async () => {
     AlertAtom(
-      "初期化",
-      "全てのデータが削除されますがよろしいですか？",
+      i18n.t("actions.initialize"),
+      i18n.t("alerts.delete_confirmation"),
       async () => {
         // 全体データの更新
         appContextDispatch.setModalNumber(0);
         appContextDispatch.deletePerson();
-        Alert.alert("初期化しました");
+        Alert.alert(i18n.t("alerts.initialized"));
       }
     );
   };
@@ -199,15 +200,15 @@ export default function CommonSetting() {
   // ユーザーの削除
   const deletePatientData = async () => {
     AlertAtom(
-      "ユーザー削除",
-      `[${
-        patientNumber + ":" + (patientName ?? "")
-      }]を削除しますがよろしいですか？`,
+      i18n.t("settings.delete_user"),
+      `[${patientNumber + ":" + (patientName ?? "")}]${i18n.t(
+        "alerts.delete_confirm"
+      )}`,
       async () => {
         // 全体データの更新
         appContextDispatch.setModalNumber(0);
         appContextDispatch.deletePerson(appContextState.patientNumber);
-        Alert.alert("削除しました");
+        Alert.alert(i18n.t("alerts.deleted"));
       }
     );
   };
@@ -215,15 +216,15 @@ export default function CommonSetting() {
   // 検査データの削除
   const deleteInspectionData = async () => {
     AlertAtom(
-      "検査データ削除",
-      `検査データを削除しますがよろしいですか？`,
+      i18n.t("settings.delete_inspection_data"),
+      i18n.t("alerts.delete_inspection_data_confirmation"),
       async () => {
         appContextDispatch.setModalNumber(0);
         appContextDispatch.deletePerson(
           undefined,
           appContextState.inspectionDataNumber
         );
-        Alert.alert("削除しました");
+        Alert.alert(i18n.t("alerts.deleted"));
       }
     );
   };
@@ -267,34 +268,39 @@ export default function CommonSetting() {
           backgroundColor: "#EFFFF0",
         }}
       >
-        <MainTitleChildren title={"データ管理"} style={{ marginBottom: 16 }}>
-          <IconTitleAction
-            title={"プレミアムプラン"}
-            icon={<IconAtom name="payment" type="material-icon" />}
-          >
-            {appContextState.isPremium ? (
-              <TextAtom
-                style={{
-                  color: "blue",
-                  paddingRight: 4,
-                  textAlignVertical: "center",
-                  fontSize: 18,
-                }}
-              >
-                {"登録済"}
-              </TextAtom>
-            ) : (
-              <ButtonAtom
-                onPress={() => setIsOpenSubscription(true)}
-                style={{ backgroundColor: "pink", padding: 12 }}
-              >
-                プランを確認
-              </ButtonAtom>
-            )}
-          </IconTitleAction>
+        <MainTitleChildren
+          title={i18n.t("settings.data_management")}
+          style={{ marginBottom: 16 }}
+        >
+          {(locale === "ja" || appContextState.isPremium) && (
+            <IconTitleAction
+              title={i18n.t("settings.premium_plan")}
+              icon={<IconAtom name="payment" type="material-icon" />}
+            >
+              {appContextState.isPremium ? (
+                <TextAtom
+                  style={{
+                    color: "blue",
+                    paddingRight: 4,
+                    textAlignVertical: "center",
+                    fontSize: 18,
+                  }}
+                >
+                  {i18n.t("settings.subscribed")}
+                </TextAtom>
+              ) : (
+                <ButtonAtom
+                  onPress={() => setIsOpenSubscription(true)}
+                  style={{ backgroundColor: "pink", padding: 12 }}
+                >
+                  {i18n.t("settings.check_plan")}
+                </ButtonAtom>
+              )}
+            </IconTitleAction>
+          )}
           {appContextState.isPremium && (
             <IconTitleAction
-              title={"ユーザー"}
+              title={i18n.t("settings.user")}
               icon={<IconAtom name="user" type="ant-design" />}
             >
               <ButtonAtom
@@ -313,14 +319,19 @@ export default function CommonSetting() {
                   padding: 12,
                 }}
               >
-                {!appContextState.user ? "サインイン" : "サインアウト"}
+                {!appContextState.user
+                  ? i18n.t("settings.sign_in")
+                  : i18n.t("settings.sign_out")}
               </ButtonAtom>
             </IconTitleAction>
           )}
         </MainTitleChildren>
-        <MainTitleChildren title={"共通設定設定"} style={{ marginBottom: 16 }}>
+        <MainTitleChildren
+          title={i18n.t("settings.common_settings")}
+          style={{ marginBottom: 16 }}
+        >
           <IconTitleAction
-            title={"自動タブ移動"}
+            title={i18n.t("settings.auto_tab_move")}
             icon={<IconAtom name={"autorenew"} type="material-icons" />}
           >
             <SwitchAtom
@@ -329,10 +340,16 @@ export default function CommonSetting() {
             />
           </IconTitleAction>
         </MainTitleChildren>
-        <MainTitleChildren title={"PPD詳細設定"} style={{ marginBottom: 16 }}>
+        <MainTitleChildren
+          title={i18n.t("settings.ppd_detailed_settings")}
+          style={{ marginBottom: 16 }}
+        >
           <IconTitleAction
             title={
-              "上歯の順序：" + (isPpdUpKo ? "コ(右上から)" : "Ｚ(右上から)")
+              i18n.t("settings.upper_teeth_order") +
+              (isPpdUpKo
+                ? `コ(${i18n.t("settings.upper_teeth_right")})`
+                : `Ｚ(${i18n.t("settings.upper_teeth_right")})`)
             }
             icon={
               isPpdUpKo ? (
@@ -352,7 +369,10 @@ export default function CommonSetting() {
           </IconTitleAction>
           <IconTitleAction
             title={
-              "下歯の順序：" + (isPpdDownHako ? "匚(左下から)" : "コ(右下から)")
+              i18n.t("settings.lower_teeth_order") +
+              (isPpdDownHako
+                ? `匚(${i18n.t("settings.lower_teeth_left")})`
+                : `コ(${i18n.t("settings.lower_teeth_right")})`)
             }
             icon={
               isPpdDownHako ? (
@@ -368,9 +388,12 @@ export default function CommonSetting() {
             />
           </IconTitleAction>
         </MainTitleChildren>
-        <MainTitleChildren title={"PCR詳細設定"} style={{ marginBottom: 16 }}>
+        <MainTitleChildren
+          title={i18n.t("settings.pcr_detailed_settings")}
+          style={{ marginBottom: 16 }}
+        >
           <IconTitleAction
-            title={"自動フォーカス"}
+            title={i18n.t("settings.auto_focus")}
             icon={
               <IconAtom
                 name={"image-filter-center-focus"}
@@ -384,38 +407,41 @@ export default function CommonSetting() {
             />
           </IconTitleAction>
         </MainTitleChildren>
-        <MainTitleChildren title={"データ削除"} style={{ marginBottom: 32 }}>
+        <MainTitleChildren
+          title={i18n.t("settings.data_deletion")}
+          style={{ marginBottom: 32 }}
+        >
           <IconTitleAction
-            title={"ユーザー"}
+            title={i18n.t("settings.user")}
             icon={<IconAtom name="deleteuser" type="ant-design" />}
           >
             <ButtonAtom
               onPress={deletePatientData}
               style={{ backgroundColor: "red", padding: 12 }}
             >
-              削除
+              {i18n.t("common.delete")}
             </ButtonAtom>
           </IconTitleAction>
           <IconTitleAction
-            title={"検査データ"}
+            title={i18n.t("inspection.inspection_data")}
             icon={<IconAtom name="delete" type="ant-design" />}
           >
             <ButtonAtom
               onPress={deleteInspectionData}
               style={{ backgroundColor: "red", padding: 12 }}
             >
-              削除
+              {i18n.t("common.delete")}
             </ButtonAtom>
           </IconTitleAction>
           <IconTitleAction
-            title={"全データの初期化"}
+            title={i18n.t("settings.initialize_all_data")}
             icon={<IconAtom name="delete-forever" type="material-icon" />}
           >
             <ButtonAtom
               onPress={initData}
               style={{ backgroundColor: "red", padding: 12 }}
             >
-              削除
+              {i18n.t("common.delete")}
             </ButtonAtom>
           </IconTitleAction>
         </MainTitleChildren>

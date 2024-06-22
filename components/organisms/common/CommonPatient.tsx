@@ -13,6 +13,7 @@ import TitleAndAction from "../../moleculars/TitleAndAction";
 import { LIMIT_COUNT } from "../../../constants/Constant";
 import { showInterstitialAd } from "../../../constants/AdmobInter";
 import { showRewardInterstitialAd } from "../../../constants/AdmobRewardInter";
+import { i18n } from "../../locales/i18n";
 
 export default function CommonPatient() {
   const appContextState = useContext(AppContextState);
@@ -23,14 +24,14 @@ export default function CommonPatient() {
 
   const savePatient = () => {
     if (!patientNumber || !patientName)
-      return alert("患者番号と患者名は必須です。");
+      return alert(i18n.t("patient.patient_number_required"));
 
     if (
       appContextState.patients
         .map((patient) => patient.value)
         .includes(patientNumber)
     ) {
-      alert("この患者番号は既に存在します");
+      alert(i18n.t("patient.patient_number_exists"));
       return;
     }
 
@@ -90,7 +91,10 @@ export default function CommonPatient() {
   return (
     <ModalAtom>
       <View>
-        <TitleAndAction title={"患者番号"} style={{ marginBottom: 16 }}>
+        <TitleAndAction
+          title={i18n.t("patient.patient_number")}
+          style={{ marginBottom: 16 }}
+        >
           <TextInputAtom
             autoFocus={true}
             keyboardType={"phone-pad"}
@@ -102,7 +106,10 @@ export default function CommonPatient() {
             isTextInput={true}
           />
         </TitleAndAction>
-        <TitleAndAction title={"患者名称"} style={{ marginBottom: 16 }}>
+        <TitleAndAction
+          title={i18n.t("patient.patient_name")}
+          style={{ marginBottom: 16 }}
+        >
           <TextInputAtom
             value={patientName}
             onChangeText={setPatientName}
@@ -121,12 +128,12 @@ export default function CommonPatient() {
         <PressableAtom
           style={[styles.button, styles.buttonClose]}
           onPress={savePatient}
-          value={"追加"}
+          value={i18n.t("common.add")}
         />
         <PressableAtom
           style={[styles.button, styles.buttonClose]}
           onPress={cancel}
-          value={"キャンセル"}
+          value={i18n.t("common.cancel")}
         />
       </View>
     </ModalAtom>

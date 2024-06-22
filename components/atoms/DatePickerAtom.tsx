@@ -1,9 +1,8 @@
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
-import { getYMD, isAndroid, parseDate } from "../../constants/Util";
+import { isAndroid, parseDate } from "../../constants/Util";
 import { View } from "../organisms/common/Themed";
-import ButtonAtom from "./ButtonAtom";
 
 export type DateProps = {
   date: Date;

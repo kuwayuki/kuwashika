@@ -8,6 +8,7 @@ import {
 } from "../../../constants/Constant";
 import { PPD_ORDER_DOWN, PPD_ORDER_UP } from "../../../constants/Util";
 import ButtonAtom from "../../atoms/ButtonAtom";
+import { i18n } from "../../locales/i18n";
 
 type buttonType = {
   status: TEETH_STATUS;
@@ -48,13 +49,13 @@ export const PPD_BUTTON_NAMES = [
   // { value: 11, display: "→", status: TEETH_STATUS.NORMAL } as buttonType,
   {
     value: 101,
-    display: "出血",
+    display: i18n.t("buttons.bleeding"),
     color: "#FF3366",
     status: TEETH_STATUS.BLLEDING,
   } as buttonType,
   {
     value: 102,
-    display: "排膿",
+    display: i18n.t("buttons.drainage"),
     color: "#FFCC00",
     status: TEETH_STATUS.DRAINAGE,
   } as buttonType,
@@ -79,14 +80,14 @@ export const UPSET_BUTTON_NAMES = [
   { value: 9, status: TEETH_STATUS.NORMAL, isDisabled: true } as buttonType,
   {
     value: 101,
-    display: "出血",
+    display: i18n.t("buttons.bleeding"),
     color: "#FF3366",
     status: TEETH_STATUS.BLLEDING,
     isDisabled: true,
   } as buttonType,
   {
     value: 102,
-    display: "排膿",
+    display: i18n.t("buttons.drainage"),
     color: "#FFCC00",
     status: TEETH_STATUS.DRAINAGE,
     isDisabled: true,

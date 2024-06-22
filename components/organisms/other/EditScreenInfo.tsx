@@ -4,6 +4,7 @@ import Colors from "../../../constants/Colors";
 import { MonoText } from "../../moleculars/StyledText";
 import { Text, View } from "../common/Themed";
 import { useState } from "react";
+import { i18n } from "../../locales/i18n";
 
 export default function EditScreenInfo({ path }: { path: string }) {
   const [text, onChangeText] = useState("Useless Text");
@@ -12,7 +13,7 @@ export default function EditScreenInfo({ path }: { path: string }) {
     <View>
       <View style={styles.getStartedContainer}>
         <TextInput
-          placeholder="入力してください"
+          placeholder={i18n.t("edit_screen_info.input_placeholder")}
           placeholderTextColor="hsla(210, 10%, 10%, 0.3)"
           value={text}
           multiline={true}

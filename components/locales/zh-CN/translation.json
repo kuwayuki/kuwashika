@@ -1,0 +1,115 @@
+{
+  "NSUserTrackingUsageDescription": "请允许追踪以显示使用第三方数据的广告。",
+  "NSMicrophoneUsageDescription": "此应用程序使用麦克风发送语音消息订单。",
+  "userTrackingPermission": "请允许追踪以显示使用第三方数据的广告。",
+  "user_tracking_usage_description": "请允许追踪以显示使用第三方数据的广告。",
+  "microphonePermission": "此应用程序使用麦克风发送语音消息订单。",
+  "common": {
+    "cancel": "取消",
+    "delete": "删除",
+    "patient": "患者",
+    "data": "数据",
+    "basic": "基本",
+    "precision": "精密",
+    "add": "添加",
+    "close": "关闭",
+    "never_show_again": "不再显示"
+  },
+  "patient": {
+    "patient_number": "患者编号",
+    "patient_name": "患者姓名",
+    "patient_number_required": "需要患者编号和姓名。",
+    "patient_number_exists": "此患者编号已存在。",
+    "new_patient": "＋ 添加新患者"
+  },
+  "inspection": {
+    "inspection_date": "检查日期",
+    "inspection_data": "检查数据",
+    "inspection_name": "检查名称"
+  },
+  "alerts": {
+    "email_not_verified": "电子邮件地址未验证。",
+    "delete_confirm": "您确定要删除吗？",
+    "delete_confirmation": "您确定要删除所有数据吗？",
+    "delete_inspection_data_confirmation": "您确定要删除检查数据吗？",
+    "initialized": "已初始化",
+    "deleted": "已删除",
+    "premium_subscribed": "已订阅。",
+    "restore_purchase_success": "购买已恢复。",
+    "restore_purchase_failure": "恢复购买失败。",
+    "no_purchase_to_restore": "没有恢复的购买。",
+    "subscription_failed": "订阅失败。"
+  },
+  "actions": {
+    "initialize": "初始化"
+  },
+  "navigation": {
+    "tab_one_screen": "牙周病",
+    "upset": "动度"
+  },
+  "auth": {
+    "email_placeholder": "请输入您的电子邮件地址",
+    "password_placeholder": "请输入您的密码",
+    "register": "注册",
+    "forgot_password": "忘记密码",
+    "email_verification_sent": "请验证您的电子邮件。",
+    "password_reset_sent": "请检查您的电子邮件。"
+  },
+  "buttons": {
+    "bleeding": "出血",
+    "drainage": "引流"
+  },
+  "settings": {
+    "data_management": "数据管理",
+    "premium_plan": "高级计划",
+    "subscribed": "已订阅",
+    "check_plan": "检查计划",
+    "user": "用户",
+    "sign_in": "登录",
+    "sign_out": "登出",
+    "common_settings": "常规设置",
+    "auto_tab_move": "自动标签移动",
+    "ppd_detailed_settings": "PPD详细设置",
+    "upper_teeth_order": "上牙顺序：",
+    "lower_teeth_order": "下牙顺序：",
+    "pcr_detailed_settings": "PCR详细设置",
+    "auto_focus": "自动对焦",
+    "data_deletion": "数据删除",
+    "delete_user": "删除用户",
+    "delete_inspection_data": "删除检查数据",
+    "initialize_all_data": "初始化所有数据",
+    "upper_teeth_right": "从右上方",
+    "lower_teeth_left": "从左下方",
+    "lower_teeth_right": "从右下方"
+  },
+  "subscription": {
+    "premium_features": "★ 添加高级功能 ★",
+    "title": "牙周图表高级计划",
+    "price": "¥500/月",
+    "benefits": "通过订阅高级计划，您可以在没有广告的情况下使用该应用程序。\r\n您还可以通过登录与其他应用程序共享数据。\r\n（您需要使用相同的 Apple ID。）",
+    "benefits_2": "广告将不再显示，您可以通过登录与其他设备共享数据。您可以从右上角的设置屏幕注册。",
+    "subscribe_button": "订阅高级计划",
+    "restore_button": "恢复购买",
+    "terms_and_conditions": "条款和条件",
+    "privacy_policy": "隐私政策",
+    "auto_renewal_text": "此订阅将自动续订。您可以随时在当前期间结束前至少24小时从 App Store 账户设置中取消。",
+    "premium_join": "通过订阅高级计划，",
+    "accept": "您将被视为同意条款和条件以及隐私政策。"
+  },
+  "edit_screen_info": {
+    "input_placeholder": "请输入"
+  },
+  "dropdown": {
+    "search_placeholder": "搜索筛选器",
+    "placeholder": "选择项目"
+  },
+  "additional": {
+    "Sc_after": "Sc",
+    "SRP_after": "SRP",
+    "SPT/P_restricted": "SPT/P",
+    "optional_input": "可选输入",
+    "current_tooth_count": "当前牙齿数量",
+    "above": "以上",
+    "sample": "样本"
+  }
+}

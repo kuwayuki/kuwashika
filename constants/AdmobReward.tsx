@@ -6,7 +6,6 @@ import mobileAds, {
   TestIds,
 } from "react-native-google-mobile-ads";
 
-// 初期化
 mobileAds()
   .initialize()
   .then((adapterStatuses) => {});

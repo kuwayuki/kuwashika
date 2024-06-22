@@ -22,6 +22,7 @@ import {
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import { isIpad } from "../constants/Util";
+import { i18n } from "../components/locales/i18n";
 
 export default function Navigation({
   colorScheme,
@@ -51,7 +52,7 @@ function RootNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="歯周病検査"
+        name="PerioDental"
         component={TopTabNavigator}
         options={{
           headerShown: false,
@@ -116,7 +117,7 @@ function TopTabNavigator() {
         name="TabUpset"
         component={UpsetPage}
         options={{
-          title: "動揺度",
+          title: i18n.t("navigation.upset"),
           // tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />

@@ -12,6 +12,7 @@ import TextInputAtom from "../../atoms/TextInputAtom";
 import * as FileSystem from "expo-file-system";
 import { AUTH_FILE } from "../../../constants/Constant";
 import { getFileData } from "../../../constants/Util";
+import { i18n } from "../../locales/i18n";
 
 export default function CommonAuth() {
   const [email, setEmail] = useState("");
@@ -34,8 +35,6 @@ export default function CommonAuth() {
           console.log(person);
           try {
             const readData = await getFileData(person.patientNumber);
-            console.log(person.patientNumber + "書き込む");
-            console.log(readData);
             if (readData) {
               appContextDispatch.saveDB(
                 readData,
@@ -69,7 +68,7 @@ export default function CommonAuth() {
         sendEmailVerification(user)
           .then(() => {
             // 認証メール送信成功
-            alert("メールを承認してください。");
+            alert(i18n.t("auth.email_verification_sent"));
             writeFileData({ email, password });
             appContextDispatch.setUser(user);
             appContextDispatch.setModalNumber(0);
@@ -91,12 +90,10 @@ export default function CommonAuth() {
   const handleResetPassword = async (event: any) => {
     sendPasswordResetEmail(auth, email)
       .then(() => {
-        console.log("パスワードリセットメールが送信されました。");
-        alert("メールを確認してください。");
+        alert(i18n.t("auth.password_reset_sent"));
       })
       .catch((error) => {
         // エラー処理
-        console.error("パスワードリセットメール送信エラー", error);
       });
   };
 
@@ -132,7 +129,7 @@ export default function CommonAuth() {
             autoFocus={true}
             onChangeText={setEmail}
             value={email}
-            placeholder="メールアドレスを入力してください"
+            placeholder={i18n.t("auth.email_placeholder")}
             placeholderTextColor={"gray"}
             autoCapitalize="none"
             autoCorrect={false}
@@ -148,7 +145,7 @@ export default function CommonAuth() {
             }}
             onChangeText={setPassword}
             value={password}
-            placeholder="パスワードを入力してください"
+            placeholder={i18n.t("auth.password_placeholder")}
             placeholderTextColor={"gray"}
             secureTextEntry={true}
             autoCapitalize="none"
@@ -169,10 +166,10 @@ export default function CommonAuth() {
             }}
             onPress={signIn}
           >
-            <Text style={{ color: "white" }}>サインイン</Text>
+            <Text style={{ color: "white" }}>{i18n.t("settings.sign_in")}</Text>
           </TouchableOpacity>
           <Text style={{ color: "blue", padding: 10 }} onPress={handleRegister}>
-            登録する
+            {i18n.t("auth.register")}
           </Text>
           <TouchableOpacity
             style={{
@@ -182,14 +179,14 @@ export default function CommonAuth() {
             }}
             onPress={cancel}
           >
-            <Text style={{ color: "white" }}>キャンセル</Text>
+            <Text style={{ color: "white" }}>{i18n.t("common.cancel")}</Text>
           </TouchableOpacity>
         </View>
         <Text
           style={{ color: "red", padding: 10 }}
           onPress={handleResetPassword}
         >
-          パスワードを忘れた
+          {i18n.t("auth.forgot_password")}
         </Text>
       </View>
     </View>
