@@ -70,7 +70,8 @@ export default function CommonInspection() {
       appContextState.patients.length > LIMIT_COUNT.ADMOB_MAX_PATIENTS
     ) {
       // showInterstitialAd();
-      showRewardInterstitialAd(func);
+      func();
+      showRewardInterstitialAd();
     } else {
       func();
     }

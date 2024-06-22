@@ -70,11 +70,11 @@ export function rewardInitializeInterstitialAd(
  * @param setAdClosed
  */
 export async function showRewardInterstitialAd(
-  func: (data?: any) => Promise<void>
+  func?: (data?: any) => Promise<void>
 ) {
   if (interstitial?.loaded) {
     interstitial!.show();
-    func();
+    if (func) func();
   } else {
     // 再読み込み&広告表示
     rewardInitializeInterstitialAd(true, func);

@@ -18,7 +18,7 @@ function selectAdId() {
 
 let interstitial: InterstitialAd | null = null;
 
-export function initializeInterstitialAd() {
+export function initializeInterstitialAd(isLoadedShow?: boolean) {
   const id = selectAdId();
   interstitial = InterstitialAd.createForAdRequest(id, {
     keywords: ["dental"],
@@ -29,6 +29,9 @@ export function initializeInterstitialAd() {
   // イベントリスナーの追加
   interstitial.addAdEventListener(AdEventType.LOADED, () => {
     console.log("Ad Loaded");
+    if (isLoadedShow) {
+      interstitial!.show();
+    }
   });
 
   interstitial.addAdEventListener(AdEventType.CLOSED, () => {
@@ -39,6 +42,7 @@ export function initializeInterstitialAd() {
 
   interstitial.addAdEventListener(AdEventType.ERROR, (error) => {
     console.error("Ad Load Error: ", error);
+    interstitial?.load();
   });
 }
 
@@ -46,6 +50,6 @@ export function showInterstitialAd() {
   if (interstitial?.loaded) {
     interstitial.show();
   } else {
-    console.error("Ad is not ready to be shown");
+    initializeInterstitialAd(true);
   }
 }
