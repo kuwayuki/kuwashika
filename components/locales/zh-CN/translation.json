@@ -18,6 +18,7 @@
   "patient": {
     "patient_number": "患者编号",
     "patient_name": "患者姓名",
+    "patient_name2": "患者姓名",
     "patient_number_required": "需要患者编号和姓名。",
     "patient_number_exists": "此患者编号已存在。",
     "new_patient": "＋ 添加新患者"
@@ -56,8 +57,8 @@
     "password_reset_sent": "请检查您的电子邮件。"
   },
   "buttons": {
-    "bleeding": "出血",
-    "drainage": "引流"
+    "bleeding": "BOP",
+    "drainage": "PUS"
   },
   "settings": {
     "data_management": "数据管理",

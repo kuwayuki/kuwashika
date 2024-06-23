@@ -268,11 +268,11 @@ export default function CommonSetting() {
           backgroundColor: "#EFFFF0",
         }}
       >
-        <MainTitleChildren
-          title={i18n.t("settings.data_management")}
-          style={{ marginBottom: 16 }}
-        >
-          {(locale === "ja" || appContextState.isPremium) && (
+        {(locale === "ja" || appContextState.isPremium) && (
+          <MainTitleChildren
+            title={i18n.t("settings.data_management")}
+            style={{ marginBottom: 16 }}
+          >
             <IconTitleAction
               title={i18n.t("settings.premium_plan")}
               icon={<IconAtom name="payment" type="material-icon" />}
@@ -297,35 +297,35 @@ export default function CommonSetting() {
                 </ButtonAtom>
               )}
             </IconTitleAction>
-          )}
-          {appContextState.isPremium && (
-            <IconTitleAction
-              title={i18n.t("settings.user")}
-              icon={<IconAtom name="user" type="ant-design" />}
-            >
-              <ButtonAtom
-                onPress={() => {
-                  !appContextState.user
-                    ? appContextDispatch.setModalNumber(101)
-                    : signOut(getAuth()).then(async () => {
-                        await deleteFileData();
-                        appContextDispatch.setUser(null);
-                      });
-                }}
-                style={{
-                  backgroundColor: !appContextState.user
-                    ? "skyblue"
-                    : "lightgray",
-                  padding: 12,
-                }}
+            {appContextState.isPremium && (
+              <IconTitleAction
+                title={i18n.t("settings.user")}
+                icon={<IconAtom name="user" type="ant-design" />}
               >
-                {!appContextState.user
-                  ? i18n.t("settings.sign_in")
-                  : i18n.t("settings.sign_out")}
-              </ButtonAtom>
-            </IconTitleAction>
-          )}
-        </MainTitleChildren>
+                <ButtonAtom
+                  onPress={() => {
+                    !appContextState.user
+                      ? appContextDispatch.setModalNumber(101)
+                      : signOut(getAuth()).then(async () => {
+                          await deleteFileData();
+                          appContextDispatch.setUser(null);
+                        });
+                  }}
+                  style={{
+                    backgroundColor: !appContextState.user
+                      ? "skyblue"
+                      : "lightgray",
+                    padding: 12,
+                  }}
+                >
+                  {!appContextState.user
+                    ? i18n.t("settings.sign_in")
+                    : i18n.t("settings.sign_out")}
+                </ButtonAtom>
+              </IconTitleAction>
+            )}
+          </MainTitleChildren>
+        )}
         <MainTitleChildren
           title={i18n.t("settings.common_settings")}
           style={{ marginBottom: 16 }}

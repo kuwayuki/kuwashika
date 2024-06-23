@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { isAndroid, parseDate } from "../../constants/Util";
 import { View } from "../organisms/common/Themed";
+import { i18n } from "../locales/i18n";
 
 export type DateProps = {
   date: Date;
@@ -11,6 +12,7 @@ export type DateProps = {
 
 export default function DatePickerAtom(props: DateProps) {
   const [show, setShow] = useState(false);
+  const locale = i18n.locale;
 
   useEffect(() => {
     setShow(false);
@@ -26,7 +28,7 @@ export default function DatePickerAtom(props: DateProps) {
     <View>
       {(show || !isAndroid()) && (
         <RNDateTimePicker
-          locale={"ja"}
+          locale={locale}
           style={styles.base}
           removeClippedSubviews={true}
           value={parseDate(props.date)}

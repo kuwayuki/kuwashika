@@ -18,6 +18,7 @@
   "patient": {
     "patient_number": "Numéro de Patient",
     "patient_name": "Nom du Patient",
+    "patient_name2": "Nom du Patient",
     "patient_number_required": "Le numéro et le nom du patient sont requis.",
     "patient_number_exists": "Ce numéro de patient existe déjà.",
     "new_patient": "＋ Ajouter Nouveau"
@@ -56,8 +57,8 @@
     "password_reset_sent": "Veuillez vérifier votre e-mail."
   },
   "buttons": {
-    "bleeding": "Saignement",
-    "drainage": "Drainage"
+    "bleeding": "BOP",
+    "drainage": "PUS"
   },
   "settings": {
     "data_management": "Gestion des Données",

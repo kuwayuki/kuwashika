@@ -107,7 +107,7 @@ export default function CommonPatient() {
           />
         </TitleAndAction>
         <TitleAndAction
-          title={i18n.t("patient.patient_name")}
+          title={i18n.t("patient.patient_name2")}
           style={{ marginBottom: 16 }}
         >
           <TextInputAtom

@@ -12,7 +12,7 @@
     ],
     "name": "ぺリオチャート",
     "slug": "PerioChart",
-    "version": "1.0.25",
+    "version": "1.0.26",
     "orientation": "landscape",
     "icon": "./assets/images/file-000.png",
     "scheme": "periochart",
@@ -39,13 +39,14 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "buildNumber": "22",
+      "buildNumber": "23",
       "supportsTablet": true,
       "requireFullScreen": true,
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-2103807205659646~3739470895"
       },
       "infoPlist": {
+        "CFBundleAllowMixedLocalizations": true,
         "SKAdNetworkItems": [
           {
             "SKAdNetworkIdentifier": "cstr6suwn9.skadnetwork"

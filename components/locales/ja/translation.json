@@ -18,6 +18,7 @@
   "patient": {
     "patient_number": "患者番号",
     "patient_name": "患者名",
+    "patient_name2": "患者名称",
     "patient_number_required": "患者番号と患者名は必須です。",
     "patient_number_exists": "この患者番号は既に存在します",
     "new_patient": "＋ 新規追加"

@@ -235,7 +235,7 @@ export default function App() {
       if (isDialogStr !== "false" && locale === "ja") {
         AlertAtom(
           i18n.t("subscription.premium_features"),
-          i18n.t("subscription.benefits2"),
+          i18n.t("subscription.benefits_2"),
           () => {
             setQuestionPremium(false);
             saveLocalStorage(
@@ -324,7 +324,7 @@ export default function App() {
     if (!settingData?.persons) return;
 
     // 患者番号をセット
-    const newPatients = [{ label: "＋ 新規", value: 0 }];
+    const newPatients = [{ label: i18n.t("patient.new_patient"), value: 0 }];
     // let maxLen = 1;
     // settingData.persons.forEach((person) => {
     //   if (person.isDeleted) return;

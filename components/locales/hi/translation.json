@@ -18,6 +18,7 @@
   "patient": {
     "patient_number": "मरीज़ नंबर",
     "patient_name": "मरीज़ का नाम",
+    "patient_name2": "मरीज़ का नाम",
     "patient_number_required": "मरीज़ नंबर और नाम आवश्यक हैं।",
     "patient_number_exists": "यह मरीज़ नंबर पहले से ही मौजूद है।",
     "new_patient": "＋ नया जोड़ें"
@@ -56,8 +57,8 @@
     "password_reset_sent": "कृपया अपना ईमेल जांचें।"
   },
   "buttons": {
-    "bleeding": "खून बह रहा है",
-    "drainage": "निकासी"
+    "bleeding": "BOP",
+    "drainage": "PUS"
   },
   "settings": {
     "data_management": "डेटा प्रबंधन",
