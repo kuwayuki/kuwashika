@@ -1,0 +1,116 @@
+{
+  "NSUserTrackingUsageDescription": "कृपया तृतीय-पक्ष डेटा का उपयोग करके विज्ञापन प्रदर्शित करने के लिए ट्रैकिंग की अनुमति दें।",
+  "NSMicrophoneUsageDescription": "यह ऐप वॉयस संदेश आदेश भेजने के लिए माइक्रोफोन का उपयोग करता है।",
+  "userTrackingPermission": "कृपया तृतीय-पक्ष डेटा का उपयोग करके विज्ञापन प्रदर्शित करने के लिए ट्रैकिंग की अनुमति दें।",
+  "user_tracking_usage_description": "कृपया तृतीय-पक्ष डेटा का उपयोग करके विज्ञापन प्रदर्शित करने के लिए ट्रैकिंग की अनुमति दें।",
+  "microphonePermission": "यह ऐप वॉयस संदेश आदेश भेजने के लिए माइक्रोफोन का उपयोग करता है।",
+  "common": {
+    "cancel": "रद्द करें",
+    "delete": "हटाएं",
+    "patient": "मरीज़",
+    "data": "डेटा",
+    "basic": "मूल",
+    "precision": "सटीकता",
+    "add": "जोड़ें",
+    "close": "बंद करें",
+    "never_show_again": "फिर से न दिखाएं"
+  },
+  "patient": {
+    "patient_number": "मरीज़ नंबर",
+    "patient_name": "मरीज़ का नाम",
+    "patient_name2": "मरीज़ का नाम",
+    "patient_number_required": "मरीज़ नंबर और नाम आवश्यक हैं।",
+    "patient_number_exists": "यह मरीज़ नंबर पहले से ही मौजूद है।",
+    "new_patient": "＋ नया जोड़ें"
+  },
+  "inspection": {
+    "inspection_date": "निरीक्षण तिथि",
+    "inspection_data": "निरीक्षण डेटा",
+    "inspection_name": "निरीक्षण नाम"
+  },
+  "alerts": {
+    "email_not_verified": "ईमेल पता सत्यापित नहीं है।",
+    "delete_confirm": "क्या आप वाकई हटाना चाहते हैं?",
+    "delete_confirmation": "क्या आप वाकई सभी डेटा हटाना चाहते हैं?",
+    "delete_inspection_data_confirmation": "क्या आप वाकई निरीक्षण डेटा हटाना चाहते हैं?",
+    "initialized": "आरंभ किया गया",
+    "deleted": "हटाया गया",
+    "premium_subscribed": "सदस्यता ली गई।",
+    "restore_purchase_success": "खरीदारी पुनर्स्थापित की गई।",
+    "restore_purchase_failure": "खरीदारी पुनर्स्थापित करने में विफल।",
+    "no_purchase_to_restore": "पुनर्स्थापित करने के लिए कोई खरीदारी नहीं।",
+    "subscription_failed": "सदस्यता विफल।"
+  },
+  "actions": {
+    "initialize": "आरंभ करें"
+  },
+  "navigation": {
+    "tab_one_screen": "मसूढ़ों की बीमारी",
+    "upset": "गतिशीलता"
+  },
+  "auth": {
+    "email_placeholder": "कृपया अपना ईमेल पता दर्ज करें",
+    "password_placeholder": "कृपया अपना पासवर्ड दर्ज करें",
+    "register": "पंजीकरण करें",
+    "forgot_password": "पासवर्ड भूल गए",
+    "email_verification_sent": "कृपया अपना ईमेल सत्यापित करें।",
+    "password_reset_sent": "कृपया अपना ईमेल जांचें।"
+  },
+  "buttons": {
+    "bleeding": "BOP",
+    "drainage": "PUS"
+  },
+  "settings": {
+    "data_management": "डेटा प्रबंधन",
+    "premium_plan": "प्रीमियम योजना",
+    "subscribed": "सदस्यता ली गई",
+    "check_plan": "योजना जांचें",
+    "user": "उपयोगकर्ता",
+    "sign_in": "साइन इन करें",
+    "sign_out": "साइन आउट करें",
+    "common_settings": "सामान्य सेटिंग्स",
+    "auto_tab_move": "स्वचालित टैब मूव",
+    "ppd_detailed_settings": "पीपीडी विस्तृत सेटिंग्स",
+    "upper_teeth_order": "ऊपरी दांत क्रम:",
+    "lower_teeth_order": "निचले दांत क्रम:",
+    "pcr_detailed_settings": "पीसीआर विस्तृत सेटिंग्स",
+    "auto_focus": "ऑटो फोकस",
+    "data_deletion": "डेटा हटाना",
+    "delete_user": "उपयोगकर्ता हटाएं",
+    "delete_inspection_data": "निरीक्षण डेटा हटाएं",
+    "initialize_all_data": "सभी डेटा आरंभ करें",
+    "upper_teeth_right": "ऊपर दाईं ओर से",
+    "lower_teeth_left": "नीचे बाईं ओर से",
+    "lower_teeth_right": "नीचे दाईं ओर से"
+  },
+  "subscription": {
+    "premium_features": "★ प्रीमियम सुविधाएँ जोड़ें ★",
+    "title": "पीरियोडोंटल चार्ट प्रीमियम योजना",
+    "price": "¥500/महीना",
+    "benefits": "प्रीमियम योजना की सदस्यता लेकर, आप बिना विज्ञापन के ऐप का उपयोग कर सकते हैं।\r\nआप साइन इन करके अन्य ऐप्स के साथ डेटा भी साझा कर सकते हैं।\r\n(आपको एक ही Apple ID का उपयोग करना होगा।)",
+    "benefits_2": "विज्ञापन अब नहीं दिखाए जाएंगे, और आप साइन इन करके अन्य उपकरणों के साथ डेटा साझा कर सकते हैं। आप शीर्ष दाईं ओर सेटिंग्स स्क्रीन से पंजीकरण कर सकते हैं।",
+    "subscribe_button": "प्रीमियम योजना की सदस्यता लें",
+    "restore_button": "खरीदारी पुनर्स्थापित करें",
+    "terms_and_conditions": "नियम और शर्तें",
+    "privacy_policy": "गोपनीयता नीति",
+    "auto_renewal_text": "यह सदस्यता स्वचालित रूप से नवीनीकृत हो जाएगी। आप किसी भी समय वर्तमान अवधि समाप्त होने से कम से कम 24 घंटे पहले App Store खाते की सेटिंग्स से इसे रद्द कर सकते हैं।",
+    "premium_join": "प्रीमियम योजना की सदस्यता लेकर,",
+    "accept": "आपको नियम और शर्तें और गोपनीयता नीति मान ली गई हैं।"
+  },
+  "edit_screen_info": {
+    "input_placeholder": "कृपया दर्ज करें"
+  },
+  "dropdown": {
+    "search_placeholder": "खोज फ़िल्टर",
+    "placeholder": "आइटम चुनें"
+  },
+  "additional": {
+    "Sc_after": "Sc",
+    "SRP_after": "SRP",
+    "SPT/P_restricted": "SPT/P",
+    "optional_input": "वैकल्पिक",
+    "current_tooth_count": "वर्तमान दांत की संख्या",
+    "above": "ऊपर",
+    "sample": "नमूना"
+  }
+}

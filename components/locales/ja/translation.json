@@ -1,0 +1,116 @@
+{
+  "NSUserTrackingUsageDescription": "他社のデータを活用して広告を表示するために、トラッキングの許可をお願いします。",
+  "NSMicrophoneUsageDescription": "このアプリは、音声メッセージで注文を送信するためにマイクを使用します。",
+  "userTrackingPermission": "他社のデータを活用して広告を表示するために、トラッキングの許可をお願いします。",
+  "user_tracking_usage_description": "他社のデータを活用して広告を表示するために、トラッキングの許可をお願いします。",
+  "microphonePermission": "このアプリは、音声メッセージで注文を送信するためにマイクを使用します。",
+  "common": {
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "patient": "患者",
+    "data": "データ",
+    "basic": "基本",
+    "precision": "精密",
+    "add": "追加",
+    "close": "閉じる",
+    "never_show_again": "今後は表示しない"
+  },
+  "patient": {
+    "patient_number": "患者番号",
+    "patient_name": "患者名",
+    "patient_name2": "患者名称",
+    "patient_number_required": "患者番号と患者名は必須です。",
+    "patient_number_exists": "この患者番号は既に存在します",
+    "new_patient": "＋ 新規追加"
+  },
+  "inspection": {
+    "inspection_date": "検査日",
+    "inspection_data": "検査データ",
+    "inspection_name": "検査名称　"
+  },
+  "alerts": {
+    "email_not_verified": "メールアドレスは未認証です",
+    "delete_confirm": "を削除しますがよろしいですか？",
+    "delete_confirmation": "全てのデータが削除されますがよろしいですか？",
+    "delete_inspection_data_confirmation": "検査データを削除しますがよろしいですか？",
+    "initialized": "初期化しました",
+    "deleted": "削除しました",
+    "premium_subscribed": "登録しました。",
+    "restore_purchase_success": "購入が復元されました。",
+    "restore_purchase_failure": "購入の復元に失敗しました。",
+    "no_purchase_to_restore": "復元する購入はありません。",
+    "subscription_failed": "登録に失敗しました。"
+  },
+  "actions": {
+    "initialize": "初期化"
+  },
+  "navigation": {
+    "tab_one_screen": "歯周病",
+    "upset": "動揺度"
+  },
+  "auth": {
+    "email_placeholder": "メールアドレスを入力してください",
+    "password_placeholder": "パスワードを入力してください",
+    "register": "登録する",
+    "forgot_password": "パスワードを忘れた",
+    "email_verification_sent": "メールを承認してください。",
+    "password_reset_sent": "メールを確認してください。"
+  },
+  "buttons": {
+    "bleeding": "出血",
+    "drainage": "排膿"
+  },
+  "settings": {
+    "data_management": "データ管理",
+    "premium_plan": "プレミアムプラン",
+    "subscribed": "登録済",
+    "check_plan": "プランを確認",
+    "user": "ユーザー",
+    "sign_in": "サインイン",
+    "sign_out": "サインアウト",
+    "common_settings": "共通設定",
+    "auto_tab_move": "自動タブ移動",
+    "ppd_detailed_settings": "PPD詳細設定",
+    "upper_teeth_order": "上歯の順序：",
+    "lower_teeth_order": "下歯の順序：",
+    "pcr_detailed_settings": "PCR詳細設定",
+    "auto_focus": "自動フォーカス",
+    "data_deletion": "データ削除",
+    "delete_user": "ユーザー削除",
+    "delete_inspection_data": "検査データ削除",
+    "initialize_all_data": "全データの初期化",
+    "upper_teeth_right": "右上から",
+    "lower_teeth_left": "左下から",
+    "lower_teeth_right": "右下から"
+  },
+  "subscription": {
+    "premium_features": "★プレミアム機能追加★",
+    "title": "ペリオチャートプレミアムプラン",
+    "price": "¥500/月",
+    "benefits": "プレミアムプランの加入で、アプリを広告なしで利用できます。\r\nまた、サインインで別アプリとのデータ共有を行うことができます。\r\n(共通のApple IDで利用する必要があります。)",
+    "benefits_2": "広告が表示されなくなり、サインインで別デバイスとのデータ共有が可能になります。右上の設定画面から登録可能です。",
+    "subscribe_button": "プレミアムプランに登録",
+    "restore_button": "購入の復元",
+    "terms_and_conditions": "利用規約",
+    "privacy_policy": "プライバシーポリシー",
+    "auto_renewal_text": "本サブスクリプションは自動的に更新されます。更新は、契約期間の終了24時間前までにApp Storeのアカウント設定からいつでもキャンセル可能です。",
+    "premium_join": "プレミアムプランの加入で、",
+    "accept": "に同意いただいたとみなします。"
+  },
+  "edit_screen_info": {
+    "input_placeholder": "入力してください"
+  },
+  "dropdown": {
+    "search_placeholder": "検索フィルター",
+    "placeholder": "項目を選択"
+  },
+  "additional": {
+    "Sc_after": "Sc後",
+    "SRP_after": "SRP後",
+    "SPT/P_restricted": "SPT/P重防",
+    "optional_input": "任意入力",
+    "current_tooth_count": "現在歯数",
+    "above": "以上",
+    "sample": "サンプル"
+  }
+}

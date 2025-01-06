@@ -1,0 +1,116 @@
+{
+  "NSUserTrackingUsageDescription": "Please allow tracking to display ads using third-party data.",
+  "NSMicrophoneUsageDescription": "This app uses the microphone to send voice message orders.",
+  "userTrackingPermission": "Please allow tracking to display ads using third-party data.",
+  "user_tracking_usage_description": "Please allow tracking to display ads using third-party data.",
+  "microphonePermission": "This app uses the microphone to send voice message orders.",
+  "common": {
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "patient": "Patient",
+    "data": "Data",
+    "basic": "Basic",
+    "precision": "Precision",
+    "add": "Add",
+    "close": "Close",
+    "never_show_again": "Never show again"
+  },
+  "patient": {
+    "patient_number": "Patient Number",
+    "patient_name": "Patient Name",
+    "patient_name2": "Patient Name",
+    "patient_number_required": "Patient number and name are required.",
+    "patient_number_exists": "This patient number already exists.",
+    "new_patient": "＋ Add New"
+  },
+  "inspection": {
+    "inspection_date": "Inspection Date",
+    "inspection_data": "Inspection Data",
+    "inspection_name": "Inspection Name"
+  },
+  "alerts": {
+    "email_not_verified": "Email address is not verified.",
+    "delete_confirm": "Are you sure you want to delete?",
+    "delete_confirmation": "Are you sure you want to delete all data?",
+    "delete_inspection_data_confirmation": "Are you sure you want to delete the inspection data?",
+    "initialized": "Initialized",
+    "deleted": "Deleted",
+    "premium_subscribed": "Subscribed.",
+    "restore_purchase_success": "Purchase restored.",
+    "restore_purchase_failure": "Failed to restore purchase.",
+    "no_purchase_to_restore": "No purchase to restore.",
+    "subscription_failed": "Subscription failed."
+  },
+  "actions": {
+    "initialize": "Initialize"
+  },
+  "navigation": {
+    "tab_one_screen": "Periodontal Disease",
+    "upset": "Mobility"
+  },
+  "auth": {
+    "email_placeholder": "Please enter your email address",
+    "password_placeholder": "Please enter your password",
+    "register": "Register",
+    "forgot_password": "Forgot Password",
+    "email_verification_sent": "Please verify your email.",
+    "password_reset_sent": "Please check your email."
+  },
+  "buttons": {
+    "bleeding": "BOP",
+    "drainage": "PUS"
+  },
+  "settings": {
+    "data_management": "Data Management",
+    "premium_plan": "Premium Plan",
+    "subscribed": "Subscribed",
+    "check_plan": "Check Plan",
+    "user": "User",
+    "sign_in": "Sign In",
+    "sign_out": "Sign Out",
+    "common_settings": "Common Settings",
+    "auto_tab_move": "Auto Tab Move",
+    "ppd_detailed_settings": "PPD Detailed Settings",
+    "upper_teeth_order": "Upper Teeth Order:",
+    "lower_teeth_order": "Lower Teeth Order:",
+    "pcr_detailed_settings": "PCR Detailed Settings",
+    "auto_focus": "Auto Focus",
+    "data_deletion": "Data Deletion",
+    "delete_user": "Delete User",
+    "delete_inspection_data": "Delete Inspection Data",
+    "initialize_all_data": "Initialize All Data",
+    "upper_teeth_right": "From Upper Right",
+    "lower_teeth_left": "From Lower Left",
+    "lower_teeth_right": "From Lower Right"
+  },
+  "subscription": {
+    "premium_features": "★ Add Premium Features ★",
+    "title": "Periodontal Chart Premium Plan",
+    "price": "¥500/month",
+    "benefits": "By subscribing to the Premium Plan, you can use the app without ads.\r\nYou can also share data with other apps by signing in.\r\n(You need to use the same Apple ID.)",
+    "benefits_2": "Ads will no longer be displayed, and you can share data with other devices by signing in. You can register from the settings screen at the top right.",
+    "subscribe_button": "Subscribe to Premium Plan",
+    "restore_button": "Restore Purchase",
+    "terms_and_conditions": "Terms and Conditions",
+    "privacy_policy": "Privacy Policy",
+    "auto_renewal_text": "This subscription will auto-renew. You can cancel at any time from the App Store account settings at least 24 hours before the end of the current period.",
+    "premium_join": "By subscribing to the Premium Plan,",
+    "accept": "you are deemed to have agreed to the terms and conditions and the privacy policy."
+  },
+  "edit_screen_info": {
+    "input_placeholder": "Please enter"
+  },
+  "dropdown": {
+    "search_placeholder": "Search Filter",
+    "placeholder": "Select an Item"
+  },
+  "additional": {
+    "Sc_after": "Sc",
+    "SRP_after": "SRP",
+    "SPT/P_restricted": "SPT/P",
+    "optional_input": "Optional",
+    "current_tooth_count": "Current Tooth Count",
+    "above": "Above",
+    "sample": "Sample"
+  }
+}

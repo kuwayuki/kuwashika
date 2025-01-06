@@ -1,34 +1,28 @@
-/**
- * Learn more about deep linking with React Navigation
- * https://reactnavigation.org/docs/deep-linking
- * https://reactnavigation.org/docs/configuring-links
- */
-
-import { LinkingOptions } from '@react-navigation/native';
-import * as Linking from 'expo-linking';
-
-import { RootStackParamList } from '../types';
+import { LinkingOptions } from "@react-navigation/native";
+import * as Linking from "expo-linking";
+import { RootStackParamList } from "../types";
+import { i18n } from "../components/locales/i18n";
 
 const linking: LinkingOptions<RootStackParamList> = {
-  prefixes: [Linking.makeUrl('/')],
+  prefixes: [Linking.makeUrl("/")],
   config: {
     screens: {
-      Root: {
+      PerioDental: {
         screens: {
-          TabOne: {
+          TabPeriodontal: {
             screens: {
-              TabOneScreen: 'one',
+              TabOneScreen: i18n.t("navigation.tab_one_screen"),
             },
           },
-          TabTwo: {
+          TabPCR: {
             screens: {
-              TabTwoScreen: 'two',
+              TabTwoScreen: "PCR",
             },
           },
         },
       },
-      Modal: 'modal',
-      NotFound: '*',
+      Modal: "modal",
+      NotFound: "*",
     },
   },
 };
