@@ -1,150 +1,41 @@
-npm run start
+# ペリオチャートアプリ
 
-React Native パッケージャー(▷ 　 ⇒ 　 □)
-19000
+ペリオチャートは、歯科医師向けの歯周病検査ツールで、患者ごとの PPD（プロービングポケット深さ）、動揺度、PCR（プラークコントロールレコード）を記録・保存・印刷できます。
 
-Attach to pacakagr（F5）
-19000
+## 主な機能
 
-Remote JS
-※省略可能(起動しっぱなしならそれでもいい)
+- **患者情報の管理**: 患者の詳細情報を入力・管理できます。
+- **検査データの入力と保存**: PPD、動揺度、PCR のデータを入力し、保存できます。
+- **データの印刷**: 保存したデータを印刷し、物理的な記録として保管できます。
 
-ブラウザのデバッグモードは切らないとだめ
-スマホからリロードすると、ブラウザのデバッグモードが起動するので、切ってから F5 デバッグする
+## インストール方法
 
-Admob
-https://docs.expo.dev/versions/v44.0.0/sdk/admob/
+ペリオチャートは iOS デバイス向けに提供されています。以下の手順でインストールしてください。
 
-Google Admob
-https://apps.admob.com/v2/home?_ga=2.71246102.782286764.1642601502-166732312.1642306416
+1. App Store を開きます。
+2. 検索バーに「ペリオチャート」と入力し、検索します。
+3. 表示されたアプリの中から「ペリオチャート」を選択し、ダウンロードしてインストールします。
 
-AuthSession
-https://docs.expo.dev/versions/v44.0.0/sdk/auth-session/
+詳細はこちらをご参照ください: [App Store ページ](https://apps.apple.com/jp/app/%E3%83%9A%E3%83%AA%E3%82%AA%E3%83%81%E3%83%A3%E3%83%BC%E3%83%88/id1603040583)
 
-StoreReview
-https://docs.expo.dev/versions/v44.0.0/sdk/storereview/
+## 使用方法
 
-次に、アプリ内に広告ユニットを配置します
-導入の手順は次のとおりです。
-このアプリ ID を使用して、Google Mobile Ads SDK ガイドの手順を完了してください。
-歯周病検査 ca-app-pub-2103807205659646~3739470895
-リワード導入ガイドに沿って SDK を組み込んでください。広告の種類とプレースメントは、この広告ユニット ID を使用してコードを設定する際に指定します。
-リワード ca-app-pub-2103807205659646/7101815610
+1. **患者情報の入力**: アプリを起動し、新規患者の情報を入力します。
+2. **検査データの入力**: 各患者の PPD、動揺度、PCR の値を入力します。
+3. **データの保存**: 入力したデータを保存し、必要に応じて編集できます。
+4. **データの印刷**: 保存したデータを印刷し、紙媒体での記録として保管できます。
 
-app.json
-// "orientation": "portrait", 縦向き
+## 利用規約とプライバシーポリシー
 
-Error Domain=com.google.admob Code=0 "Cannot determine request type. Is your ad unit id correct?" UserInfo={NSLocalizedDescription=Cannot determine request type. Is your ad unit id correct?, gad_response_info= ** Response Info **
-Response ID: (null)
-Network: (null)
+アプリの利用に際しては、以下のリンクから利用規約とプライバシーポリシーをご確認ください。
 
-** Mediation line items **
-}
-at Object.promiseMethodWrapper [as callMethod] (c:\workspace\kuwashika.git\node_modules\react-native\Libraries\BatchedBridge\NativeModules.js:106:51)
-at Object.NativeModulesProxy.<computed>.<computed> [as requestAd] (c:\workspace\kuwashika.git\node_modules\expo-modules-core\build\NativeModulesProxy.native.js:15:36)  
-at \_callee3$ (c:\workspace\kuwashika.git\node_modules\expo-ads-admob\build\AdMobInterstitial.js:39:33)
-at tryCatch (c:\workspace\kuwashika.git\node_modules\regenerator-runtime\runtime.js:63:40)
-at Generator.invoke [as _invoke] (c:\workspace\kuwashika.git\node_modules\regenerator-runtime\runtime.js:294:22)
-at Generator.next (c:\workspace\kuwashika.git\node_modules\regenerator-runtime\runtime.js:119:21)
-at tryCatch (c:\workspace\kuwashika.git\node_modules\regenerator-runtime\runtime.js:63:40)
-at invoke (c:\workspace\kuwashika.git\node_modules\regenerator-runtime\runtime.js:155:20)
-at c:\workspace\kuwashika.git\node_modules\regenerator-runtime\runtime.js:190:11
-at tryCallTwo (c:\workspace\kuwashika.git\.vscode\.react\node_modules%5Cexpo%5CAppEntry.bundle:29526:7) {code: 'E_AD_REQUEST_FAILED', message: 'Error Domain=com.google.admob Code=0 "Cannot…work: (null)
+- **利用規約**: [利用規約ページ](https://kuwank.hatenablog.com/entry/2024/01/07/230214)
+- **プライバシーポリシー**: [プライバシーポリシーページ](https://kuwank.hatenablog.com/entry/2024/01/07/230214)
 
-** Mediation line items **
-}', nativeStackIOS: Array(17), domain: 'com.google.admob', userInfo: {…}, …}
-arg0:Error: Error Domain=com.google.admob Code=0 "Cannot determine request type. Is your ad unit id correct?" UserInfo={NSLocalizedDescription=Cannot determine request type. Is your ad unit id correct?, gad_response_info= ** Response Info **
-Response ID: (null)
-Network: (null)
+## サポート
 
-** Mediation line items **
-}
-at Object.promiseMethodWrapper [as callMethod] (c:\workspace\kuwashika.git\.vscode\.react\node_modules%5Cexpo%5CAppEntry.bundle:22573:36)
-at Object.NativeModulesProxy.<computed>.<computed> [as requestAd] (c:\workspace\kuwashika.git\.vscode\.react\node_modules%5Cexpo%5CAppEntry.bundle:109869:30)
-at \_callee3$ (c:\workspace\kuwashika.git\.vscode\.react\node_modules%5Cexpo%5CAppEntry.bundle:177601:92)
-at tryCatch (c:\workspace\kuwashika.git\.vscode\.react\node_modules%5Cexpo%5CAppEntry.bundle:24674:19)
-at Generator.invoke [as _invoke] (c:\workspace\kuwashika.git\.vscode\.react\node_modules%5Cexpo%5CAppEntry.bundle:24844:24)
-at Generator.next (c:\workspace\kuwashika.git\.vscode\.rea...
-reactConsoleErrorHandler @ c:\workspace\kuwashika.git\node_modules\react-native\Libraries\Core\ExceptionsManager.js:184:3
+ご不明な点やサポートが必要な場合は、アプリ内のサポートセクションをご参照いただくか、開発者のウェブサイトをご確認ください。
 
-Expo で作成したアプリを App Store に申請するまで
-https://qiita.com/mildsummer/items/e98b1b8e4ea7f72b9899
+---
 
-_アプリのビルド Credential の作成_
-※expo build:ios で自動的に作成される
-Certificates, Identifiers & Profiles
-https://developer.apple.com/account/resources/identifiers/list
-
-_アプリの公開_
-App Store Connect
-https://appstoreconnect.apple.com/apps
-
-SKU に命名規則はありません。ただし、App001 のように適当な名前をつけると紛らわしいので、おすすめしません。私の場合、Bundle ID が com.example.MyApp なら SKU は ComExampleMyApp のように設定しています。
-
-月額課金：
-https://docs-expo-dev.translate.goog/versions/latest/sdk/in-app-purchases/?_x_tr_sl=en&_x_tr_tl=ja&_x_tr_hl=ja&_x_tr_pto=sc
-参考:https://tech-blog.re-arc-lab.jp/posts/211015_expo-in-app-purchases/
-
-アプリ説明
-プロモーション用テキスト（170 文字）：
-概要（4000 文字）：
-
-キーワード（100 文字）：
-歯周病 歯周病検査 PPD ppd pcr 動揺度 ししゅうびょう
-
-サポート URL：
-マーケティング URL：
-
-6.5 インチ (iPhone 13 Pro Max、iPhone 12 Pro Max)
-5.5 インチ (iPhone 8 Plus)
-12.9 インチ (iPad Pro (第 4 世代、第 3 世代))
-12.9 インチ (iPad Pro (第 2 世代))
-
-expo build:ios
-
-Thanks for a lot checking.
-I ansered following.
-
-- Does your app include the login mechanism?
-  No, it is not login mechanism.
-
-- What is the 月額課金 for, and what are the costs?
-  Sorry, it is not finished publish yet.
-  I deleted this function, so please chack again.
-
-OTA update のやりかた
-
-$ expo publish
-
-eas build --profile development-simulator --platform ios
-
-% ビルドした状態でのみテストしたいとき(Purchase や Google-Admob)
-npm install --dev-client
-% pacakge を追加した場合には必ず再インストールすること！
-eas build --profile development --platform ios
-% QR コードを読み取る
-npx expo start --dev-client
-% Expo で起動すると、上でインストールしたペリオチャートが起動する。
-
-% npx expo start --dev-client 以外は起動できなくなるので、アンインストール時は下記を行う
-npm uninstall --dev-client
-npm run start
-
-% app.json-"version": "2"はずれるようにする必要がある。
-% app.json-"ios"."buildNumber": "2"はずれるようにする必要がある。
-% eas build -p ios
-% eas submit --latest -p ios
-% eas update --branch production --message "Bug Fixed"
-
-eas build --profile development --platform ios
-npx expo start --dev-client
-
-ee68028@yahoo.ne.jp
-
-eas build --platform ios --auto-submit
-
-% ★OTA (初回だけ production で公開。次回以降は eas update で OTA)
-eas build --platform ios --profile production
-eas submit --latest -p ios
-% OTA(以降はこれだけで OK)
-eas update --branch production --message "Bug Fixed"
+ペリオチャートは、歯科診療の効率化と精度向上をサポートするために設計されています。ぜひご活用ください。
